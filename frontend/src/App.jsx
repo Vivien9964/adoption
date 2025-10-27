@@ -7,11 +7,14 @@ import HomePage from './pages/HomePage.jsx';
 import AdoptPage from './pages/AdoptPage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 
+import Navigation from './components/layout/Navigation.jsx';
+
 
 function App() {
 
   return (
     <Router>
+      <Navigation />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />

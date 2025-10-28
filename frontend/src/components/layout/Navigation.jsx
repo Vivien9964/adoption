@@ -85,23 +85,22 @@ const Navigation = () => {
                             <div className="flex flex-col items-center text-center space-y-4">
 
                                 {/*Home menu item*/}
-                                <div className="flex flex-col items-center">
                                 <Link
                                     to="/"
-                                    onClick={handleLinkClick}
-                                    className={`inline-block text-2xl font-medium transition-all duration-300 transform hover:scale-110 hover:text-blue-600 ${
-                                        isActiveRoute('/') ? 'text-blue-600 scale-110' : 'text-gray-800'
+                                    onclick={handleLinkClick}
+                                    className={`text-2xl font-medium transition-all duration-300 transform hover:scale-110 hover:text-blue-600 ${
+                                        isActiveRoute('/') ? 'text-blue-600 scale-110' : 'text-black'
                                     }`}
                                 >
                                     Home
                                 </Link>
-                                </div>
+                        
                                 
 
                                 {/*Adoption menu item*/}
                                 <div className="flex flex-col items-center space-y-4">
                                     <button
-                                        className={`flex text-2xl font-medium space-x-2 transition-all duration-300 transform hover:scale-110 hover:text-blue-800 ${
+                                        className={`flex items-center text-2xl font-medium space-x-2 transition-all duration-300 transform hover:scale-110 hover:text-blue-800 ${
                                             isActiveRoute('/dogs') || isActiveRoute('/schedule-meeting') || isActiveRoute('/virtual-adoption') ? "text-blue-600 scale-110" : "text-black"
                                         }`}
                                         onClick={toggleAdoptionDropdown}
@@ -115,7 +114,61 @@ const Navigation = () => {
 
                                     </button>
 
+                                    {/*Dropdown items for mobile*/}
+                                    {isAdoptionDropdownOpen && (
+                                        <div className="flex flex-col items-center space-y-3 pl-4">
+                                            <Link
+                                                to="/dogs"
+                                                onclick={handleLinkClick}
+                                                className="text-lg text-black hover:text-blue-600 transition-all duration-300 transform hover:scale-105"
+                                            >
+                                                Dogs
+                                            </Link>
+                                            <Link
+                                                to="/schedule-meeting"
+                                                onclick={handleLinkClick}
+                                                className="text-lg text-black hover:text-blue-600 transition-all duration-300 transform hover:scale-105"
+                                            >
+                                                Schedule Meeting
+                                            </Link>
+                                            <Link
+                                                to="/virtual-adoption"
+                                                onclick={handleLinkClick}
+                                                className="text-lg text-black hover:text-blue-600 transition-all duration-300 transform hover:scale-105"
+                                            >
+                                                Virtual Adoption
+                                            </Link>
+                                        </div>
+                                    )}
                                 </div>
+
+                                <Link
+                                    to="/about"
+                                    onclick={handleLinkClick}
+                                    className={`text-2xl font-medium transition-all duration-300 transform hover:scale-110 hover:text-blue-600 ${
+                                        isActiveRoute('/about') ? 'text-blue-600 scale-110' : 'text-black'
+                                    }`}
+                                >
+                                    About
+                                </Link>
+
+                                <Link
+                                    to="/contact"
+                                    onclick={handleLinkClick}
+                                    className={`text-2xl font-medium transition-all duration-300 transform hover:scale-110 hover:text-blue-600 ${
+                                        isActiveRoute('/contact') ? 'text-blue-600 scale-110' : 'text-black'
+                                    }`}
+                                >
+                                    Contact
+                                </Link>
+
+                                <Link
+                                    to="/login"
+                                    onclick={handleLinkClick}
+                                    className="bg-gradient-to-r from-black to-yellow-600 hover:from-black hover:to-yellow-700 text-white py-3 px-5 rounded font-medium transition-all duration-300 transform hover:scale-105 shadow-lg text-xl mt-8"
+                                >
+                                    Log In
+                                </Link>
 
                             </div>
 

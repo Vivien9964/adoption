@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Dog, X, Menu, ChevronDown } from 'lucide-react';
 
@@ -10,7 +10,24 @@ const Navigation = () => {
     // state to toggle adoption dropdown menu
     const [isAdoptionDropdownOpen, setIsAdoptionDropdownOpen] = useState(false);
 
+    const dropdownRef = useRef(null);
     const location = useLocation();
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if(dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setIsAdoptionDropdownOpen(false);
+            }
+        };
+
+        if(isAdoptionDropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        () => document.removeEventListener('mousedown', handleClickOutside);
+
+    }, [isAdoptionDropdownOpen]);
+
 
 
     const isActiveRoute = (path) => {
@@ -33,62 +50,75 @@ const Navigation = () => {
     // if I have to change something it takes longer and it is harder to read to code 
     const styles = {
 
-        navLink: (isActive) => `
-            px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105
+        navLink: (isActive, index = 0) => `
+            px-4 py-2 rounded-full text-md font-semibold 
+            transition-all duration-300 transform hover:scale-105 hover:rotate-3
+
+            ${index % 2 === 0 ? "hover:-rotate-3" : "hover:rotate-3"}
             ${isActive 
-                ? "bg-blue-100 text-blue-700 scale-105" 
-                : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                ? "bg-yellow-300 text-yellow-800 scale-105 shadow-sm" 
+                : "text-yellow-900 hover:bg-yellow-200 hover:shadow-md"
             }
         `,
 
-        mobileLink: (isActive) => `
-            text-2xl font-medium transition-all duration-300 transform hover:scale-110 hover:text-blue-600
+        mobileLink: (isActive, index = 0) => `
+            px-4 py-2 rounded-full text-2xl font-semibold 
+            transition-all duration-300 transform hover:scale-110 hover:rotate-3
+
+            ${index % 2 === 0 ? "hover:rotate-3" : "hover:-rotate-3"}
             ${isActive
-                ? "text-blue-600 scale-110"
-                : "text-gray-800"
+                ? "bg-yellow-400 text-yellow-800 scale-110 shadow-sm"
+                : "text-yellow-900 hover:bg-yellow-200 hover:shadow-md"
             }
         `,
 
-        dropDownItem: `
-            block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600
-            transition-colors duration-200
+        dropDownItem:(index = 0) =>  `
+            block px-4 py-3 mx-2 my-1 
+            text-sm font-semibold rounded-full
+            text-yellow-900 hover:bg-yellow-200 hover:text-yellow-800
+            transition-all duration-300 transform hover:scale-105 hover:rotate-2 hover:shadow-md
+
+            ${index % 2 === 0 ? "hover:rotate-2" : "hover:-rotate-2"}
         `,
 
-        dropDownItemMobile: `
-            text-lg text-gray-600 hover:text-blue-600 transition-all duration-300 transform hover:scale-105
+        dropDownItemMobile:(index = 0) => `
+            px-4 py-2 rounded-full
+            text-lg font-semibold text-yellow-900 hover:text-yellow-800
+            transition-all duration-300 transform hover:scale-105 hover:rotate-2 hover:shadow-md hover:bg-yellow-200
+
+            ${index % 2 === 0? "hover:rotate-2" : "hover:-rotate-2"}
         `,
 
         primaryBtn: `
             px-6 py-2 rounded-full
-            bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700
-            text-white font-medium
-            transition-all duration-300 transform hover:scale-105
-            shadow-md hover:shadow-lg
+            text-md font-semibold text-yellow-800
+            transition-all duration-300 transform hover:scale-105 hover:rotate-3
+            shadow-md hover:shadow-lg bg-yellow-300 hover:bg-yellow-400
         `,
 
         primaryBtnMobile: `
             px-8 py-3 mt-8 rounded-full
-            bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700
-            text-white font-medium text-xl
-            transition-all duration-300 transform hover:scale-105
-            shadow-md
+            text-xl font-semibold text-yellow-800
+            transition-all duration-300 transform hover:scale-105 hover:rotate-3
+            shadow-lg bg-yellow-300 hover:bg-yellow-400
         `,
 
         dropDownBtn: (isActive) => `
-            flex items-center px-3 py-2 space-x-1 rounded-md
-            text-sm font-medium transition-all duration-300 transform hover:scale-105
+            flex items-center px-4 py-2 space-x-1 rounded-full
+            text-md font-semibold 
+            transition-all duration-300 transform hover:scale-105 hover:rotate-3
             ${isActive 
-                ? "bg-blue-100 text-blue-700 scale-105"
-                : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                ? "bg-yellow-300 text-yellow-800 scale-105 shadow-sm"
+                : "text-yellow-900 hover:bg-yellow-200 hover:shadow-md"
             }
         `,
 
         dropDownBtnMobile: (isActive) => `
-            flex items-center space-x-2 text-2xl font-medium 
-            transition-all duration-300 transform hover:scale-110 hover:text-blue-600
+            flex items-center space-x-2  px-4 py-2 rounded-full
+            text-2xl font-semibold transition-all duration-300 transform hover:scale-110 hover:rotate-3
             ${isActive 
-                ? "text-blue-600 scale-110" 
-                : "text-gray-800"
+                ? "bg-yellow-300 text-yellow-800 scale-110 shadow-sm" 
+                : "text-yellow-900 hover:bg-yellow-200 hover:shadow-md"
             }
         `   
     }
@@ -96,15 +126,15 @@ const Navigation = () => {
     const isAdoptionActive = isActiveRoute('/dogs') || isActiveRoute('/schedule-meeting') || isActiveRoute('/virtual-adoption');
 
     return (
-        <nav className="sticky top-0 z-50 shadow-lg bg-white">
+        <nav className="sticky top-0 z-50 shadow-lg bg-blue-50 border-blue-100">
             <div className="max-w-7xl px-4 mx-auto sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
 
                     {/* Responsive logo section */}
                     <div className="flex items-center">
-                        <Link to="/" className="flex items-center space-x-3" onClick={handleLinkClick}>
-                        <div className="w-10 h-10 flex items-center justify-center rounded-full bg-yellow-500">
-                            <Dog className='w-6 h-6 text-black' />
+                        <Link to="/" className="flex items-center space-x-3 group" onClick={handleLinkClick}>
+                        <div className="logo-wiggle w-12 h-12 flex items-center justify-center rounded-full bg-yellow-300/80 shadow-sm transition-colors duration-300 group-hover:bg-yellow-300">
+                            <Dog className='w-8 h-8 text-yellow-800 drop-shadow-sm' />
                         </div>
                         <span className="text-black text-xl font-bold hidden sm:block">PawSome</span>
                         </Link>
@@ -115,22 +145,16 @@ const Navigation = () => {
                         <div className="flex items-center ml-10 space-x-8">
                             <Link 
                                 to="/"
-                                className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
-                                    isActiveRoute('/') ? 'bg-yellow-200 scale-105' : 'text-gray-600 hover:bg-gray-50'
-                                }`}
+                                className={styles.navLink(isActiveRoute('/'), 0)}
                             >
                                 Home
                             </Link>
                             
                             { /* Dropdown Adoption for desktop */}
-                            <div className="relative">
+                            <div className="relative" ref={dropdownRef}>
                                 <button
                                     onClick={toggleAdoptionDropdown}
-                                    className={`flex items-center px-3 py-2 space-x-1 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
-                                        isActiveRoute('/dogs') || isActiveRoute('/schedule-meeting') || isActiveRoute('/virtual-adoption')
-                                        ? "bg-yellow-200 text-black scale-105"
-                                        : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
-                                    }`}
+                                    className={styles.dropDownBtn(isAdoptionActive, 1)}
                                 >
                                     <span>Adoption</span>
                                     <ChevronDown
@@ -141,24 +165,24 @@ const Navigation = () => {
                                 </button>
 
                                 {isAdoptionDropdownOpen && (
-                                    <div className="absolute top-full left-0 mt-2 py-2 z-50 w-48 bg-white rounded-md shadow-lg border border-gray-200">
+                                    <div className="absolute top-full left-0 mt-2 py-2 z-50 w-52 bg-white rounded-xl shadow-xl border border-blue-100">
                                         <Link
                                             to="/dogs"
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200"
+                                            className={styles.dropDownItem(0)}
                                             onClick={() => setIsAdoptionDropdownOpen(false)}
                                         >
                                             Dogs
                                         </Link>
                                         <Link
                                             to="/schedule-meeting"
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200"
+                                            className={styles.dropDownItem(1)}
                                             onClick={() => setIsAdoptionDropdownOpen(false)}
                                         >
                                             Schedule Meeting
                                         </Link>
                                         <Link
                                             to="/virtual-adoption"
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200"
+                                            className={styles.dropDownItem(2)}
                                             onClick={() => setIsAdoptionDropdownOpen(false)}
                                         >
                                             Virtual Adoption
@@ -170,17 +194,13 @@ const Navigation = () => {
 
                             <Link
                                 to="/about"
-                                className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
-                                    isActiveRoute('/about') ? "bg-blue-100 text-blue-700 scale-105" : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
-                                }`}
+                                className={styles.navLink(isActiveRoute('/about'), 2)}
                             >
                                 About
                             </Link>
                             <Link
                                 to="/contact"
-                                className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
-                                    isActiveRoute('/contact') ? "bg-blue-100 text-blue-700 scale-105" : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
-                                }`}
+                                className={styles.navLink(isActiveRoute('/contact'), 3)}
                             >
                                 Contact
                             </Link>
@@ -191,7 +211,7 @@ const Navigation = () => {
                     <div className="hidden lg:block">
                         <Link
                             to="/login"
-                            className="px-6 py-3 rounded bg-gradient-to-r from-black to-yellow-600 hover:from-yellow-600 hover:to-black text-white font-medium transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg"
+                            className={styles.primaryBtn}
                         >
                             Log In
                         </Link>
@@ -207,7 +227,7 @@ const Navigation = () => {
                     <div className="lg:hidden">
                         <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            className="inline-flex items-center justify-center p-2 rounded-md text-black hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-500 transition-all duration-300"
+                            className="inline-flex items-center justify-center p-2 rounded-md text-slate-600 hover:bg-yellow-100 hover:text-yellow-800 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition-all duration-300 transform hover:scale-110"
                         >
                         {/* Menu / X toggle*/}
                         {isMenuOpen ? (
@@ -232,7 +252,7 @@ const Navigation = () => {
                         ></div>
 
                         {/* Menu items with content  and close button*/}
-                        <div className={`relative h-full w-full flex flex-col items-center justify-center space-y-8 transform transition-transform duration-500 bg-white ${
+                        <div className={`relative h-full w-full flex flex-col items-center justify-center space-y-8 transform transition-transform duration-500 bg-yellow-50 ${
                             isMenuOpen ? "translate-x-0" : "translate-x-full"
                         }`}>
 
@@ -251,9 +271,7 @@ const Navigation = () => {
                                 <Link
                                     to="/"
                                     onClick={handleLinkClick}
-                                    className={`text-2xl font-medium transition-all duration-300 transform hover:scale-110 hover:text-blue-600 ${
-                                        isActiveRoute('/') ? 'text-blue-600 scale-110' : 'text-black'
-                                    }`}
+                                    className={styles.mobileLink(isActiveRoute('/'), 0)}
                                 >
                                     Home
                                 </Link>
@@ -262,9 +280,7 @@ const Navigation = () => {
                                 {/*Adoption menu item*/}
                                 <div className="flex flex-col items-center space-y-4">
                                     <button
-                                        className={`flex items-center text-2xl font-medium space-x-2 transition-all duration-300 transform hover:scale-110 hover:text-blue-800 ${
-                                            isActiveRoute('/dogs') || isActiveRoute('/schedule-meeting') || isActiveRoute('/virtual-adoption') ? "text-blue-600 scale-110" : "text-black"
-                                        }`}
+                                        className={styles.dropDownBtnMobile(isAdoptionActive, 1)}
                                         onClick={toggleAdoptionDropdown}
                                     >
                                         <span> Adoption </span>
@@ -278,25 +294,25 @@ const Navigation = () => {
 
                                     {/*Dropdown for Adoption menu item for mobile*/}
                                     {isAdoptionDropdownOpen && (
-                                        <div className="flex flex-col items-center space-y-3 pl-4">
+                                        <div className="flex flex-col items-center space-y-3">
                                             <Link
                                                 to="/dogs"
                                                 onClick={handleLinkClick}
-                                                className="text-lg text-black hover:text-blue-600 transition-all duration-300 transform hover:scale-105"
+                                                className={styles.dropDownItemMobile(0)}
                                             >
                                                 Dogs
                                             </Link>
                                             <Link
                                                 to="/schedule-meeting"
                                                 onClick={handleLinkClick}
-                                                className="text-lg text-black hover:text-blue-600 transition-all duration-300 transform hover:scale-105"
+                                                className={styles.dropDownItemMobile(1)}
                                             >
                                                 Schedule Meeting
                                             </Link>
                                             <Link
                                                 to="/virtual-adoption"
                                                 onClick={handleLinkClick}
-                                                className="text-lg text-black hover:text-blue-600 transition-all duration-300 transform hover:scale-105"
+                                                className={styles.dropDownItemMobile(2)}
                                             >
                                                 Virtual Adoption
                                             </Link>
@@ -307,9 +323,7 @@ const Navigation = () => {
                                 <Link
                                     to="/about"
                                     onClick={handleLinkClick}
-                                    className={`text-2xl font-medium transition-all duration-300 transform hover:scale-110 hover:text-blue-600 ${
-                                        isActiveRoute('/about') ? 'text-blue-600 scale-110' : 'text-black'
-                                    }`}
+                                    className={styles.mobileLink(isActiveRoute('/about'), 2)}
                                 >
                                     About
                                 </Link>
@@ -317,9 +331,7 @@ const Navigation = () => {
                                 <Link
                                     to="/contact"
                                     onClick={handleLinkClick}
-                                    className={`text-2xl font-medium transition-all duration-300 transform hover:scale-110 hover:text-blue-600 ${
-                                        isActiveRoute('/contact') ? 'text-blue-600 scale-110' : 'text-black'
-                                    }`}
+                                    className={styles.mobileLink(isActiveRoute('/contact'), 3)}
                                 >
                                     Contact
                                 </Link>
@@ -327,7 +339,7 @@ const Navigation = () => {
                                 <Link
                                     to="/login"
                                     onClick={handleLinkClick}
-                                    className="bg-gradient-to-r from-black to-yellow-600 hover:from-black hover:to-yellow-700 text-white py-3 px-5 rounded font-medium transition-all duration-300 transform hover:scale-105 shadow-lg text-xl mt-8"
+                                    className={styles.primaryBtnMobile}
                                 >
                                     Log In
                                 </Link>

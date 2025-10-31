@@ -93,14 +93,14 @@ const Navigation = () => {
             px-6 py-2 rounded-full
             text-md font-semibold text-yellow-800
             transition-all duration-300 transform hover:scale-105 hover:rotate-3
-            shadow-md hover:shadow-lg bg-yellow-300 hover:bg-yellow-400
+            shadow-md hover:shadow-lg bg-yellow-300/80 hover:bg-yellow-300
         `,
 
         primaryBtnMobile: `
             px-8 py-3 mt-8 rounded-full
             text-xl font-semibold text-yellow-800
             transition-all duration-300 transform hover:scale-105 hover:rotate-3
-            shadow-lg bg-yellow-300 hover:bg-yellow-400
+            shadow-lg bg-yellow-300/80 hover:bg-yellow-300
         `,
 
         dropDownBtn: (isActive) => `
@@ -126,7 +126,7 @@ const Navigation = () => {
     const isAdoptionActive = isActiveRoute('/dogs') || isActiveRoute('/schedule-meeting') || isActiveRoute('/virtual-adoption');
 
     return (
-        <nav className="sticky top-0 z-50 shadow-lg bg-blue-50 border-blue-100">
+        <nav className="sticky top-0 z-50 shadow-lg bg-sky-100 border-blue-100 backdrop-blur-sm">
             <div className="max-w-7xl px-4 mx-auto sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
 
@@ -136,7 +136,7 @@ const Navigation = () => {
                         <div className="logo-wiggle w-12 h-12 flex items-center justify-center rounded-full bg-yellow-300/80 shadow-sm transition-colors duration-300 group-hover:bg-yellow-300">
                             <Dog className='w-8 h-8 text-yellow-800 drop-shadow-sm' />
                         </div>
-                        <span className="text-black text-xl font-bold hidden sm:block">PawSome</span>
+                        <span className="text-yellow-800 text-xl font-bold hidden sm:block">PawSome</span>
                         </Link>
                     </div>
 

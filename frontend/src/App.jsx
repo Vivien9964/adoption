@@ -8,6 +8,7 @@ import AdoptPage from './pages/AdoptPage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 
 import Navigation from './components/layout/Navigation.jsx';
+import Footer from './components/layout/Footer.jsx';
 
 
 function App() {
@@ -15,11 +16,14 @@ function App() {
   return (
     <Router>
       <Navigation />
+
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/adopt" element={<AdoptPage />} />
       </Routes>
+
+      <Footer />
     </Router>
   )
 }

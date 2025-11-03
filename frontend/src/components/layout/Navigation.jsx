@@ -13,6 +13,8 @@ const Navigation = () => {
     const dropdownRef = useRef(null);
     const location = useLocation();
 
+    // The function below ensures that the dropdown menu on a desktop can be closed
+    // by clicking anywhere on the page if the mobile menu is not open!!
     useEffect(() => {
         const handleClickOutside = (e) => {
             if(!isMenuOpen && dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -29,8 +31,6 @@ const Navigation = () => {
 
     }, [isAdoptionDropdownOpen, isMenuOpen]);
 
-
-
     const isActiveRoute = (path) => {
         return location.pathname === path;
     }
@@ -40,7 +40,6 @@ const Navigation = () => {
           setIsMenuOpen(false);
           setIsAdoptionDropdownOpen(false);
     }
-
 
     const toggleAdoptionDropdown = () => {
         setIsAdoptionDropdownOpen(!isAdoptionDropdownOpen);

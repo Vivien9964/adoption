@@ -1,39 +1,41 @@
 import Button from '../components/common/Button'
+import Section from '../components/layout/Section'
 
 const HomePage = () => {
 
     return(
-        <div className="min-h-screen bg-blue-400/60 p-8">
-            <div className="max-w-4xl mx-auto space-y-4">
+        <main className="min-h-screen bg-blue-400/60 p-8">
+           
+           <Section background="blue" padding="normal" maxWidth="7xl">
+            <h2 className="text-3xl font-bold mb-4">Section test</h2>
+            <p className="text-gray-700 mb-6">
+                This is a test for a section.
+            </p>
 
-                <h1 className="text-3xl font-bold mb-8">Buttons</h1>
+            <Button variant="primary">Test Button</Button>
+           </Section>
 
 
-                {/* Primary button test */}
-                <div className="space-x-4">
-                    <Button variant="primary" size="small">Small primary</Button>
-                    <Button variant="primary" size="medium">Medium primary</Button>
-                    <Button variant="primary" size="large">Large primary</Button>
-                </div>
+           <Section background="white" padding="large" maxWidth="2xl" className="mt-4">
+            <h2 className="text-3xl font-bold mb-4">Section test</h2>
+            <p className="text-gray-700 text-center">
+                This is a test for a section.
+            </p>
 
-                {/* Secondary button test */}
-                <div className="space-x-4">
-                    <Button variant="secondary" size="medium">Secondary</Button>
-                </div>
+            <Button variant="secondary">Test Button</Button>
+           </Section>
 
-                {/* Outline button test */}
-                <div className="bg-gray-800 p-4 space-x-4">
-                    <Button variant="outline" size="medium">Outline</Button>
-                </div>
 
-                {/* Mobile button */}
-                <div className="max-w-xs">
-                    <Button variant="primary" fullWidth>Full width for mobile</Button>
-                </div>
+           <Section background="blue" padding="normal" maxWidth="7xl" className="mt-6">
+            <h2 className="text-3xl font-bold mb-4">Section test</h2>
+            <p className="text-gray-700 mb-6">
+                This is a test for a section.
+            </p>
 
-            </div>
+            <Button variant="primary">Test Button</Button>
+           </Section>
 
-        </div>
+        </main>
     )
 }
 

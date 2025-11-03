@@ -15,18 +15,19 @@ const Navigation = () => {
 
     useEffect(() => {
         const handleClickOutside = (e) => {
-            if(dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+            if(!isMenuOpen && dropdownRef.current && !dropdownRef.current.contains(e.target)) {
                 setIsAdoptionDropdownOpen(false);
             }
+
         };
 
         if(isAdoptionDropdownOpen) {
             document.addEventListener('mousedown', handleClickOutside);
         }
 
-        () => document.removeEventListener('mousedown', handleClickOutside);
+       return () => document.removeEventListener('mousedown', handleClickOutside);
 
-    }, [isAdoptionDropdownOpen]);
+    }, [isAdoptionDropdownOpen, isMenuOpen]);
 
 
 
@@ -36,8 +37,8 @@ const Navigation = () => {
 
     // function to change states
     const handleLinkClick = () => {
-        setIsMenuOpen(false);
-        setIsAdoptionDropdownOpen(false);
+          setIsMenuOpen(false);
+          setIsAdoptionDropdownOpen(false);
     }
 
 
@@ -239,33 +240,37 @@ const Navigation = () => {
                     </div>
 
                     {/* Full screen menu for mobile */}
-                    <div  className={`fixed inset-0 z-40 transition-all duration-500 ease-in-out lg:hidden ${
+                    <div  className={`fixed inset-0 z-50 transition-all duration-500 ease-in-out lg:hidden ${
                         isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
                     }`}
                     >
                         {/* Dark overlay for the menu */}
+                        
                         <div
                             className={`absolute inset-0 bg-black transition-opacity duration-500 ${
                                 isMenuOpen ? "opacity-50" : "opacity-0" 
                             }`}
                             onClick={() => setIsMenuOpen(false)}
                         ></div>
+                    
 
                         {/* Menu items with content  and close button*/}
-                        <div className={`relative h-full w-full flex flex-col items-center justify-center space-y-8 transform transition-transform duration-500 bg-yellow-50 ${
+                        <div className={`relative h-screen w-screen z-10 flex flex-col items-center justify-center space-y-8 transform transition-transform duration-500 bg-yellow-50 ${
                             isMenuOpen ? "translate-x-0" : "translate-x-full"
-                        }`}>
+                        }`}
+                        onClick={(e) => e.stopPropagation()}
+                        >
 
                             {/*Close button*/}
                             <button 
-                                className="absolute top-6 right-6 p-2 text-black hover:text-gray-600 transition-colors duration-300"
+                                className="absolute z-10 top-6 right-6 p-2 text-yellow-900 hover:text-gray-600 transition-colors duration-300"
                                 onClick={() => setIsMenuOpen(false)}
                             >
                                 <X className="w-8 h-8" />
                             </button>
 
                             {/*Menu items*/}
-                            <div className="flex flex-col items-center text-center space-y-4">
+                            <div className="flex flex-col items-center text-center space-y-6">
 
                                 {/*Home menu item*/}
                                 <Link
@@ -281,7 +286,7 @@ const Navigation = () => {
                                 <div className="flex flex-col items-center space-y-4">
                                     <button
                                         className={styles.dropDownBtnMobile(isAdoptionActive, 1)}
-                                        onClick={toggleAdoptionDropdown}
+                                        onClick={toggleAdoptionDropdown} 
                                     >
                                         <span> Adoption </span>
                                         <ChevronDown
@@ -294,7 +299,7 @@ const Navigation = () => {
 
                                     {/*Dropdown for Adoption menu item for mobile*/}
                                     {isAdoptionDropdownOpen && (
-                                        <div className="flex flex-col items-center space-y-3">
+                                        <div className="flex flex-col items-center space-y-3" >
                                             <Link
                                                 to="/dogs"
                                                 onClick={handleLinkClick}

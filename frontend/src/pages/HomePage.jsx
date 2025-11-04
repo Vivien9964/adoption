@@ -1,10 +1,13 @@
 import Button from '../components/common/Button'
 import Section from '../components/layout/Section'
+import HeroSection from '../components/home/HeroSection';
 
 const HomePage = () => {
 
     return(
-        <main className="min-h-screen bg-blue-400/60 p-8">
+        <>
+
+            <HeroSection />
            
            <Section background="blue" padding="normal" maxWidth="7xl">
             <h2 className="text-3xl font-bold mb-4">Section test</h2>
@@ -35,7 +38,7 @@ const HomePage = () => {
             <Button variant="primary">Test Button</Button>
            </Section>
 
-        </main>
+        </>
     )
 }
 

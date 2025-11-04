@@ -2,6 +2,15 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
 
+:root {
+  --color-sky-100: #e0f2fe;
+  --color-sky-200: #bae6fd;
+  --color-yellow-300: #fde047;
+  --color-yellow-400: #facc15;
+  --color-yellow-500: #eab308;
+}
+
+
 @keyframes wiggle {
   0%, 7% {
     transform: rotateZ(0);
@@ -31,7 +40,35 @@
     animation: wiggle 2s ease-in-out;
 }
 
-
-body {
+html, body {
   font-family: 'Fredoka', cursive;
+  overflow-x: hidden;
 }
+
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-sky-100);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-yellow-300);
+  border-radius: 10px;
+  border: 2px solid var(--color-sky-100);
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color--yellow-400);
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--color-yellow-500);
+}
+

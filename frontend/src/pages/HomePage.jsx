@@ -1,7 +1,8 @@
 import Button from '../components/common/Button'
 import Section from '../components/layout/Section'
-import HeroSection from '../components/home/HeroSection'
-import ChooseUsSection from '../components/home/ChooseUsSection'
+import HeroSection from '../components/home/HeroSection';
+import ChooseUsSection from '../components/home/ChooseUsSection';
+import FeaturedPetsSection from '../components/home/FeaturedPetsSection';
 
 const HomePage = () => {
 
@@ -10,6 +11,7 @@ const HomePage = () => {
 
             <HeroSection />
            <ChooseUsSection />
+           <FeaturedPetsSection />
            
         </>
     )

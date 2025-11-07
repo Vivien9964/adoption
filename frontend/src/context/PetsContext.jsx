@@ -1,7 +1,6 @@
 
 // Context to hold pet data, later on the list of available pets are going to be shared accross 
 // multiple pages
-
 import { createContext, useContext, useState, useEffect } from 'react';
 
 // Creating the context
@@ -14,9 +13,13 @@ export const usePets = () => {
     if(!context) {
         throw new Error("Component must be wrapped by PetsProvider!");
     }
-    
+
     return context;
 };
+
+
+// future reference -> pictures in public folder: /images/dogs/maxi.jpg for mock data
+// Image dimensions: 800x600px or 1200x900px 4:3 ratio for swiper carousel
 
 // provider component 
 export const PetsProvider = ({ children }) => {
@@ -30,6 +33,7 @@ export const PetsProvider = ({ children }) => {
             gender: "male",
             breed: "Golden Retriever",
             size: "Large",
+            image: "https://placedog.net/500/400?id=2",
             personality: "Friendly and energetic! Maxi is the ideal furry friend for an active household.",
             featured: true
         },
@@ -40,6 +44,7 @@ export const PetsProvider = ({ children }) => {
             gender: "female",
             breed: "Daschund mix",
             size: "Small",
+            image: "https://placedog.net/500/400?id=4",
             personality: "Sweet and playful! She loves attention and is a loving companion.",
             featured: true
         },
@@ -50,6 +55,7 @@ export const PetsProvider = ({ children }) => {
             gender: "male",
             breed: "Mixed breed",
             size: "Medium",
+            image: "https://placedog.net/500/400?id=6",
             personality: "Smart and gentle! Benji loves to learn new tricks and rest beside you!",
             featured: true
         },
@@ -60,6 +66,7 @@ export const PetsProvider = ({ children }) => {
             gender: "male",
             breed: "Carpathian Shepherd",
             size: "Large",
+            image: "https://placedog.net/500/400?id=8",
             personality: "Protective and loving! He is a gentle giant and and excellent guard dog who needs many kisses.",
             featured: true
         },
@@ -70,6 +77,7 @@ export const PetsProvider = ({ children }) => {
             gender: "female",
             breed: "Bichon Frise",
             size: "Small",
+            image: "https://placedog.net/500/400?id=10",
             personality: "Shy troublemaker! Misty is an elderly dog with a childish spirit who loves attention, but only from you!",
             featured: true
         }

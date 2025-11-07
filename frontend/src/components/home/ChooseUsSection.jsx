@@ -28,7 +28,7 @@
 
 
     return (
-        <Section background="white" padding="large" maxWidth="7xl" id="choose-us">
+        <Section background="white" padding="normal" maxWidth="7xl" id="choose-us">
             
             {/* Section header with main title and subtitle */}
             <div className="mb-12 md:mb-16 text-center">

@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import Button from '../common/Button';
-import Section from '../layout/Section';
 import { Heart, HandHeart } from 'lucide-react';
 
 const HeroSection = () => {

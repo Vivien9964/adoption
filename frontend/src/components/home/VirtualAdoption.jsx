@@ -56,13 +56,26 @@ const VirtualAdoption = () => {
                         <div
                             key={option.id}
                             className="
-                                p-6 md:p-8 rounded-2xl
+                               group p-6 md:p-8 rounded-2xl relative overflow-hidden
                                 bg-white hover:bg-sky-50/50 text-center
                                 border-2 border-transparent hover:border-yellow-300
                                 hover:shadow-xl hover:-translate-2
                                 transition-all duration-300 cursor-pointer"
                         >
 
+                            {/* Decor blob */}
+                            <div className="
+                                absolute -top-8 -right-8 w-24 h-24
+                                bg-yellow-200 rounded-full blur-lg
+                                group-hover:scale-150 transition-transform duration-500">
+                            </div>
+
+                             {/* Decor blob */}
+                             <div className="
+                                absolute -bottom-8 -left-8 w-24 h-24
+                                bg-yellow-400/50 rounded-full blur-lg
+                                group-hover:scale-150 transition-transform duration-500">
+                            </div>
 
                             {/* Option title */}
                             <h3 className="mb-3 text-xl md:text-2xl font-bold text-yellow-900">
@@ -70,7 +83,7 @@ const VirtualAdoption = () => {
                             </h3>
 
                             {/* Option description*/}
-                            <p className="text-gray-700 leading-relaxed text-sm md:text-base">
+                            <p className="text-yellow-900 leading-relaxed text-sm md:text-base">
                                 {option.description}
                             </p>
                         </div>

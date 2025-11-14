@@ -105,7 +105,7 @@ const Navigation = () => {
 
         dropDownBtn: (isActive) => `
             flex items-center px-4 py-2 space-x-1 rounded-full
-            text-md font-semibold 
+            text-md font-semibold cursor-pointer
             transition-all duration-300 transform hover:scale-105 hover:rotate-3
             ${isActive 
                 ? "bg-yellow-300 text-yellow-800 scale-105 shadow-sm"

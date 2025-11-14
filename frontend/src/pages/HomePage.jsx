@@ -3,6 +3,7 @@ import ChooseUsSection from '../components/home/ChooseUsSection';
 import FeaturedPetsSection from '../components/home/FeaturedPetsSection';
 import AdoptionGuideSection from '../components/home/AdoptionGuideSection';
 import VirtualAdoption from '../components/home/VirtualAdoption';
+import EventsSection from '../components/home/EventsSection';
 
 const HomePage = () => {
 
@@ -46,6 +47,7 @@ const HomePage = () => {
            />
 
            <VirtualAdoption />
+           <EventsSection />
         
         </>
     )

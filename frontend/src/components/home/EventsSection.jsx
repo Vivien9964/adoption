@@ -16,7 +16,7 @@ const EventsSection = () => {
             </h2>
 
             <div className="
-                    flex items-center justify-center flex-col lg:flex-row gap-8 md:gap-10 lg:gap-14"
+                    flex flex-wrap items-center justify-center flex-col lg:flex-row gap-8 md:gap-10 lg:gap-14"
             >
                {eventsData.map((event) => {
                     return <EventCard key={event.id} event={event} />

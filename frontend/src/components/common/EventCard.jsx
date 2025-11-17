@@ -12,7 +12,7 @@ const EventCard = ({ event }) => {
 
     return (
         <div className="
-                h-full flex-1 p-3 md:p-4 lg:p-6 overflow-hidden
+                flex-1 p-3 md:p-4 lg:p-6 overflow-hidden
                 bg-white rounded-xl 
                 shadow-lg hover:shadow-xl hover:-translate-y-2
                 transition-all duration-400 

@@ -143,7 +143,7 @@ const Footer = () => {
                         <div className={styles.contactItem}>
                             <MapPin className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
                             <span className="text-sm">
-                                Bdul. Revolutiei 63, Arad, Romania
+                                Arad Street 77, Arad
                             </span>
                         </div>
 

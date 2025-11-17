@@ -32,7 +32,7 @@
             
             {/* Section header with main title and subtitle */}
             <div className="mb-12 md:mb-16 text-center">
-                <h2 className="mb-4 text-3xl md:text-4xl lg:text-5xl font bold text-yellow-900">
+                <h2 className="mb-4 text-3xl md:text-4xl lg:text-5xl font-bold text-yellow-900">
                     Why Adopt from <span className="text-amber-500">Us</span> ?
                 </h2>
 

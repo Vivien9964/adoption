@@ -14,7 +14,7 @@ const EventCard = ({ event }) => {
         <div className="
                 h-full flex-1 p-3 md:p-4 lg:p-6 overflow-hidden
                 bg-white rounded-xl 
-                shadow-lg hover:shadow-xl hover:translate-y-2
+                shadow-lg hover:shadow-xl hover:-translate-y-2
                 transition-all duration-400 
                 cursor-pointer"
         >
@@ -85,7 +85,7 @@ const EventCard = ({ event }) => {
                 {/* Paw icon with special note, if there is one */}
                 {event.specialNote && (
 
-                    <div className="flex flex-1 gap-3 justify-center border-1 rounded-full p-3 mt-3 bg-sky-100/50">
+                    <div className="flex flex-1 gap-3 justify-center border-1 rounded-full p-4 mt-3 bg-sky-100/50">
                         {/* Map icon */}
                         <PawPrint size={22} color={"orange"} />
 

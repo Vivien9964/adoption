@@ -34,7 +34,7 @@ const FeaturedPetsSection = () => {
                     Meet Your <span className="text-amber-500"> Pawsome Friend </span>
                 </h2>
                 <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-700"> 
-                    These special dogs are rady to go HOME. Click to learn more about them!
+                    These special dogs are ready to go HOME. Click to learn more about them!
                 </p>
             </div>
 

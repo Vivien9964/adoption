@@ -151,7 +151,7 @@ const Footer = () => {
                         <div className={styles.contactItem}>
                             <Phone className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
                             <a 
-                                href="tel: +123456789"
+                                href="tel:+123456789"
                                 className="text-sm hover:text-yellow-600 transition-colors"
                             >
                                 (123) 456-789   

@@ -40,10 +40,15 @@
     animation: wiggle 2s ease-in-out;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html, body {
   font-family: 'Fredoka', cursive;
   overflow-x: hidden;
 }
+
 
 
 ::-webkit-scrollbar {
@@ -64,7 +69,7 @@ html, body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color--yellow-400);
+  background: var(--color-yellow-400);
   cursor: pointer;
 }
 

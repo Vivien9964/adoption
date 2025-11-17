@@ -4,6 +4,7 @@ import FeaturedPetsSection from '../components/home/FeaturedPetsSection';
 import AdoptionGuideSection from '../components/home/AdoptionGuideSection';
 import VirtualAdoption from '../components/home/VirtualAdoption';
 import EventsSection from '../components/home/EventsSection';
+import SuccessStories from '../components/home/SuccessStories';
 
 const HomePage = () => {
 
@@ -48,6 +49,7 @@ const HomePage = () => {
 
            <VirtualAdoption />
            <EventsSection />
+           <SuccessStories />
         
         </>
     )

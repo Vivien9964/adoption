@@ -24,7 +24,7 @@ const VirtualAdoption = () => {
 
 
     return(
-        <Section padding="small" background="gray">
+        <Section padding="small" background="white">
 
             {/* Header */}
             <div className="flex flex-col items-center text-center gap-6 mb-12 md:mb-16">
@@ -33,7 +33,7 @@ const VirtualAdoption = () => {
                 <div className="
                         inline-flex items-center gap-3 px-6 py-3
                         bg-yellow-300 rounded-full shadow-md
-                        hover:shadow-lg hover:scale-105 transition-all duartion-300"
+                        hover:shadow-lg hover:scale-105 transition-all duration-300"
                 >
                     
                     {/* Title */}
@@ -93,7 +93,7 @@ const VirtualAdoption = () => {
             
             {/* CTA button */}
             <div className="flex justify-center">
-                <Button variant="accent" size="large" href="virtualadoption" className="group">
+                <Button variant="accent" size="large" href="/virtualadoption" className="group">
                     Learn More
                 </Button>
             </div>

@@ -33,7 +33,7 @@ const SuccessStories = () => {
                 
                 {/* Success story card */}
                 {testimonialsData.map((testimonial) => (
-                    <SuccessCard testimonial={testimonial} />
+                    <SuccessCard key={testimonial.id} testimonial={testimonial} />
                 ))}
 
 

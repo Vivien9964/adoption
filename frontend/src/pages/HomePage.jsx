@@ -39,7 +39,7 @@ const HomePage = () => {
                     Found a dog that you would like to meet? Schedule a visit to our shelter. 
                     You can ask questions, go for a walk, play and see how your personalities match."
                 buttonText="Schedule a visit"
-                buttonHref="/appointment"
+                buttonHref="/schedule-meeting"
                 imageSrc="/images/AdoptStepTwo.jpg"
                 imageAlt="Schedule a visit"
                 reversed={true}

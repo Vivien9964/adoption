@@ -1,7 +1,10 @@
 const PetCardDogsPage = () => {
 
     return (
-        <p>Card</p>
+        <div>
+            <p>Card1</p>
+        </div>
+        
     )
 }
 

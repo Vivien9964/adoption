@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 // Pages visible in the menu, main pages for the application
 import HomePage from './pages/HomePage';
 import DogsPage from './pages/DogsPage';
+import DogProfilePage from './pages/DogProfilePage';
 import ScheduleMeetingPage from './pages/ScheduleMeetingPage';
 import VirtualAdoptionPage from './pages/VirtualAdoptionPage';
 import AboutPage from './pages/AboutPage';
@@ -27,6 +28,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/dogs" element={<DogsPage />} />
+          <Route path="/dogs/:id" element={<DogProfilePage />} />
           <Route path="/schedule-meeting" element={<ScheduleMeetingPage />} />
           <Route path="/virtual-adoption" element={<VirtualAdoptionPage />} />
         </Routes>

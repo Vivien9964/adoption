@@ -1,8 +1,23 @@
+import { useNavigate } from 'react-router-dom'
+import { MapPin } from 'lucide-react';
+
+
 const PetCardDogsPage = ({dog}) => {
+
+    const navigate = useNavigate();
+
+    // helper function to navigate to individual dog profile page
+    const handleClick = () => {
+        navigate(`/dogs/${dog.id}`);
+    }
+
+    const dogAge = dog.ageInMonths < 12 ? `${dog.ageInMonths} ${dog.ageInMonths === 1 ? "month" : "months"}`
+                                 : `${dog.age} ${dog.age === 1 ? "year" : "years"}`
+
 
     return (
     
-        <div className="group relative cursor-pointer">
+        <div className="group relative cursor-pointer" onClick={handleClick}>
 
             {/* Inner main container that holds the main content */}
             <div className="text-center bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 ">
@@ -39,7 +54,11 @@ const PetCardDogsPage = ({dog}) => {
                     {/* Age container */}
                     <div className='text-center p-3 bg-yellow-200 border-2 border-gray-700 rounded-2xl'>
                         <p className='mb-1 text-xs tracking-wide font-semibold uppercase text-yellow-900/70'>Age</p>
-                        <p className='text-lg leading-tight font-bold text-gray-800'>{dog.age === 1 ? `${dog.age} year` : `${dog.age} years`}</p>
+                        <p className='text-lg leading-tight font-bold text-gray-800'>
+                            {dogAge}
+                        </p>
+                    
+  
                     </div>
 
                     {/* Gender container */}
@@ -73,9 +92,9 @@ const PetCardDogsPage = ({dog}) => {
                 <button className='
                     w-[70%] py-3.5 px-6 rounded-2xl mb-4
                     bg-yellow-500 hover:bg-yellow-600 text-yellow-900 font-black text-base
-                    transition-all duration-300 shadow-md hover:shadow-xl border-2 border-yellow-500'
+                    transition-all duration-300 shadow-md hover:shadow-xl border-2 border-yellow-500 hover:rotate-3'
                 >
-                    `Meet ${dog.name}`
+                    {`Meet ${dog.name}`}
                 </button>
     
             </div>

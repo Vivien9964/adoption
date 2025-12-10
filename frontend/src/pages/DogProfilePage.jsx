@@ -1,7 +1,26 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import dogsData from '../data/dogsData';
 import Section from '../components/layout/Section';
-import { MapPin, Calendar, CircleCheck } from 'lucide-react';
+import { 
+    MapPin, 
+    Calendar, 
+    CircleCheck, 
+    Baby,
+    BadgeCheck,
+    Building2,
+    UserRound,
+    PawPrint,
+    HeartPulse,
+    Trees,
+    Zap, 
+    Activity,
+    Award,
+    CalendarHeart,
+    Sparkles,
+    Stethoscope,
+    House
+
+} from 'lucide-react';
 
 const DogProfilePage = () => {
 
@@ -21,6 +40,20 @@ const DogProfilePage = () => {
         const newDate = new Date(date);
         return `${newDate.toLocaleString('en-US', { month: "short"  })} ${newDate.getFullYear()}`;
     }
+
+    // Icon configuration for "Good with" section - the database is not concerned with UI related 
+    const goodWithConfig = [
+        { key: "apartmentLiving", label: "Apartments", icon: Building2 },
+        { key: "yard", label: "Outdoors", icon: Trees },
+        { key: "smallChildren", label: "Toddlers", icon: Baby },
+        { key: "olderChildren", label: "Older Children", icon: UserRound },
+        { key: "adults", label: "Adults", icon: UserRound },
+        { key: "seniors", label: "Seniors", icon: HeartPulse },
+        { key: "otherAnimals", label: "Other Animals", icon: PawPrint },
+        { key: "experiencedOwners", label: "Experienced Owners", icon: BadgeCheck },
+        { key: "activeOwners", label: "Active Owners", icon: Zap },
+    ]
+    
 
 
 
@@ -57,7 +90,7 @@ const DogProfilePage = () => {
 
                             {/* Location badge */}
                             <span className='
-                                        px-2 py-1 flex items-center gap-1 whitespace-nowrap
+                                        px-2 py-1 flex items-center justify-center gap-1 whitespace-nowrap
                                         rounded-xl bg-yellow-200 text-yellow-900 text-xs font-bold 
                                         border-2 border-yellow-300 '
                             >
@@ -139,6 +172,33 @@ const DogProfilePage = () => {
                             ))}
 
                         </div>
+                        
+                        {/* Ideal home section  */}
+                        <div className='mt-6 border-2 border-amber-300/50 bg-amber-50 rounded-xl p-6'>
+
+                            <h2 className='text-xl lg:text-2xl font-bold text-gray-700 mb-1'>
+                                My Ideal Home
+                            </h2>
+
+                            <div className='mt-4 p-3'>
+                                <p className='text-gray-600'>Here goes the ideal home description later on when the database is updated.</p>
+                            </div>
+
+                            <div className='flex gap-3 flex-wrap'>
+                                <span className='px-3 py-1 text-yellow-800 border-3 border-yellow-300 bg-white rounded-xl'>
+                                    Ideal badge
+                                </span>
+                                <span className='px-3 py-1 text-yellow-800 border-3 border-yellow-300 bg-white rounded-xl'>
+                                    Ideal badge
+                                </span>
+                                <span className='px-3 py-1 text-yellow-800 border-3 border-yellow-300 bg-white rounded-xl'>
+                                    Ideal badge
+                                </span>
+                                <span className='px-3 py-1 text-yellow-800 border-3 border-yellow-300 bg-white rounded-xl'>
+                                    Ideal badge
+                                </span>
+                            </div>
+                        </div>
 
                         {/* Background, story container */}
                         <div className='mt-6 border-2 border-sky-300/50 bg-sky-50 rounded-xl p-6'>
@@ -176,10 +236,101 @@ const DogProfilePage = () => {
 
                         </div>
                         
-                    
                     </div>
 
+                {/* Details - energy level, health, training, good with */}
+                <div className='border-2 border-yellow-300 rounded-xl p-4 mt-4'>
+                    
+                    {/* Section title */}
+                    <h2 className='text-xl lg:text-2xl font-bold text-gray-700 mb-1'>I'm great for</h2>
 
+                    {/* Good with badges */}
+                    <div className='flex gap-3 flex-wrap mt-4'>
+                        {goodWithConfig.map(({ key, label, icon: Icon }) =>
+                            dog.goodWith[key] ? (
+                            <div key={key} className="flex items-center gap-2 border-3 border-yellow-300/50 bg-amber-200 px-3 py-1 rounded-full">
+                                <Icon className="w-5 h-5 text-yellow-900" />
+                                <span>{label}</span>
+                            </div>
+                            ) : null
+                        )}           
+                    </div>
+
+                    {/* Section divider */}
+                    <div className="h-px bg-gradient-to-r from-transparent via-yellow-300 to-transparent mt-4"></div>
+
+                    {/* Additional information */}
+                    <div className='mt-4 flex flex-col gap-3'>
+
+                        {/* Energy levels container icon, label + info */}
+                        <div className='flex justify-between p-4 bg-lime-200 rounded-xl'>
+                            {/* Energy icon with label */}
+                            <div className='flex gap-3 items-center'>
+                                <span className='rounded-full p-2 bg-sky-100 border-1 border-sky-300/50'><Activity className='w-3 h-3' /></span>
+                                <h2>Energy levels</h2>
+                            </div>
+                            {/* Energy info */}
+                            <p>{dog.energyLevel}</p>
+                        </div>
+
+                        {/* Training container icon, label + info */}
+                        <div className='flex justify-between p-4 bg-lime-200 rounded-xl'>
+                            {/* Training icon with label */}
+                            <div className='flex gap-3 items-center'>
+                                <span className='rounded-full p-2 bg-sky-100 border-1 border-sky-300/50'><Award className='w-3 h-3' /></span>
+                                <h2>Training</h2>
+                            </div>
+                            {/* Training info */}
+                            <p>{dog.trainingLevel}</p>
+                        </div>
+
+                        {/* Health status container icon, label + info */}
+                        <div className='flex flex-col justify-between p-4 bg-lime-200 rounded-xl'>
+                            {/* Health icon with label */}
+                            <div className='flex gap-3 items-center'>
+                                <span className='rounded-full p-2 bg-sky-100 border-1 border-sky-300/50'><Stethoscope className='w-3 h-3' /></span>
+                                <h2>Health status</h2>
+                            </div>
+                            {/* Health info */}
+                            <p className='self-end'>{dog.healthStatus}</p>
+                        </div>
+
+                        {/* Last vet check container icon, label + info */}
+                        <div className='flex justify-between p-4 bg-lime-200 rounded-xl'>
+                            {/* Vet check icon with label */}
+                            <div className='flex gap-3 items-center'>
+                                <span className='rounded-full p-2 bg-sky-100 border-1 border-sky-300/50'><CalendarHeart className='w-3 h-3' /></span>
+                                <h2>Vet-check</h2>
+                            </div>
+                            {/* Last vet check info */}
+                            <p>{formatDate(dog.lastVetCheck)}</p>
+                        </div>
+
+                        {/* Grooming needs container icon, label + info */}
+                        <div className='flex justify-between p-4 bg-lime-200 rounded-xl'>
+                            {/* Grooming icon with label */}
+                            <div className='flex gap-3 items-center'>
+                                <span className='rounded-full p-2 bg-sky-100 border-1 border-sky-300/50'><Sparkles className='w-3 h-3' /></span>
+                                <h2>Grooming</h2>
+                            </div>
+                            {/* Grooming needs info */}
+                            <p>{dog.groomingNeeds}</p>
+                        </div>
+
+                        {/* House trained container icon, label + info */}
+                        <div className='flex justify-between p-4 bg-lime-200 rounded-xl'>
+                            {/* House  icon with label */}
+                            <div className='flex gap-3 items-center'>
+                                <span className='rounded-full p-2 bg-sky-100 border-1 border-sky-300/50'><House className='w-3 h-3' /></span>
+                                <h2>House trained</h2>
+                            </div>
+                            {/* House trained info */}
+                            <p>{dog.houseTrained}</p>
+                        </div>
+
+                    </div>
+
+                </div>
 
 
 

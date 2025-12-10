@@ -14,7 +14,17 @@ const dogsData = [
       dateAdded: "2024-10-15",
       description: "Luna is a gentle soul who loves belly rubs and playing fetch. She's wonderful with children and gets along beautifully with other dogs. Her favorite activities include swimming in the lake and napping in sunny spots.",
       personality: ["Gentle", "Playful", "Friendly", "Calm"],
-      goodWith: ["Children", "Dogs", "Cats"],
+      goodWith: {
+        adults: true,
+        smallChildren: true,
+        olderChildren: true,
+        seniors: false,
+        otherAnimals: true,
+        activeOwners: true,
+        experiencedOwners: false,
+        apartmentLiving: false,
+        yard: true
+      },
       whyAdopt: [
         "Well-socialized and friendly with people and animals",
         "House-trained and crate-trained",
@@ -24,7 +34,9 @@ const dogsData = [
       energyLevel: "Medium",
       trainingLevel: "Basic commands",
       healthStatus: "Healthy, vaccinated, spayed",
-      adoptionFee: 150,
+      lastVetCheck: "2025-11-15",
+      groomingNeeds: "Moderate",
+      houseTrained: "Yes",
       images: [
         "https://images.unsplash.com/photo-1633722715463-d30f4f325e24?w=800&h=800&fit=crop",
         "https://images.unsplash.com/photo-1558788353-f76d92427f16?w=800&h=800&fit=crop",
@@ -49,7 +61,17 @@ const dogsData = [
       dateAdded: "2024-11-01",
       description: "Max is an energetic companion who adores outdoor adventures and swimming. Perfect for active families who love hiking and water activities. He's a bundle of energy and joy!",
       personality: ["Energetic", "Loyal", "Adventurous", "Friendly"],
-      goodWith: ["Children", "Dogs"],
+      goodWith: {
+        adults: true,
+        smallChildren: true,
+        olderChildren: true,
+        seniors: true,
+        otherAnimals: true,
+        activeOwners: true,
+        experiencedOwners: false,
+        apartmentLiving: true,
+        yard: false
+      },
       whyAdopt: [
         "Thrives with active owners who enjoy hiking, running, and outdoor activities",
         "Highly trainable and eager to learn new commands and tricks",
@@ -60,7 +82,9 @@ const dogsData = [
       energyLevel: "High",
       trainingLevel: "Advanced - knows sit, stay, fetch, heel",
       healthStatus: "Healthy, vaccinated, neutered",
-      adoptionFee: 175,
+      lastVetCheck: "2025-10-29",
+      groomingNeeds: "High",
+      houseTrained: "Yes",
       images: [
         "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&h=800&fit=crop",
         "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=800&h=800&fit=crop"
@@ -92,11 +116,23 @@ const dogsData = [
         "Perfect companion for families with children who want a playmate",
         "Her enthusiasm for life is absolutely contagious"
       ],
-      goodWith: ["Children", "Dogs", "Cats"],
+      goodWith: {
+        adults: true,
+        smallChildren: true,
+        olderChildren: true,
+        seniors: true,
+        otherAnimals: true,
+        activeOwners: true,
+        experiencedOwners: false,
+        apartmentLiving: true,
+        yard: false
+      },
       energyLevel: "Medium",
       trainingLevel: "Basic commands, working on leash training",
       healthStatus: "Healthy, vaccinated, spayed",
-      adoptionFee: 140,
+      lastVetCheck: "2025-10-15",
+      groomingNeeds: "Low",
+      houseTrained: "Yes",
       images: [
         "https://images.unsplash.com/photo-1505628346881-b72b27e84530?w=800&h=800&fit=crop",
         "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=800&h=800&fit=crop"
@@ -120,7 +156,17 @@ const dogsData = [
       dateAdded: "2024-09-10",
       description: "Rocky is a loyal and protective companion seeking an experienced owner who can provide him with structure and consistent training. He's incredibly smart and devoted.",
       personality: ["Loyal", "Protective", "Intelligent", "Serious"],
-      goodWith: ["Experienced owners"],
+      goodWith: {
+        adults: true,
+        smallChildren: true,
+        olderChildren: true,
+        seniors: true,
+        otherAnimals: true,
+        activeOwners: true,
+        experiencedOwners: false,
+        apartmentLiving: true,
+        yard: false
+      },
       whyAdopt: [
         "Exceptional loyalty and devotion to their family",
         "Natural protective instincts provide security and peace of mind",
@@ -131,7 +177,9 @@ const dogsData = [
       energyLevel: "Medium-High",
       trainingLevel: "Advanced - protection trained",
       healthStatus: "Healthy, vaccinated, neutered, mild hip dysplasia managed with supplements",
-      adoptionFee: 200,
+      lastVetCheck: "2025-09-28",
+      groomingNeeds: "Moderate",
+      houseTrained: "Yes",
       images: [
         "https://images.unsplash.com/photo-1568572933382-74d440642117?w=800&h=800&fit=crop",
         "https://images.unsplash.com/photo-1549717523-e78dea47a4b0?w=800&h=800&fit=crop"
@@ -155,7 +203,17 @@ const dogsData = [
       dateAdded: "2024-11-10",
       description: "Playful Daisy is bursting with energy and absolutely loves learning new tricks. She's incredibly smart and picks things up quickly. A perfect companion for an active household!",
       personality: ["Playful", "Intelligent", "Energetic", "Affectionate"],
-      goodWith: ["Children", "Dogs"],
+      goodWith: {
+        adults: true,
+        smallChildren: true,
+        olderChildren: true,
+        seniors: true,
+        otherAnimals: true,
+        activeOwners: true,
+        experiencedOwners: false,
+        apartmentLiving: true,
+        yard: false
+      },
       whyAdopt: [
         "Well-socialized and friendly with people and animals",
         "House-trained and crate-trained for easy integration",
@@ -166,7 +224,9 @@ const dogsData = [
       energyLevel: "High",
       trainingLevel: "Learning fast - knows sit, paw, spin",
       healthStatus: "Healthy, vaccinated, not yet spayed (scheduled)",
-      adoptionFee: 160,
+      lastVetCheck: "2025-11-22",
+      groomingNeeds: "Moderate",
+      houseTrained: "Yes",
       images: [
         "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=800&h=800&fit=crop",
         "https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?w=800&h=800&fit=crop"
@@ -190,7 +250,17 @@ const dogsData = [
       dateAdded: "2024-11-15",
       description: "Little Charlie is a bundle of pure joy! As a young puppy, he's looking for someone patient to help guide him as he grows into a wonderful companion. He loves toys and playtime!",
       personality: ["Playful", "Curious", "Energetic", "Sweet"],
-      goodWith: ["Children", "Dogs", "Cats"],
+      goodWith: {
+        adults: true,
+        smallChildren: true,
+        olderChildren: true,
+        seniors: true,
+        otherAnimals: true,
+        activeOwners: true,
+        experiencedOwners: false,
+        apartmentLiving: true,
+        yard: false
+      },
       whyAdopt: [
         "Opportunity to shape and train from the very beginning",
         "Long life ahead means many years of companionship",
@@ -201,7 +271,9 @@ const dogsData = [
       energyLevel: "High (puppy energy)",
       trainingLevel: "Puppy basics - house training in progress",
       healthStatus: "Healthy, first vaccinations done, neutering scheduled at 8 months",
-      adoptionFee: 120,
+      lastVetCheck: "2025-11-15",
+      groomingNeeds: "Moderate",
+      houseTrained: "Yes",
       images: [
         "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=800&h=800&fit=crop",
         "https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?w=800&h=800&fit=crop"
@@ -225,7 +297,17 @@ const dogsData = [
       dateAdded: "2024-11-05",
       description: "Buddy is incredibly intelligent and needs mental stimulation daily. He excels at agility and loves learning new commands. Perfect for someone who wants an active, trainable companion.",
       personality: ["Intelligent", "Energetic", "Focused", "Loyal"],
-      goodWith: ["Experienced owners", "Active families"],
+      goodWith: {
+        adults: true,
+        smallChildren: true,
+        olderChildren: true,
+        seniors: true,
+        otherAnimals: true,
+        activeOwners: true,
+        experiencedOwners: false,
+        apartmentLiving: true,
+        yard: false
+      },
       whyAdopt: [
         "Exceptional loyalty and devotion to their family",
         "Natural protective instincts provide security and peace of mind",
@@ -236,7 +318,9 @@ const dogsData = [
       energyLevel: "Very High",
       trainingLevel: "Advanced - agility trained",
       healthStatus: "Healthy, vaccinated, neutered",
-      adoptionFee: 180,
+      lastVetCheck: "2025-11-15",
+      groomingNeeds: "Low",
+      houseTrained: "Yes",
       images: [
         "https://images.unsplash.com/photo-1568393691622-c7ba131d63b4?w=800&h=800&fit=crop",
         "https://images.unsplash.com/photo-1507146426996-ef05306b995a?w=800&h=800&fit=crop"
@@ -260,7 +344,17 @@ const dogsData = [
       dateAdded: "2024-10-25",
       description: "Senior sweetheart Molly is looking for a quiet home where she can spend her golden years. She loves lap time, soft blankets, and gentle walks. Low maintenance and full of love!",
       personality: ["Calm", "Affectionate", "Gentle", "Quiet"],
-      goodWith: ["Adults", "Seniors", "Quiet homes"],
+      goodWith: {
+        adults: true,
+        smallChildren: true,
+        olderChildren: true,
+        seniors: true,
+        otherAnimals: true,
+        activeOwners: true,
+        experiencedOwners: false,
+        apartmentLiving: true,
+        yard: false
+      },
       whyAdopt: [
         "Calm, predictable temperament - no puppy surprises",
         "Already trained and understands house rules",
@@ -271,7 +365,9 @@ const dogsData = [
       energyLevel: "Low",
       trainingLevel: "Fully trained",
       healthStatus: "Senior health check done, dental work completed, on joint supplements",
-      adoptionFee: 80,
+      lastVetCheck: "2025-11-15",
+      groomingNeeds: "Moderate",
+      houseTrained: "Yes",
       images: [
         "https://images.unsplash.com/photo-1541364983171-a8ba01e95cfc?w=800&h=800&fit=crop",
         "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800&h=800&fit=crop"
@@ -295,7 +391,17 @@ const dogsData = [
       dateAdded: "2024-10-30",
       description: "Zeus is a gentle giant who loves his family deeply. Despite his size, he's incredibly gentle and patient. He needs an experienced owner who understands the breed.",
       personality: ["Protective", "Gentle", "Loyal", "Calm"],
-      goodWith: ["Experienced owners", "Older children"],
+      goodWith: {
+        adults: true,
+        smallChildren: true,
+        olderChildren: true,
+        seniors: true,
+        otherAnimals: true,
+        activeOwners: true,
+        experiencedOwners: false,
+        apartmentLiving: true,
+        yard: false
+      },
       whyAdopt: [
         "Highly rewarding for owners who understand canine behavior",
         "With proper guidance, he'll be an exceptional companion",
@@ -306,7 +412,9 @@ const dogsData = [
       energyLevel: "Medium",
       trainingLevel: "Well-trained, knows commands",
       healthStatus: "Healthy, vaccinated, neutered",
-      adoptionFee: 190,
+      lastVetCheck: "2025-11-15",
+      groomingNeeds: "Moderate",
+      houseTrained: "Yes",
       images: [
         "https://images.unsplash.com/photo-1568572933382-74d440642117?w=800&h=800&fit=crop",
         "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=800&h=800&fit=crop"
@@ -330,7 +438,17 @@ const dogsData = [
       dateAdded: "2024-11-12",
       description: "Rosie is a hypoallergenic sweetheart who's perfect for apartment living. She's quiet, well-mannered, and loves everyone. Great for first-time dog owners!",
       personality: ["Sweet", "Gentle", "Friendly", "Adaptable"],
-      goodWith: ["Children", "Dogs", "Cats", "Apartments"],
+      goodWith: {
+        adults: true,
+        smallChildren: true,
+        olderChildren: true,
+        seniors: true,
+        otherAnimals: true,
+        activeOwners: true,
+        experiencedOwners: false,
+        apartmentLiving: true,
+        yard: false
+      },
       whyAdopt: [
         "Perfect size for apartment or smaller living spaces",
         "Quiet and considerate - won't disturb neighbors",
@@ -341,7 +459,9 @@ const dogsData = [
       energyLevel: "Low-Medium",
       trainingLevel: "Fully house trained",
       healthStatus: "Healthy, vaccinated, spayed",
-      adoptionFee: 155,
+      lastVetCheck: "2025-11-15",
+      groomingNeeds: "Moderate",
+      houseTrained: "Yes",
       images: [
         "https://images.unsplash.com/photo-1546527868-ccb7ee7dfa6a?w=800&h=800&fit=crop",
         "https://images.unsplash.com/photo-1514984879728-be0aff75a6e8?w=800&h=800&fit=crop"

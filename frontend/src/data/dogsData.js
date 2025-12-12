@@ -9,11 +9,16 @@ const dogsData = [
       size: "Large",
       weight: 28,
       location: "Arad",
-      status: "Available", // Available, Pending, Adopted
+      status: "Available",
       featured: true,
       dateAdded: "2024-10-15",
       description: "Luna is a gentle soul who loves belly rubs and playing fetch. She's wonderful with children and gets along beautifully with other dogs. Her favorite activities include swimming in the lake and napping in sunny spots.",
       personality: ["Gentle", "Playful", "Friendly", "Calm"],
+      story: "Luna was found wandering in a park, clearly lost and scared. After weeks of searching for her owner with no success, she's now ready for a new forever home.",
+      idealHome: {
+        description: "Luna thrives in an active family home with a yard where she can play fetch and enjoy outdoor time. She'd love a home with children and other dogs to play with.",
+        badges: ["Needs daily exercise", "Fenced Yard"]
+      },
       goodWith: {
         adults: true,
         smallChildren: true,
@@ -44,7 +49,6 @@ const dogsData = [
       ],
       mainImage: "https://images.unsplash.com/photo-1633722715463-d30f4f325e24?w=800&h=800&fit=crop",
       specialNeeds: null,
-      story: "Luna was found wandering in a park, clearly lost and scared. After weeks of searching for her owner with no success, she's now ready for a new forever home.",
     },
     {
       id: 2,
@@ -61,6 +65,11 @@ const dogsData = [
       dateAdded: "2024-11-01",
       description: "Max is an energetic companion who adores outdoor adventures and swimming. Perfect for active families who love hiking and water activities. He's a bundle of energy and joy!",
       personality: ["Energetic", "Loyal", "Adventurous", "Friendly"],
+      story: "Max's previous owner had to relocate internationally and couldn't take him along. He's adjusting well and ready to find his new adventure buddy!",
+      idealHome: {
+        description: "Max needs an active owner who loves hiking, running, and outdoor adventures. He'd excel with someone who enjoys water activities and can provide daily exercise and mental stimulation.",
+        badges: ["Active Lifestyle", "Hiking Buddy", "Water Access", "Experienced Owner"]
+      },
       goodWith: {
         adults: true,
         smallChildren: true,
@@ -91,8 +100,6 @@ const dogsData = [
       ],
       mainImage: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&h=800&fit=crop",
       specialNeeds: null,
-      story: "Max's previous owner had to relocate internationally and couldn't take him along. He's adjusting well and ready to find his new adventure buddy!",
-      videoUrl: null
     },
     {
       id: 3,
@@ -109,6 +116,11 @@ const dogsData = [
       dateAdded: "2024-10-20",
       description: "Sweet Bella is a cuddle enthusiast with a passion for treats. Her friendly nature makes her get along wonderfully with everyone she meets. She loves following her nose on walks!",
       personality: ["Sweet", "Curious", "Friendly", "Food-motivated"],
+      story: "Bella was surrendered when her family had to downsize their living situation. She's a wonderful companion who just needs a second chance.",
+      idealHome: {
+        description: "Bella would thrive in a home with a securely fenced yard due to her strong scent-tracking instincts. She's perfect for families or singles who enjoy moderate daily walks and interactive play.",
+        badges: ["Fenced Yard", "Family-Friendly", "First-Time Owner OK", "Apartment OK"]
+      },
       whyAdopt: [
         "Brings endless entertainment and laughter to your home",
         "Loves learning tricks and games - mental stimulation keeps her happy",
@@ -139,7 +151,6 @@ const dogsData = [
       ],
       mainImage: "https://images.unsplash.com/photo-1505628346881-b72b27e84530?w=800&h=800&fit=crop",
       specialNeeds: null,
-      story: "Bella was surrendered when her family had to downsize their living situation. She's a wonderful companion who just needs a second chance.",
     },
     {
       id: 4,
@@ -156,16 +167,21 @@ const dogsData = [
       dateAdded: "2024-09-10",
       description: "Rocky is a loyal and protective companion seeking an experienced owner who can provide him with structure and consistent training. He's incredibly smart and devoted.",
       personality: ["Loyal", "Protective", "Intelligent", "Serious"],
+      story: "Rocky was a working dog whose handler retired. He needs an owner who understands his training background and can provide clear leadership.",
+      idealHome: {
+        description: "Rocky requires an experienced handler who understands working breeds. He needs a structured environment with consistent training, regular exercise, and should be the only pet in the home.",
+        badges: ["Experienced Owner Required", "Only Pet", "Structured Environment", "Large Space"]
+      },
       goodWith: {
         adults: true,
-        smallChildren: true,
+        smallChildren: false,
         olderChildren: true,
         seniors: true,
         otherAnimals: true,
         activeOwners: true,
         experiencedOwners: false,
-        apartmentLiving: true,
-        yard: false
+        apartmentLiving: false,
+        yard: true
       },
       whyAdopt: [
         "Exceptional loyalty and devotion to their family",
@@ -186,7 +202,6 @@ const dogsData = [
       ],
       mainImage: "https://images.unsplash.com/photo-1568572933382-74d440642117?w=800&h=800&fit=crop",
       specialNeeds: "Needs experienced handler, best as only pet",
-      story: "Rocky was a working dog whose handler retired. He needs an owner who understands his training background and can provide clear leadership.",
     },
     {
       id: 5,
@@ -203,6 +218,11 @@ const dogsData = [
       dateAdded: "2024-11-10",
       description: "Playful Daisy is bursting with energy and absolutely loves learning new tricks. She's incredibly smart and picks things up quickly. A perfect companion for an active household!",
       personality: ["Playful", "Intelligent", "Energetic", "Affectionate"],
+      story: "Daisy was part of an unplanned litter. She's grown into a happy, confident puppy and is ready to bring joy to her forever family!",
+      idealHome: {
+        description: "Daisy needs an active home with owners who can provide daily exercise, training, and mental stimulation. She'd love a family with older children who can help with her training and playtime.",
+        badges: ["Active Family", "Training Commitment", "Older Children OK", "Moderate Space"]
+      },
       goodWith: {
         adults: true,
         smallChildren: true,
@@ -233,7 +253,6 @@ const dogsData = [
       ],
       mainImage: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=800&h=800&fit=crop",
       specialNeeds: null,
-      story: "Daisy was part of an unplanned litter. She's grown into a happy, confident puppy and is ready to bring joy to her forever family!",
     },
     {
       id: 6,
@@ -250,6 +269,11 @@ const dogsData = [
       dateAdded: "2024-11-15",
       description: "Little Charlie is a bundle of pure joy! As a young puppy, he's looking for someone patient to help guide him as he grows into a wonderful companion. He loves toys and playtime!",
       personality: ["Playful", "Curious", "Energetic", "Sweet"],
+      story: "Charlie was rescued from the streets with his siblings. He's now healthy, happy, and ready for his forever home where he can grow up loved!",
+      idealHome: {
+        description: "Charlie needs a patient family ready for puppy training and socialization. He'd do well in most living situations as long as he gets plenty of attention, playtime, and consistent training.",
+        badges: ["Puppy Training Required", "Patient Owner", "Flexible Space", "Time Commitment"]
+      },
       goodWith: {
         adults: true,
         smallChildren: true,
@@ -280,7 +304,6 @@ const dogsData = [
       ],
       mainImage: "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=800&h=800&fit=crop",
       specialNeeds: null,
-      story: "Charlie was rescued from the streets with his siblings. He's now healthy, happy, and ready for his forever home where he can grow up loved!",
     },
     {
       id: 7,
@@ -297,6 +320,11 @@ const dogsData = [
       dateAdded: "2024-11-05",
       description: "Buddy is incredibly intelligent and needs mental stimulation daily. He excels at agility and loves learning new commands. Perfect for someone who wants an active, trainable companion.",
       personality: ["Intelligent", "Energetic", "Focused", "Loyal"],
+      story: "Buddy's previous owner underestimated the breed's energy needs. He's a wonderful dog who just needs the right active home!",
+      idealHome: {
+        description: "Buddy requires a very active owner committed to providing extensive daily exercise and mental challenges. Ideal for someone interested in dog sports like agility, herding, or advanced obedience training.",
+        badges: ["Very Active Lifestyle", "Dog Sports", "Mental Stimulation", "Experienced Preferred"]
+      },
       goodWith: {
         adults: true,
         smallChildren: true,
@@ -327,7 +355,6 @@ const dogsData = [
       ],
       mainImage: "https://images.unsplash.com/photo-1568393691622-c7ba131d63b4?w=800&h=800&fit=crop",
       specialNeeds: "Needs lots of exercise and mental stimulation",
-      story: "Buddy's previous owner underestimated the breed's energy needs. He's a wonderful dog who just needs the right active home!",
     },
     {
       id: 8,
@@ -344,6 +371,11 @@ const dogsData = [
       dateAdded: "2024-10-25",
       description: "Senior sweetheart Molly is looking for a quiet home where she can spend her golden years. She loves lap time, soft blankets, and gentle walks. Low maintenance and full of love!",
       personality: ["Calm", "Affectionate", "Gentle", "Quiet"],
+      story: "Molly's elderly owner passed away and family couldn't keep her. She's adjusting but would thrive in a calm, loving retirement home.",
+      idealHome: {
+        description: "Molly would thrive in a quiet, calm home with adults or seniors. She needs minimal exercise and would be perfect for someone looking for a gentle companion to share peaceful days with.",
+        badges: ["Quiet Home", "Seniors Welcome", "Low Exercise", "Indoor Living"]
+      },
       goodWith: {
         adults: true,
         smallChildren: true,
@@ -355,6 +387,7 @@ const dogsData = [
         apartmentLiving: true,
         yard: false
       },
+
       whyAdopt: [
         "Calm, predictable temperament - no puppy surprises",
         "Already trained and understands house rules",
@@ -374,7 +407,6 @@ const dogsData = [
       ],
       mainImage: "https://images.unsplash.com/photo-1541364983171-a8ba01e95cfc?w=800&h=800&fit=crop",
       specialNeeds: "Senior dog - needs soft food and joint supplements",
-      story: "Molly's elderly owner passed away and family couldn't keep her. She's adjusting but would thrive in a calm, loving retirement home.",
     },
     {
       id: 9,
@@ -391,6 +423,11 @@ const dogsData = [
       dateAdded: "2024-10-30",
       description: "Zeus is a gentle giant who loves his family deeply. Despite his size, he's incredibly gentle and patient. He needs an experienced owner who understands the breed.",
       personality: ["Protective", "Gentle", "Loyal", "Calm"],
+      story: "Zeus's family relocated and couldn't bring him. He's a well-mannered boy who just needs someone who understands his protective nature.",
+      idealHome: {
+        description: "Zeus needs an experienced owner familiar with large, protective breeds. A home with a secure yard and no small children would be ideal. He thrives with consistent leadership and clear boundaries.",
+        badges: ["Experienced Owner Only", "Secure Yard", "No Small Children", "Strong Handler"]
+      },
       goodWith: {
         adults: true,
         smallChildren: true,
@@ -421,7 +458,6 @@ const dogsData = [
       ],
       mainImage: "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=800&h=800&fit=crop",
       specialNeeds: "Needs experienced handler, strong leash control",
-      story: "Zeus's family relocated and couldn't bring him. He's a well-mannered boy who just needs someone who understands his protective nature.",
     },
     {
       id: 10,
@@ -438,6 +474,11 @@ const dogsData = [
       dateAdded: "2024-11-12",
       description: "Rosie is a hypoallergenic sweetheart who's perfect for apartment living. She's quiet, well-mannered, and loves everyone. Great for first-time dog owners!",
       personality: ["Sweet", "Gentle", "Friendly", "Adaptable"],
+      story: "Rosie was found abandoned in a park. After rehabilitation and grooming, she's transformed into a beautiful, loving companion!",
+      idealHome: {
+        description: "Rosie is perfect for apartment living or smaller homes. She'd thrive with first-time dog owners, seniors, or anyone looking for a low-maintenance, hypoallergenic companion.",
+        badges: ["Apartment Perfect", "First-Time Owner OK", "Hypoallergenic", "Low Exercise"]
+      },
       goodWith: {
         adults: true,
         smallChildren: true,
@@ -468,7 +509,6 @@ const dogsData = [
       ],
       mainImage: "https://images.unsplash.com/photo-1546527868-ccb7ee7dfa6a?w=800&h=800&fit=crop",
       specialNeeds: "Requires regular grooming",
-      story: "Rosie was found abandoned in a park. After rehabilitation and grooming, she's transformed into a beautiful, loving companion!",
     }
 ];
 

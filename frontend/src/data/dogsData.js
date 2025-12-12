@@ -17,7 +17,7 @@ const dogsData = [
       story: "Luna was found wandering in a park, clearly lost and scared. After weeks of searching for her owner with no success, she's now ready for a new forever home.",
       idealHome: {
         description: "Luna thrives in an active family home with a yard where she can play fetch and enjoy outdoor time. She'd love a home with children and other dogs to play with.",
-        badges: ["Needs daily exercise", "Fenced Yard"]
+        badges: ["Daily exercise required", "Fenced yard needed", "Active family best"]
       },
       goodWith: {
         adults: true,
@@ -27,7 +27,7 @@ const dogsData = [
         otherAnimals: true,
         activeOwners: true,
         experiencedOwners: false,
-        apartmentLiving: false,
+        apartmentLiving: true,
         yard: true
       },
       whyAdopt: [
@@ -68,18 +68,18 @@ const dogsData = [
       story: "Max's previous owner had to relocate internationally and couldn't take him along. He's adjusting well and ready to find his new adventure buddy!",
       idealHome: {
         description: "Max needs an active owner who loves hiking, running, and outdoor adventures. He'd excel with someone who enjoys water activities and can provide daily exercise and mental stimulation.",
-        badges: ["Active Lifestyle", "Hiking Buddy", "Water Access", "Experienced Owner"]
+        badges: ["Very active lifestyle", "Daily adventures", "Pool, water access needed","High energy commitment"]
       },
       goodWith: {
         adults: true,
-        smallChildren: true,
+        smallChildren: false,
         olderChildren: true,
-        seniors: true,
+        seniors: false,
         otherAnimals: true,
         activeOwners: true,
         experiencedOwners: false,
-        apartmentLiving: true,
-        yard: false
+        apartmentLiving: false,
+        yard: true
       },
       whyAdopt: [
         "Thrives with active owners who enjoy hiking, running, and outdoor activities",
@@ -119,7 +119,7 @@ const dogsData = [
       story: "Bella was surrendered when her family had to downsize their living situation. She's a wonderful companion who just needs a second chance.",
       idealHome: {
         description: "Bella would thrive in a home with a securely fenced yard due to her strong scent-tracking instincts. She's perfect for families or singles who enjoy moderate daily walks and interactive play.",
-        badges: ["Fenced Yard", "Family-Friendly", "First-Time Owner OK", "Apartment OK"]
+        badges: ["Secure fenced yard preferred", "Moderate daily walks", "Patience with training"]
       },
       whyAdopt: [
         "Brings endless entertainment and laughter to your home",
@@ -134,10 +134,10 @@ const dogsData = [
         olderChildren: true,
         seniors: true,
         otherAnimals: true,
-        activeOwners: true,
+        activeOwners: false,
         experiencedOwners: false,
         apartmentLiving: true,
-        yard: false
+        yard: true
       },
       energyLevel: "Medium",
       trainingLevel: "Basic commands, working on leash training",
@@ -170,16 +170,16 @@ const dogsData = [
       story: "Rocky was a working dog whose handler retired. He needs an owner who understands his training background and can provide clear leadership.",
       idealHome: {
         description: "Rocky requires an experienced handler who understands working breeds. He needs a structured environment with consistent training, regular exercise, and should be the only pet in the home.",
-        badges: ["Experienced Owner Required", "Only Pet", "Structured Environment", "Large Space"]
+        badges: ["Experienced owner required", "Only pet household", "Structured routine", "Large secure space"]
       },
       goodWith: {
         adults: true,
         smallChildren: false,
         olderChildren: true,
-        seniors: true,
-        otherAnimals: true,
+        seniors: false,
+        otherAnimals: false,
         activeOwners: true,
-        experiencedOwners: false,
+        experiencedOwners: true,
         apartmentLiving: false,
         yard: true
       },
@@ -221,13 +221,13 @@ const dogsData = [
       story: "Daisy was part of an unplanned litter. She's grown into a happy, confident puppy and is ready to bring joy to her forever family!",
       idealHome: {
         description: "Daisy needs an active home with owners who can provide daily exercise, training, and mental stimulation. She'd love a family with older children who can help with her training and playtime.",
-        badges: ["Active Family", "Training Commitment", "Older Children OK", "Moderate Space"]
+        badges: ["Daily training sessions", "Active playtime", "Mental stimulation", "Moderate space"]
       },
       goodWith: {
         adults: true,
-        smallChildren: true,
+        smallChildren: false,
         olderChildren: true,
-        seniors: true,
+        seniors: false,
         otherAnimals: true,
         activeOwners: true,
         experiencedOwners: false,
@@ -272,7 +272,7 @@ const dogsData = [
       story: "Charlie was rescued from the streets with his siblings. He's now healthy, happy, and ready for his forever home where he can grow up loved!",
       idealHome: {
         description: "Charlie needs a patient family ready for puppy training and socialization. He'd do well in most living situations as long as he gets plenty of attention, playtime, and consistent training.",
-        badges: ["Puppy Training Required", "Patient Owner", "Flexible Space", "Time Commitment"]
+        badges: ["Puppy training commitment", "Patient owner", "Time for socialization" ]
       },
       goodWith: {
         adults: true,
@@ -280,7 +280,7 @@ const dogsData = [
         olderChildren: true,
         seniors: true,
         otherAnimals: true,
-        activeOwners: true,
+        activeOwners: false,
         experiencedOwners: false,
         apartmentLiving: true,
         yard: false
@@ -323,18 +323,18 @@ const dogsData = [
       story: "Buddy's previous owner underestimated the breed's energy needs. He's a wonderful dog who just needs the right active home!",
       idealHome: {
         description: "Buddy requires a very active owner committed to providing extensive daily exercise and mental challenges. Ideal for someone interested in dog sports like agility, herding, or advanced obedience training.",
-        badges: ["Very Active Lifestyle", "Dog Sports", "Mental Stimulation", "Experienced Preferred"]
+        badges: ["Very active lifestyle", "Dog sports commitment", "Daily mental challenges", "Spacious yard preferred"]
       },
       goodWith: {
         adults: true,
-        smallChildren: true,
+        smallChildren: false,
         olderChildren: true,
-        seniors: true,
+        seniors: false,
         otherAnimals: true,
         activeOwners: true,
         experiencedOwners: false,
-        apartmentLiving: true,
-        yard: false
+        apartmentLiving: false,
+        yard: true
       },
       whyAdopt: [
         "Exceptional loyalty and devotion to their family",
@@ -374,15 +374,15 @@ const dogsData = [
       story: "Molly's elderly owner passed away and family couldn't keep her. She's adjusting but would thrive in a calm, loving retirement home.",
       idealHome: {
         description: "Molly would thrive in a quiet, calm home with adults or seniors. She needs minimal exercise and would be perfect for someone looking for a gentle companion to share peaceful days with.",
-        badges: ["Quiet Home", "Seniors Welcome", "Low Exercise", "Indoor Living"]
+        badges: ["Quiet calm home", "Minimal exercise", "Indoor living", "Senior care knowledge"]
       },
       goodWith: {
         adults: true,
-        smallChildren: true,
+        smallChildren: false,
         olderChildren: true,
         seniors: true,
         otherAnimals: true,
-        activeOwners: true,
+        activeOwners: false,
         experiencedOwners: false,
         apartmentLiving: true,
         yard: false
@@ -426,18 +426,18 @@ const dogsData = [
       story: "Zeus's family relocated and couldn't bring him. He's a well-mannered boy who just needs someone who understands his protective nature.",
       idealHome: {
         description: "Zeus needs an experienced owner familiar with large, protective breeds. A home with a secure yard and no small children would be ideal. He thrives with consistent leadership and clear boundaries.",
-        badges: ["Experienced Owner Only", "Secure Yard", "No Small Children", "Strong Handler"]
+        badges: ["Experienced owner only", "Large secure yard", "Breed specific knowledge"]
       },
       goodWith: {
         adults: true,
-        smallChildren: true,
-        olderChildren: true,
-        seniors: true,
-        otherAnimals: true,
+        smallChildren: false,
+        olderChildren: false,
+        seniors: false,
+        otherAnimals: false,
         activeOwners: true,
-        experiencedOwners: false,
-        apartmentLiving: true,
-        yard: false
+        experiencedOwners: true,
+        apartmentLiving: false,
+        yard: true
       },
       whyAdopt: [
         "Highly rewarding for owners who understand canine behavior",
@@ -477,7 +477,7 @@ const dogsData = [
       story: "Rosie was found abandoned in a park. After rehabilitation and grooming, she's transformed into a beautiful, loving companion!",
       idealHome: {
         description: "Rosie is perfect for apartment living or smaller homes. She'd thrive with first-time dog owners, seniors, or anyone looking for a low-maintenance, hypoallergenic companion.",
-        badges: ["Apartment Perfect", "First-Time Owner OK", "Hypoallergenic", "Low Exercise"]
+        badges: ["Regular grooming", "Moderate attention", "Small space-OK", "First-timer friendly"]
       },
       goodWith: {
         adults: true,
@@ -485,7 +485,7 @@ const dogsData = [
         olderChildren: true,
         seniors: true,
         otherAnimals: true,
-        activeOwners: true,
+        activeOwners: false,
         experiencedOwners: false,
         apartmentLiving: true,
         yard: false

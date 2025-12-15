@@ -1,16 +1,21 @@
 import Section from '../components/layout/Section';
 import PetCardDogsPage from '../components/pets/PetCardDogsPage';
-import dogsData from '../data/dogsData';
-
+import Filter from '../components/layout/Filter';
+//import dogsData from '../data/dogsData';
+import { usePets } from '../context/PetsContext';
 
 
 const DogsPage = () => {
+
+    const { filterDogs } = usePets();
+    const filteredDogs = filterDogs();
 
     return (
         <>
 
             {/* Header section */}
-            <div className="py-16 md:py-20 lg:py-24 text-center bg-white border-b-2 border-yellow-300">
+            {/*
+            <div className="py-14 md:py-16 lg:py-18 text-center bg-white border-b-2 border-yellow-300">
                 <div className="max-w-5xl mx-auto px-4 text-center">
                     <h1 className="
                         text-2xl md:text-4xl lg:text-5xl mb-6 md:mb-8
@@ -23,15 +28,25 @@ const DogsPage = () => {
                     </p>
                 </div>
             </div>
+            */}
 
-            <Section padding="large" background="gray">
+            <Section padding="normal" background="gray">
+
+                {/* Filter component */}
+                <Filter />
 
                 {/* Dog card grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 md:gap-8">
+                <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 md:gap-8">
                     
-                    {dogsData.map((dog) => (
+                    {filteredDogs.map((dog) => (
                         <PetCardDogsPage key={dog.id} dog={dog} />
                     ))}
+
+                    {filteredDogs.length === 0 && (
+                        <div>
+                            <p>No dogs matching!</p>
+                        </div>
+                    )}
 
                 </div>
 

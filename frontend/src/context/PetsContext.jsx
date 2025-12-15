@@ -104,7 +104,10 @@ export const PetsProvider = ({ children }) => {
         
         // filter by name
         if(searchString) {
-            filterResult = filterResult.filter((dog) => dog.name.toLowerCase().includes(searchString.toLowerCase()));
+            filterResult = filterResult.filter((dog) => 
+                dog.name.toLowerCase().includes(searchString.toLowerCase()) || 
+                dog.breed.toLowerCase().includes(searchString.toLowerCase()) 
+            );
         }
 
         // filter by size
@@ -131,7 +134,7 @@ export const PetsProvider = ({ children }) => {
                     return dog.age > 3  && dog.age <= 5;
                 }
 
-                // senior dogs -> 5+ years
+                // for senior dogs -> 5+ years
                 if(ageFilter === 'senior') {
                     return dog.age > 5
                 }
@@ -143,7 +146,7 @@ export const PetsProvider = ({ children }) => {
 
         // filter by gender 
         if(genderFilter !== "all") {
-            filterResult = resukt.filter((dog) => dog.gender.toLowerCase() === genderFilter)
+            filterResult = filterResult.filter((dog) => dog.gender.toLowerCase() === genderFilter)
         }
 
 
@@ -154,9 +157,9 @@ export const PetsProvider = ({ children }) => {
     // Reset all filters 
     const resetFilters = () => {
         setSearchString("");
-        setSizeFilter("");
-        setAgeFilter("");
-        setGenderFilter("");
+        setSizeFilter("all");
+        setAgeFilter("all");
+        setGenderFilter("all");
     }
 
 

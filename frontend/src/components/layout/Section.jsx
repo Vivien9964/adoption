@@ -1,7 +1,7 @@
 
 const Section = ({ children, id = "", className = "", maxWidth = "7xl", padding = "normal", background = "transparent", ...props }) => {
 
-    // Both maximum width and padding increases progressively, there are no huge jumps in sizes!
+    // Both maximum width and padding increases progressively, there are no huge jumps in sizes
 
     // The classes below are resposible for setting the width for content
     // These classes are Tailwind utility classes mapped for each property name
@@ -18,7 +18,7 @@ const Section = ({ children, id = "", className = "", maxWidth = "7xl", padding 
     }
 
     // The padding classes below are setting the vertical spacing, 
-    // spacing between sections
+    // Spacing between sections
     // Each property includes responsive padding sizes as well (md, lg)
     const paddingClasses = {
         "none": "py-0", // no padding

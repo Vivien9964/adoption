@@ -64,8 +64,12 @@ const DogProfilePage = () => {
     // Helper function to navigate user upon selecting shelter visit or sponsorship
     const handleClick = (type) => {
 
+        // Navigate to schedule meeting page from individual profile page -> simpler form, since the user knows which dog they want to meet
+        // passing data between pages
         if(type === "visit") {
-            navigate('/schedule-meeting');
+            navigate('/schedule-meeting', {
+                state: { selectedDog: dog }
+            });
         } else {
             navigate('/virtual-adoption');
         }

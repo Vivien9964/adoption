@@ -2,6 +2,7 @@
 // Context to hold pet data, later on the list of available pets are going to be shared accross 
 // multiple pages
 import { createContext, useContext, useState, useEffect } from 'react';
+import dogsData from '../data/dogsData';
 
 // Creating the context
 const PetsContext = createContext();
@@ -24,7 +25,16 @@ export const usePets = () => {
 // provider component 
 export const PetsProvider = ({ children }) => {
 
-    // mock data for now
+    // filterResult  will be the array that we return based on applied filters
+    let filterResult = dogsData;
+
+    // Filtering states - term, size, age, gender
+    const [ searchString, setSearchString ] = useState("");
+    const [ sizeFilter, setSizeFilter ] = useState("all");
+    const [ ageFilter, setAgeFilter ] = useState("all");
+    const [ genderFilter, setGenderFilter ] = useState("all");
+
+    // mock data for now - needs to be updated in dogsData don't forget !!
     const [pets, setPets] = useState([
         {
             id: 1,
@@ -83,13 +93,92 @@ export const PetsProvider = ({ children }) => {
         }
     ]);
 
+
+    // Function to filter out featured pets
     const getFeaturedPets = () => {
         return pets.filter((pet) => pet.featured);
     }
 
+
+    const filterDogs = () => {
+        
+        // filter by name
+        if(searchString) {
+            filterResult = filterResult.filter((dog) => dog.name.toLowerCase().includes(searchString.toLowerCase()));
+        }
+
+        // filter by size
+        if(sizeFilter !== "all") {
+            filterResult = filterResult.filter((dog) => dog.size.toLowerCase() === sizeFilter)
+        }
+
+        // filter by age
+        if(ageFilter !== "all") {
+            filterResult = filterResult.filter((dog) => {
+
+                // if puppy -> less than a year to a year old
+                if(ageFilter === "puppy") {
+                    return dog.age <= 1;
+                }
+
+                // if they are young -> return dogs between 1 and 3 years
+                if(ageFilter === "young") {
+                    return dog.age > 1 && dog.age <= 3;
+                }
+
+                // if category is adult -> return dogs between 3 and 5 years
+                if(ageFilter === "adult") {
+                    return dog.age > 3  && dog.age <= 5;
+                }
+
+                // senior dogs -> 5+ years
+                if(ageFilter === 'senior') {
+                    return dog.age > 5
+                }
+
+                return true;
+            })
+        }
+
+
+        // filter by gender 
+        if(genderFilter !== "all") {
+            filterResult = resukt.filter((dog) => dog.gender.toLowerCase() === genderFilter)
+        }
+
+
+        return filterResult;
+    }
+
+
+    // Reset all filters 
+    const resetFilters = () => {
+        setSearchString("");
+        setSizeFilter("");
+        setAgeFilter("");
+        setGenderFilter("");
+    }
+
+
+
+
+
     const contextValue = {
-        pets, 
+        pets,
+        searchString,
+        setSearchString,
+        sizeFilter,
+        setSizeFilter,
+        ageFilter,
+        setAgeFilter,
+        genderFilter,
+        setGenderFilter,
         getFeaturedPets,
+        filterDogs,
+        resetFilters,
+        allDogs: dogsData
+        
+
     };
 
 

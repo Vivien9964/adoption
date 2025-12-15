@@ -1,3 +1,5 @@
+// !! Need to update dataset with featured property !!
+
 const dogsData = [
     {
       id: 1,

@@ -29,7 +29,7 @@ const PetCardDogsPage = ({dog}) => {
                 <div className='flex justify-center -mt-16 mb-4'>
                     <div className='relative'>
                         <div className='h-32 w-32 rounded-full border-4 border-white shadow-xl overflow-hidden'>
-                            <img src={dog.image} className='h-full w-full object-cover' alt={`${dog.name} - ${dog.breed}`} />
+                            <img src={dog.mainImage} className='h-full w-full object-cover' alt={`${dog.name} - ${dog.breed}`} />
                         </div>
                     </div> 
                 </div>
@@ -74,7 +74,7 @@ const PetCardDogsPage = ({dog}) => {
                         {dog.size}
                     </span>
                     <span className='px-3 py-1.5 bg-yellow-200 text-yellow-900 rounded-full text-xs font-bold border-2 border-yellow-300'>
-                        {dog.weight} kg
+                        {dog.weight}kg
                     </span>
                     <span className='px-3 py-1.5 flex items-center gap-1 bg-yellow-200 text-yellow-900 rounded-full text-xs font-bold border-2 border-yellow-300'>
                         <MapPin className='w-3 h-3' />

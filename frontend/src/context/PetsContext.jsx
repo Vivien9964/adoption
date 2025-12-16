@@ -4,7 +4,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import dogsData from '../data/dogsData';
 
-// Creating the context
 const PetsContext = createContext();
 
 // using custom hook to make it easier to use the context in other components (no repeated imports)
@@ -33,6 +32,7 @@ export const PetsProvider = ({ children }) => {
     const [ sizeFilter, setSizeFilter ] = useState("all");
     const [ ageFilter, setAgeFilter ] = useState("all");
     const [ genderFilter, setGenderFilter ] = useState("all");
+    const [ locationFilter, setLocationFilter ] = useState("all");
 
     // mock data for now - needs to be updated in dogsData don't forget !!
     const [pets, setPets] = useState([
@@ -150,6 +150,11 @@ export const PetsProvider = ({ children }) => {
         }
 
 
+        // filter by location
+        if(locationFilter !== "all") {
+            filterResult = filterResult.filter((dog) => dog.location.toLowerCase() === locationFilter);
+        }
+
         return filterResult;
     }
 
@@ -160,6 +165,7 @@ export const PetsProvider = ({ children }) => {
         setSizeFilter("all");
         setAgeFilter("all");
         setGenderFilter("all");
+        setLocationFilter("all");
     }
 
 
@@ -176,6 +182,8 @@ export const PetsProvider = ({ children }) => {
         setAgeFilter,
         genderFilter,
         setGenderFilter,
+        locationFilter,
+        setLocationFilter,
         getFeaturedPets,
         filterDogs,
         resetFilters,

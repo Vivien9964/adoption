@@ -10,7 +10,18 @@
   --color-yellow-500: #eab308;
 }
 
+/* Base setting */
+html {
+  scroll-behavior: smooth;
+}
 
+html, body {
+  font-family: 'Fredoka', cursive;
+  overflow-x: hidden;
+}
+
+
+/* Animation for logo in Navigation component */
 @keyframes wiggle {
   0%, 7% {
     transform: rotateZ(0);
@@ -35,22 +46,11 @@
   }
 }
 
-
 .group:hover .logo-wiggle {
     animation: wiggle 2s ease-in-out;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-html, body {
-  font-family: 'Fredoka', cursive;
-  overflow-x: hidden;
-}
-
-
-
+/* Scrollbar styles */
 ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
@@ -75,5 +75,17 @@ html, body {
 
 ::-webkit-scrollbar-thumb:active {
   background: var(--color-yellow-500);
+}
+
+
+/* Animation for number to check transition in ProgressBar component */
+@keyframes checkPop {
+  0% { transform: scale(0) rotate(-180deg); opacity: 1; }
+  50% { transform: scale(1.2) rotate(10deg) }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.animate-check {
+  animation: checkPop 0.4s ease-out;
 }
 

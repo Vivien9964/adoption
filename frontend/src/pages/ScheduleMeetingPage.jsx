@@ -1,6 +1,8 @@
 import Section from "../components/layout/Section";
 import Button from "../components/common/Button";
+import ProgressBar from "../components/scheduleMeeting/ProgressBar";
 import Filter from "../components/layout/Filter";
+import PetCardMeeting from "../components/pets/PetCardMeeting";
 import PetCardDogsPage from "../components/pets/PetCardDogsPage";
 import { usePets } from "../context/PetsContext";
 import { useState } from "react";
@@ -11,8 +13,11 @@ const ScheduleMeetingPage = () => {
     const { filterDogs } = usePets();
     const filteredDogs = filterDogs();
 
-    // State to track the current step in the process -> for progress bar (1, 2, 3)
+    // State to track the current step in the process -> for progress bar (1, 2, 3, 4)
     const [ currentStep, setCurrentStep ] = useState(1);
+
+     // Step labels for buttons
+     const stepLabels = ["Choose a dog", "Date & Time", "Your Info", "Confirm"];
 
     // State to track selected data at each step
     const [ selectedDog, setSelectedDog ] = useState(null)
@@ -24,11 +29,12 @@ const ScheduleMeetingPage = () => {
         phone: '',
         notes: ''
     });
+    const [ userConfirmed, setUserConfirmed ] = useState(false);
 
 
     // Functions to navigate between steps
     const nextStep = () => {
-        if(currentStep < 3) {
+        if(currentStep < 5) {
             setCurrentStep(currentStep + 1);
         }
     };
@@ -38,6 +44,10 @@ const ScheduleMeetingPage = () => {
         if(currentStep > 1) {
             setCurrentStep(currentStep - 1);
         }
+    }
+
+    const confirmation = () => {
+        setUserConfirmed(true);
     }
 
 
@@ -53,8 +63,35 @@ const ScheduleMeetingPage = () => {
         {/* Main content  */}
         <Section padding="normal" background="blue" >
 
-            {/* Filter component */}
-            <Filter />
+
+            {/* Always available to show progress in the process */}
+            <ProgressBar currentStep={currentStep} />
+
+
+
+
+
+
+
+            <div className="flex justify-center items-center gap-8 mt-8">
+
+
+                <Button variant="primary" onClick={nextStep}>
+                    {`${currentStep > 3 ? "Schedule Meeting" : `Continue to ${stepLabels[currentStep]}`}`}
+                </Button>
+
+                { currentStep > 1 && (
+                    <Button variant="secondary" onClick={prevStep}>
+                        Back
+                    </Button>
+                )}
+
+                
+
+            </div>
+
+           
+
 
 
 
@@ -73,7 +110,7 @@ const ScheduleMeetingPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-8 gap-6">
 
                 {filteredDogs.map((dog) => (
-                    <PetCardDogsPage key={dog.id} dog={dog} />
+                    <PetCardMeeting key={dog.id} dog={dog} />
                 ))}
 
 

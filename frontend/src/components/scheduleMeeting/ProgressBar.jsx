@@ -35,18 +35,18 @@ const ProgressBar = ({ currentStep }) => {
                         font-bold border-3 text-base sm:text-lg md:text-xl flex-shrink-0
                         transition-all duration-300
 
-                        ${currentStep > step.stepNum ? 'animate-check' : ''}
+                        ${currentStep > step.stepNum ? "animate-check" : ""}
 
                         ${currentStep > step.stepNum
-                            ? 'bg-green-500 text-white border-green-500'
+                            ? "bg-green-500 text-white border-green-500"
                             : currentStep === step.stepNum
-                            ? 'bg-yellow-500 text-yellow-800 border-yellow-500'
-                            : 'bg-gray-200 text-gray-500 border-gray-300'
+                            ? "bg-yellow-500 text-yellow-800 border-yellow-500"
+                            : "bg-gray-200 text-gray-500 border-gray-300"
                         }
                         
                         `}
                     >
-                        {currentStep > step.stepNum ? <Check className='w-6 h-6' /> : step.stepNum }
+                        {currentStep > step.stepNum ? <Check className="w-6 h-6" /> : step.stepNum }
                     </div>
 
                     {/* Step info, label -> shown only on large screens */}
@@ -61,7 +61,7 @@ const ProgressBar = ({ currentStep }) => {
                     { index < steps.length - 1 && (
                         <div className={
                             `w-8 sm:w-16 md:w-24 h-1 flex-shrink-0
-                            ${currentStep > step.stepNum ? 'bg-green-500' : 'bg-sky-300/30'}
+                            ${currentStep > step.stepNum ? "bg-green-500" : "bg-sky-300/30"}
                         `}></div>
                     )}
 

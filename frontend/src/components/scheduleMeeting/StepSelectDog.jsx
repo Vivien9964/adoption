@@ -3,17 +3,16 @@ import PetCardMeeting from '../pets/PetCardMeeting';
 import { usePets } from '../../context/PetsContext';
 
 
-
 const StepSelectDog = () => {
 
-    // Take and use filterDogs function from context
+    // Take and use filterDogs function from pets context 
     const { filterDogs } = usePets();
     const filteredDogs = filterDogs();
 
     return (
-        <div className='p-4 mt-4 border-3 border-yellow-300 rounded-xl'>
+        <div className="p-4 mt-4 border-3 border-yellow-300 rounded-xl">
             
-            <h1 className='mb-4 text-gray-700 font-black text-xl md:text-4xl'>Step 1: Choose a dog</h1>
+            <h1 className="mb-4 text-gray-700 font-black text-xl md:text-4xl">Step 1: Choose a dog</h1>
 
             {/* Filter component */}
             <Filter />

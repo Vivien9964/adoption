@@ -2,6 +2,7 @@ import Section from "../components/layout/Section";
 import Button from "../components/common/Button";
 import ProgressBar from "../components/scheduleMeeting/ProgressBar";
 import StepSelectDog from "../components/scheduleMeeting/StepSelectDog";
+import StepSelectTimeDate from "../components/scheduleMeeting/StepSelectTimeDate";
 import { MeetingProvider, useMeeting } from "../context/MeetingContext";
 
 const ScheduleMeetingContent = () => {
@@ -30,7 +31,7 @@ const ScheduleMeetingContent = () => {
 
             {/* Different content based on current step */}
             { currentStep === 1 && <StepSelectDog /> }
-            { currentStep === 2 && <div>Step 2: Date & Time</div> }
+            { currentStep === 2 && <StepSelectTimeDate dog={selectedDog} /> }
             { currentStep === 3 && <div>Step 3: Your Info</div> }
             { currentStep === 4 && <div>Step 4: Confirm meeting</div> }
 

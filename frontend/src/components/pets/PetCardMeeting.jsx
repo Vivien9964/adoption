@@ -1,22 +1,29 @@
 import { MapPin } from 'lucide-react';
-import { useState } from 'react';
+import { useMeeting } from '../../context/MeetingContext';
 
 const PetCardMeeting = ({ dog }) => {
 
-    const [ isSelected, setIsSelected ] = useState(false);
+    const { selectedDog, setSelectedDog } = useMeeting();
 
-    // Function to toggle selected state for now
-    const toggleSelected = () => {
-        setIsSelected(!isSelected);
+    // Check if the current dog is the selected one
+    const isSelected = selectedDog?.id === dog.id;
+
+    // Function to set selected dog
+    const handleSelect = () => {
+        setSelectedDog(dog);
     }
 
     return (
         // Main container
         <div 
-            onClick={toggleSelected}
-            className='
-                p-3 rounded-xl bg-sky-50 cursor-pointer border-3 border-sky-200 shadow-lg 
-                hover:-rotate-3 hover:bg-gray-200/50 transition-all duration-300'
+            onClick={handleSelect}
+            className={
+                `p-3 rounded-xl cursor-pointer border-3 border-sky-200 shadow-lg 
+                hover:scale-[1.04] hover:border-yellow-300
+                 transition-all duration-300 
+                 ${isSelected 
+                    ? 'bg-amber-100 border-yellow-400 shadow-yellow-400/50 ring-4 ring-yellow-300/50 scale-105'
+                    : 'bg-sky-50 hover:bg-gray-200/50'}`}
         >
             {/* Image + Name + Breed container */}
             <div className='flex flex-row items-center gap-3' >

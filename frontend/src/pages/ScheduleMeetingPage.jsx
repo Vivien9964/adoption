@@ -8,7 +8,7 @@ import { MeetingProvider, useMeeting } from "../context/MeetingContext";
 const ScheduleMeetingContent = () => {
 
     // Take step variables and functions from meeting context
-    const { currentStep, nextStep, prevStep, selectedDog} = useMeeting();
+    const { currentStep, nextStep, prevStep, selectedDog, selectedDate, selectedTime } = useMeeting();
 
     // Step labels for buttons
      const stepLabels = ["Choose a dog", "Date & Time", "Your Info", "Confirm"];
@@ -45,7 +45,10 @@ const ScheduleMeetingContent = () => {
                 <Button 
                     variant="primary" 
                     onClick={nextStep}
-                    disabled={currentStep === 1 && !selectedDog}
+                    disabled={
+                        (currentStep === 1 && !selectedDog) ||
+                        (currentStep === 2 && !selectedDate || !selectedTime)
+                    }
                 >
                     {currentStep >= 4 ? "Schedule Meeting" : `Continue to ${stepLabels[currentStep]}`}
                 </Button>

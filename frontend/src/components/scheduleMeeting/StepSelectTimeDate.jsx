@@ -99,9 +99,8 @@ const StepSelectTimeDate = ({ dog }) => {
 
 
 
-
     return (
-        <div className="p-4 mt-4 border-3 border-yellow-300 rounded-xl">
+        <div className="p-4 mt-4 border-3 border-yellow-300 rounded-xl bg-white">
             
             <h1 className='mb-8 text-gray-700 font-black text-xl md:text-4xl'>Step 2: Choose Date & Time</h1>
 
@@ -203,6 +202,7 @@ const StepSelectTimeDate = ({ dog }) => {
                 {/* Time availability grid */}
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-3'>
                     {visitingHours.map((hour, index) => (
+                        // Time card
                         <div 
                             key={index}
                             onClick={() => handleSelectTime(hour)}
@@ -224,8 +224,6 @@ const StepSelectTimeDate = ({ dog }) => {
 
             </div>
             
-
-
 
         </div>
     )

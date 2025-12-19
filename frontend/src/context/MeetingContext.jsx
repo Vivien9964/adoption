@@ -20,7 +20,7 @@ export const MeetingProvider = ({ children }) => {
     const [ selectedDog, setSelectedDog ] = useState(null)
     const [ selectedDate, setSelectedDate ] = useState(null)
     const [ selectedTime, setSelectedTime ] = useState(null);
-    const [ userInfo, setUserInfo ] = useState( {
+    const [ userInfo, setUserInfo ] = useState({
         name: '',
         email: '',
         phone: '',

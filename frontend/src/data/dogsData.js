@@ -1,4 +1,5 @@
 // !! Need to update dataset with featured property !!
+// !! Need to add maybe a shelter for location !!
 
 const dogsData = [
     {

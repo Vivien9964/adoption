@@ -107,7 +107,7 @@ const StepSelectTimeDate = ({ dog }) => {
             
             <h2 className="text-gray-800/80 text-base">Meeting with: </h2>
             {/* Selected dog card */}
-              {/* Image + Name + Breed container */}
+            {/* Image + Name + Breed container */}
             <div className="p-3 mt-2 flex flex-row justify-self items-center gap-3 max-w-[300px] border-3 border-yellow-300 rounded-xl" >
                 {/* Image container */}
                 <div className="h-12 w-12 rounded-full border-4 border-white shadow-xl overflow-hidden">

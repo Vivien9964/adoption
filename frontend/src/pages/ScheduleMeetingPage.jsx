@@ -29,13 +29,14 @@ const ScheduleMeetingContent = () => {
         <Section padding="normal" background="blue" >
 
             {/* Progress bar -> always available to show progress in the process */}
+
             <ProgressBar currentStep={currentStep} />
 
             {/* Different content based on current step */}
             { currentStep === 1 && <StepSelectDog /> }
             { currentStep === 2 && <StepSelectTimeDate dog={selectedDog} /> }
             { currentStep === 3 && <StepAddInfo /> }
-            { currentStep === 4 && <div>Step 4: Confirm meeting</div> }
+            { currentStep === 4 && <StepConfirmation /> }
 
 
             {/* CTA buttons container */}

@@ -3,12 +3,19 @@ import PetCardDogsPage from '../components/pets/PetCardDogsPage';
 import Filter from '../components/layout/Filter';
 //import dogsData from '../data/dogsData';
 import { usePets } from '../context/PetsContext';
+import { useEffect } from 'react';
 
 
 const DogsPage = () => {
 
-    const { filterDogs } = usePets();
+    const { filterDogs, resetFilters } = usePets();
     const filteredDogs = filterDogs();
+
+    useEffect(() => {
+        return () => {
+            resetFilters();
+        };
+    }, []);
 
     return (
         <>

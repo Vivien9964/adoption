@@ -39,6 +39,44 @@ export const MeetingProvider = ({ children }) => {
         }
     }
 
+    const submitMeeting = async () => {
+        try {
+            const meetingData = {
+                dogId: selectedDog.id,
+                dogName: selectedDog.name,
+                dogBreed: selectedDog.breed,
+                dogImage: selectedDog.mainImage,
+                dogLocation: selectedDog.location,
+                meetingDate: selectedDate,
+                meetingTime: selectedTime,
+                userName: userInfo.name,
+                userEmail: userInfo.email,
+                userPhone: userInfo.phone,
+                notes: userInfo.notes || ''
+            };
+
+            const response = await fetch("http://localhost:3000/api/meetings", {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify(meetingData)
+            });
+
+            if(!response.ok) {
+                throw new Error("Failed to create meeting!");
+            }
+
+            const result = await response.json();
+            console.log("Meeting created successfully!", result);
+            return result;
+
+        } catch(err) {
+            console.error("Error creating meeting: ", err);
+            throw err;
+        }
+    }
+
 
     const contextValue = {
         currentStep,
@@ -52,7 +90,8 @@ export const MeetingProvider = ({ children }) => {
         userInfo,
         setUserInfo,
         nextStep,
-        prevStep
+        prevStep,
+        submitMeeting
     }
 
 

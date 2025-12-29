@@ -2,15 +2,16 @@ import { Calendar, Clock, MapPin, UserRound, Dog } from 'lucide-react';
 import { useMeeting } from "../../context/MeetingContext";
 
 
-
 const StepConfirmation = () => {
 
     const { selectedDog, selectedDate, selectedTime, userInfo } = useMeeting();
+  
+
 
     const goodToKnow = [
         { id: 1, label: "Come 5-10 minutes earlier"},
         { id: 2, label: "Bring a valid ID card"},
-        { id: 2, label: `You will have 600 minutes to play with ${selectedDog} `},
+        { id: 2, label: `You will have 600 minutes to play with ${selectedDog.name} `},
         { id: 3, label: "The more the better, you can bring up to 3 more people with you"},
         { id: 4, label: "Our staff will be more than happy to answer your questions"}
     ];
@@ -118,29 +119,9 @@ const StepConfirmation = () => {
                       ))}
 
                     </div>
-
-                </div>
-
-
-                {/* CTA buttons */}
-                <div>
-                    
                 </div>
 
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
         </div>
     )
 }

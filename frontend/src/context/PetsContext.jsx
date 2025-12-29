@@ -18,14 +18,22 @@ export const usePets = () => {
 };
 
 
-// future reference -> pictures in public folder: /images/dogs/maxi.jpg for mock data
 // Image dimensions: 800x600px or 1200x900px 4:3 ratio for swiper carousel
 
 // provider component 
 export const PetsProvider = ({ children }) => {
 
+    // NEW!!!!
+    const [pets, setPets] = useState([]);
+    const [allPets, setAllPets] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [ error, setError] = useState(null);
+    // NEW!!!!
+
+
     // filterResult  will be the array that we return based on applied filters
-    let filterResult = dogsData;
+    //let filterResult = dogsData;
+
 
     // Filtering states - term, size, age, gender
     const [ searchString, setSearchString ] = useState("");
@@ -34,7 +42,7 @@ export const PetsProvider = ({ children }) => {
     const [ genderFilter, setGenderFilter ] = useState("all");
     const [ locationFilter, setLocationFilter ] = useState("all");
 
-    // mock data for now - needs to be updated in dogsData don't forget !!
+    /*
     const [pets, setPets] = useState([
         {
             id: 1,
@@ -92,16 +100,46 @@ export const PetsProvider = ({ children }) => {
             featured: true
         }
     ]);
+    */
+
+
+    // Fetch all pets from the database
+    useEffect(() => {
+        const fetchPets = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch("http://localhost:3000/api/dogs");
+
+                if(!response.ok) {
+                    throw new Error("Failed to fetch pets!");
+                }
+                
+                const data = await response.json();
+                setAllPets(data);
+                setPets(data);
+                setLoading(false);
+
+            } catch(err) {
+                console.error("Failed fetching pets: ", err);
+                setError(err.message);
+                setLoading(false);
+            }
+        }
+
+        fetchPets();
+    }, []);
 
 
     // Function to filter out featured pets
     const getFeaturedPets = () => {
-        return pets.filter((pet) => pet.featured);
+        return allPets.filter((pet) => pet.featured);
     }
 
 
     const filterDogs = () => {
         
+        let filterResult = allPets;
+
         // filter by name
         if(searchString) {
             filterResult = filterResult.filter((dog) => 
@@ -187,7 +225,9 @@ export const PetsProvider = ({ children }) => {
         getFeaturedPets,
         filterDogs,
         resetFilters,
-        allDogs: dogsData
+        allPets,
+        loading, 
+        error
         
 
     };

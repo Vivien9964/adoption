@@ -6,14 +6,36 @@ import StepSelectTimeDate from "../components/scheduleMeeting/StepSelectTimeDate
 import StepAddInfo from "../components/scheduleMeeting/StepAddInfo";
 import StepConfirmation from "../components/scheduleMeeting/StepConfirmation";
 import { MeetingProvider, useMeeting } from "../context/MeetingContext";
+import { useState } from "react";
 
 const ScheduleMeetingContent = () => {
 
     // Take step variables and functions from meeting context
-    const { currentStep, nextStep, prevStep, selectedDog, selectedDate, selectedTime, userInfo } = useMeeting();
+    const { currentStep, nextStep, prevStep, selectedDog, selectedDate, selectedTime, userInfo, submitMeeting } = useMeeting();
+
+    // State to track if user is submitting meeting appointment
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Step labels for buttons
-     const stepLabels = ["Choose a dog", "Date & Time", "Your Info", "Confirm"];
+    const stepLabels = ["Choose a dog", "Date & Time", "Your Info", "Confirm"];
+
+    const handleNextClick = async () => {
+        if( currentStep === 4){
+            setIsSubmitting(true);
+
+            try {
+                await submitMeeting();
+                console.log("Meeting scheduled successfully!");
+
+            } catch (err) {
+                console.error("Failed to schedule meeting: ", err);
+            } finally {
+                setIsSubmitting(false);
+            }
+        } else {
+            nextStep();
+        }
+    }
 
 
     return (
@@ -45,19 +67,23 @@ const ScheduleMeetingContent = () => {
                 {/* Button always available, just like progress bar but it is disabled until user selects from options / adds data */}
                 <Button 
                     variant="primary" 
-                    onClick={nextStep}
+                    onClick={handleNextClick}
                     disabled={
                         (currentStep === 1 && !selectedDog) ||
                         (currentStep === 2 && (!selectedDate || !selectedTime)) ||
                         (currentStep === 3 && (!userInfo.name || !userInfo.email || !userInfo.phone))
                     }
                 >
-                    { currentStep >= 4 ? "Schedule Meeting" : `Continue to ${stepLabels[currentStep]}`
+                     { isSubmitting 
+                        ? "Scheduling..." 
+                        : currentStep >= 4 
+                            ? "Schedule Meeting" 
+                            : `Continue to ${stepLabels[currentStep]}`
                     }
                 </Button>
 
                 {/* Only show back button when on second step and further */}
-                { currentStep > 1 && (
+                { currentStep > 1 && currentStep < 5 && (
                     <Button variant="secondary" onClick={prevStep}>
                         Back
                     </Button>

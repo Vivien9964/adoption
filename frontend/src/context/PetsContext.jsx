@@ -2,7 +2,6 @@
 // Context to hold pet data, later on the list of available pets are going to be shared accross 
 // multiple pages
 import { createContext, useContext, useState, useEffect } from 'react';
-import dogsData from '../data/dogsData';
 
 const PetsContext = createContext();
 
@@ -23,12 +22,10 @@ export const usePets = () => {
 // provider component 
 export const PetsProvider = ({ children }) => {
 
-    // NEW!!!!
     const [pets, setPets] = useState([]);
     const [allPets, setAllPets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [ error, setError] = useState(null);
-    // NEW!!!!
 
 
     // filterResult  will be the array that we return based on applied filters
@@ -42,67 +39,7 @@ export const PetsProvider = ({ children }) => {
     const [ genderFilter, setGenderFilter ] = useState("all");
     const [ locationFilter, setLocationFilter ] = useState("all");
 
-    /*
-    const [pets, setPets] = useState([
-        {
-            id: 1,
-            name: "Maxi",
-            age: 3,
-            gender: "male",
-            breed: "Golden Retriever",
-            size: "Large",
-            image: "https://placedog.net/500/400?id=2",
-            personality: "Friendly and energetic! Maxi is the ideal furry friend for an active household.",
-            featured: true
-        },
-        {
-            id: 2,
-            name: "Bingi",
-            age: 2,
-            gender: "female",
-            breed: "Daschund mix",
-            size: "Small",
-            image: "https://placedog.net/500/400?id=4",
-            personality: "Sweet and playful! She loves attention and is a loving companion.",
-            featured: true
-        },
-        {
-            id: 3,
-            name: "Benji",
-            age: 1,
-            gender: "male",
-            breed: "Mixed breed",
-            size: "Medium",
-            image: "https://placedog.net/500/400?id=6",
-            personality: "Smart and gentle! Benji loves to learn new tricks and rest beside you!",
-            featured: true
-        },
-        {
-            id: 4,
-            name: "Dot",
-            age: 6,
-            gender: "male",
-            breed: "Carpathian Shepherd",
-            size: "Large",
-            image: "https://placedog.net/500/400?id=8",
-            personality: "Protective and loving! He is a gentle giant and and excellent guard dog who needs many kisses.",
-            featured: true
-        },
-        {
-            id: 5,
-            name: "Misty",
-            age: 7,
-            gender: "female",
-            breed: "Bichon Frise",
-            size: "Small",
-            image: "https://placedog.net/500/400?id=10",
-            personality: "Shy troublemaker! Misty is an elderly dog with a childish spirit who loves attention, but only from you!",
-            featured: true
-        }
-    ]);
-    */
-
-
+   
     // Fetch all pets from the database
     useEffect(() => {
         const fetchPets = async () => {

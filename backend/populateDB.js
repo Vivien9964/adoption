@@ -1,6 +1,5 @@
 import db from './db.js';
 
-// Your complete dogs data
 const dogsData = [
   {
     id: 1,

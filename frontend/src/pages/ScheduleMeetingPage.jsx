@@ -6,25 +6,42 @@ import StepSelectTimeDate from "../components/scheduleMeeting/StepSelectTimeDate
 import StepAddInfo from "../components/scheduleMeeting/StepAddInfo";
 import StepConfirmation from "../components/scheduleMeeting/StepConfirmation";
 import { MeetingProvider, useMeeting } from "../context/MeetingContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const ScheduleMeetingContent = () => {
 
-    // Take step variables and functions from meeting context
-    const { currentStep, nextStep, prevStep, selectedDog, selectedDate, selectedTime, userInfo, submitMeeting } = useMeeting();
+    // location object -> pathname, key 
+    const location = useLocation();
 
-    // State to track if user is submitting meeting appointment
+    // Take step variables and functions from meeting context
+    const { currentStep, 
+            nextStep, 
+            prevStep, 
+            selectedDog, 
+            selectedDate, 
+            selectedTime, 
+            userInfo, 
+            submitMeeting,
+            resetMeeting
+        } = useMeeting();
+
+    // State to track if user is currently submitting meeting appointment -> meaning they are at the confirmation stage
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Step labels for buttons
     const stepLabels = ["Choose a dog", "Date & Time", "Your Info", "Confirm"];
 
+
+    // User only submits the meeting after confrimation which is on the fourth page,
+    // otherwise the user just continues to go to the next step in the process
     const handleNextClick = async () => {
         if( currentStep === 4){
             setIsSubmitting(true);
 
             try {
-                await submitMeeting();
+                // Calling the submitMeeting function from the meeting context
+                await submitMeeting(); 
                 console.log("Meeting scheduled successfully!");
 
             } catch (err) {
@@ -36,6 +53,12 @@ const ScheduleMeetingContent = () => {
             nextStep();
         }
     }
+
+    // Resets the meeting data to initial values when the user navigates
+    // location.key changes every time at any link click!! 
+    useEffect(() => {
+        resetMeeting()
+    },[location.key]);
 
 
     return (

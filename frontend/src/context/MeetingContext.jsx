@@ -39,8 +39,11 @@ export const MeetingProvider = ({ children }) => {
         }
     }
 
+    // Function to send the meeting data to the database
     const submitMeeting = async () => {
         try {
+
+            // Creating an object which contains all relevant meeting data 
             const meetingData = {
                 dogId: selectedDog.id,
                 dogName: selectedDog.name,
@@ -55,6 +58,8 @@ export const MeetingProvider = ({ children }) => {
                 notes: userInfo.notes || ''
             };
 
+            // Sending POST request to the backend with the previously created object as JSON
+            // HTTP response
             const response = await fetch("http://localhost:3000/api/meetings", {
                 method: "POST",
                 headers: {
@@ -63,10 +68,12 @@ export const MeetingProvider = ({ children }) => {
                 body: JSON.stringify(meetingData)
             });
 
+            // Check if the communication with the backend was successfull
             if(!response.ok) {
                 throw new Error("Failed to create meeting!");
             }
 
+            // Confirmation from the backend -> did wesave the data to the database?
             const result = await response.json();
             console.log("Meeting created successfully!", result);
             return result;
@@ -75,6 +82,21 @@ export const MeetingProvider = ({ children }) => {
             console.error("Error creating meeting: ", err);
             throw err;
         }
+    }
+
+
+    // Function to reset meeting data when user leaves at one point during the scheduling process
+    const resetMeeting = () => {
+        setCurrentStep(1);
+        setSelectedDog(null);
+        setSelectedDate(null);
+        setSelectedTime(null);
+        setUserInfo({
+            name: "",
+            emial: "",
+            phone: "",
+            notes: ""
+        });
     }
 
 
@@ -91,7 +113,8 @@ export const MeetingProvider = ({ children }) => {
         setUserInfo,
         nextStep,
         prevStep,
-        submitMeeting
+        submitMeeting,
+        resetMeeting
     }
 
 

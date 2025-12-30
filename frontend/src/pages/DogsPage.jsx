@@ -21,21 +21,6 @@ const DogsPage = () => {
         <>
 
             {/* Header section */}
-            {/*
-            <div className="py-14 md:py-16 lg:py-18 text-center bg-white border-b-2 border-yellow-300">
-                <div className="max-w-5xl mx-auto px-4 text-center">
-                    <h1 className="
-                        text-2xl md:text-4xl lg:text-5xl mb-6 md:mb-8
-                        text-gray-700 font-extrabold tracking-tigh"
-                    >
-                        Find your best friend!
-                    </h1>
-                    <p className="text-lg md:text-xl lg:text2xl max-w-3xl mx-auto leading-relaxed text-gray-500">
-                        A random paragraph under the main page title.
-                    </p>
-                </div>
-            </div>
-            */}
 
             <Section padding="normal" background="gray">
 

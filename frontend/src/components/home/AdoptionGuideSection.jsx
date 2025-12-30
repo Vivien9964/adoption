@@ -1,6 +1,6 @@
 // Creating one reusable component for adoption guide, instead of using two, almost identical
 // components
-// Baased on the individual component that I've built earlier, I can take the data that is needed
+// Based on the individual component that I've built earlier, I can take the data that is needed
 // like title, description etc.
 
 import Section from '../layout/Section';

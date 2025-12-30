@@ -2,12 +2,14 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
 
+/* Scrollbar colors, swiper navigation arrow styles*/
 :root {
   --color-sky-100: #e0f2fe;
   --color-sky-200: #bae6fd;
   --color-yellow-300: #fde047;
   --color-yellow-400: #facc15;
   --color-yellow-500: #eab308;
+  --swiper-navigation-color: #f7df2f;
 }
 
 /* Base setting */

@@ -1,5 +1,5 @@
  import Section from '../layout/Section';
- import { Heart, Users, Shield, Home, DollarSign, Smile } from 'lucide-react';
+ import { Shield, Home, DollarSign } from 'lucide-react';
 
 
  const ChooseUsSection = () => {
@@ -82,12 +82,8 @@
                             <p className="text-gray-700 leading-relaxed">
                                 {reason.description}
                             </p>
-
-
-
-
                         </div>
-                    )
+                    );
                 })}
 
             </div>

@@ -77,7 +77,7 @@ const FeaturedPetsSection = () => {
             {/* View all pets button */}
             <div className="mt-8 md:mt-12 text-center">
                 <Link to="/dogs">
-                <Button variant="accent" size="large">
+                <Button variant="accent" size="large" className="cursor-pointer">
                     See All Dogs
                 </Button>
                 </Link>

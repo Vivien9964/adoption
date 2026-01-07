@@ -46,9 +46,11 @@ const ScheduleMeetingContent = () => {
 
             } catch (err) {
                 console.error("Failed to schedule meeting: ", err);
+                
             } finally {
                 setIsSubmitting(false);
             }
+            
         } else {
             nextStep();
         }
@@ -57,7 +59,11 @@ const ScheduleMeetingContent = () => {
     // Resets the meeting data to initial values when the user navigates
     // location.key changes every time at any link click!! 
     useEffect(() => {
-        resetMeeting()
+        
+        return () => {
+            resetMeeting();
+        }
+
     },[location.key]);
 
 

@@ -1,7 +1,6 @@
 import Section from '../components/layout/Section';
 import PetCardDogsPage from '../components/pets/PetCardDogsPage';
 import Filter from '../components/layout/Filter';
-//import dogsData from '../data/dogsData';
 import { usePets } from '../context/PetsContext';
 import { useEffect } from 'react';
 
@@ -19,9 +18,7 @@ const DogsPage = () => {
 
     return (
         <>
-
             {/* Header section */}
-
             <Section padding="normal" background="gray">
 
                 {/* Filter component */}

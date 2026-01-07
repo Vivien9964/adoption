@@ -26,6 +26,7 @@ export const MeetingProvider = ({ children }) => {
         phone: '',
         notes: ''
     });
+    const [ isSubmitted, setIsSubmitted ] = useState(false);
 
     const nextStep = () => {
         if(currentStep < 4) {
@@ -73,9 +74,11 @@ export const MeetingProvider = ({ children }) => {
                 throw new Error("Failed to create meeting!");
             }
 
-            // Confirmation from the backend -> did wesave the data to the database?
+            // Confirmation from the backend -> did we save the data to the database?
             const result = await response.json();
             console.log("Meeting created successfully!", result);
+            setIsSubmitted(true);
+
             return result;
 
         } catch(err) {
@@ -97,6 +100,7 @@ export const MeetingProvider = ({ children }) => {
             phone: "",
             notes: ""
         });
+        setIsSubmitted(false);
     }
 
 
@@ -114,7 +118,8 @@ export const MeetingProvider = ({ children }) => {
         nextStep,
         prevStep,
         submitMeeting,
-        resetMeeting
+        resetMeeting,
+        isSubmitted
     }
 
 

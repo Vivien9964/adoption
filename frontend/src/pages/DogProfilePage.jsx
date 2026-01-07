@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import dogsData from '../data/dogsData';
+import { useEffect } from 'react';
 import Section from '../components/layout/Section';
 import { 
     MapPin, 
@@ -24,15 +24,42 @@ import {
     Mail
 
 } from 'lucide-react';
+import { useState } from 'react';
 
 const DogProfilePage = () => {
 
-    // Taking id as string from url -> later needs to be parsed 
+    // Taking id as string from url
     const { id } = useParams();
     const navigate = useNavigate();
 
-    // Find the dog from the "database" to be able to display data
-    const dog = dogsData.find(dog => dog.id === parseInt(id));
+    const [ dog, setDog ] = useState(null);
+    const [ loading, setLoading ] = useState(true);
+
+    // Fetching individual dog profile 
+    useEffect(() => {
+        const fetchDog = async() => {
+            try {
+                const response = await fetch(`http://localhost:3000/api/dogs/${id}`);
+                const data = await response.json();
+                setDog(data);
+                setLoading(false);
+
+            } catch(err) {
+                console.error(err);
+            }
+        }
+
+        fetchDog();
+
+    }, [id]);
+
+    // !! Important to handle loading state first, otherwise dog -> null, error with idealHomeChar 
+    if(loading || !dog) {
+        return (
+            <div>Loading...</div>
+        );
+    }
+
 
     // Ideal home characteristics array to display in badges - Ideal home section
     const idealHomeChar = dog.idealHome.badges

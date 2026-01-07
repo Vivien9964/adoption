@@ -17,15 +17,12 @@ export const usePets = () => {
 };
 
 
-// Image dimensions: 800x600px or 1200x900px 4:3 ratio for swiper carousel
-
 // provider component 
 export const PetsProvider = ({ children }) => {
 
-    const [pets, setPets] = useState([]);
     const [allPets, setAllPets] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [ error, setError] = useState(null);
+    const [error, setError] = useState(null);
 
 
     // filterResult  will be the array that we return based on applied filters
@@ -53,7 +50,6 @@ export const PetsProvider = ({ children }) => {
                 
                 const data = await response.json();
                 setAllPets(data);
-                setPets(data);
                 setLoading(false);
 
             } catch(err) {
@@ -64,6 +60,7 @@ export const PetsProvider = ({ children }) => {
         }
 
         fetchPets();
+        
     }, []);
 
 
@@ -148,7 +145,6 @@ export const PetsProvider = ({ children }) => {
 
 
     const contextValue = {
-        pets,
         searchString,
         setSearchString,
         sizeFilter,

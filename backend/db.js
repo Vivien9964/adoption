@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-
+// Set of reusable connections instead of creating separate connections to the database
+// contains connection data 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -15,7 +16,9 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
+
 const promisePool = pool.promise();
+
 
 pool.getConnection((err, connection) => {
     if(err) {

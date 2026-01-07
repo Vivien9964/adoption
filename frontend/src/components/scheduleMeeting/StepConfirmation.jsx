@@ -4,23 +4,35 @@ import { useMeeting } from "../../context/MeetingContext";
 
 const StepConfirmation = () => {
 
-    const { selectedDog, selectedDate, selectedTime, userInfo } = useMeeting();
+    const { selectedDog, selectedDate, selectedTime, userInfo, isSubmitted } = useMeeting();
   
 
 
     const goodToKnow = [
         { id: 1, label: "Come 5-10 minutes earlier"},
         { id: 2, label: "Bring a valid ID card"},
-        { id: 2, label: `You will have 600 minutes to play with ${selectedDog.name} `},
+        { id: 2, label: `You will have 60 minutes to play with ${selectedDog.name} `},
         { id: 3, label: "The more the better, you can bring up to 3 more people with you"},
-        { id: 4, label: "Our staff will be more than happy to answer your questions"}
+        { id: 4, label: "You can bring toys, food, anything that would make the meeting better"}
     ];
 
     return (
         <div className="flex flex-col items-center justify-center px-16 py-18 md:px-18 md:py-20 mt-4 border-3 border-yellow-300 rounded-xl bg-white">
 
-            <h1>Meeting Confirmed!</h1>
-            <p>We are excited for you to meet {selectedDog.name}! A confirmation was sent to {userInfo.email}</p>
+
+            { isSubmitted ? (
+                <>
+                    <h1>Meeting confirmed!</h1>
+                    <p>We are excited for you to meet {selectedDog.name}! A confirmation was sent to {userInfo.email}</p>
+
+                </>
+            ) : (
+                <>
+                <h1>Review your meeting!</h1>
+                <p>Confirm your meeting details below and click "Schedule Meeting"</p>
+                </>
+            )}
+
 
             {/* Meeting details card */} 
             <div className="p-4 gap-4 flex items-center flex-col mt-6 border-2 border-yellow-300 rounded-xl sm:min-w-[300px] md:min-w-[400px] lg:min-w-[500px]">

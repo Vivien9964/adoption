@@ -48,7 +48,11 @@ const PetCardMeeting = ({ dog }) => {
 
             {/* Badges container -> from PetCardDogsPage component */}
             <div className="flex flex-1 flex-wrap gap-2 mt-4">
-                    <span className="px-3 py-1.5 flex items-center gap-1 bg-yellow-200 text-yellow-900 rounded-full text-xs font-bold border-2 border-yellow-300">
+                    <span className="
+                        px-3 py-1.5 flex items-center gap-1 
+                        bg-yellow-200 text-yellow-900 rounded-full text-xs font-bold 
+                        border-2 border-yellow-300"
+                    >
                         <MapPin className="w-3 h-3" />
                         {dog.location}
                     </span>

@@ -46,13 +46,15 @@ const PetCardDogsPage = ({dog}) => {
                 <div className='grid grid-cols-3 gap-3 mb-4 p-3'>
                                 
                     {/* Breed container */}
-                    <div className='text-center p-3 bg-yellow-200 border-2 border-gray-700 rounded-2xl'>
+                    <div className='text-center p-3 bg-yellow-200 border-2 border-gray-700 rounded-2xl min-w-0 h-20 overflow-hidden'>
                         <p className='mb-1 text-xs tracking-wide font-semibold uppercase text-yellow-900/70'>Breed</p>
-                        <p className='text-lg leading-tight font-bold text-gray-800'>{dog.breed.split(" ")[0]}</p>
+                        <p className='text-sm leading-tight font-bold text-gray-800 whitespace-wrap'>
+                            {dog.breed === "Golden Retriever Mix" ? "Golden Retriever" : dog.breed }
+                        </p>
                     </div>
 
                     {/* Age container */}
-                    <div className='text-center p-3 bg-yellow-200 border-2 border-gray-700 rounded-2xl'>
+                    <div className='text-center p-3 bg-yellow-200 border-2 border-gray-700 rounded-2xl min-w-0 h-20'>
                         <p className='mb-1 text-xs tracking-wide font-semibold uppercase text-yellow-900/70'>Age</p>
                         <p className='text-lg leading-tight font-bold text-gray-800'>
                             {dogAge}
@@ -62,7 +64,7 @@ const PetCardDogsPage = ({dog}) => {
                     </div>
 
                     {/* Gender container */}
-                    <div className='text-center p-3 bg-yellow-200 border-2 border-gray-700 rounded-2xl'>
+                    <div className='text-center p-3 bg-yellow-200 border-2 border-gray-700 rounded-2xl min-w-0 h-20'>
                         <p className='mb-1 text-xs tracking-wide font-semibold uppercase text-yellow-900/70'>Gender</p>
                         <p className='text-lg leading-tight font-bold text-gray-800'>{dog.gender}</p>
                     </div>

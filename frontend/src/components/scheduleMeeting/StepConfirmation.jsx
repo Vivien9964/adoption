@@ -11,9 +11,9 @@ const StepConfirmation = () => {
     const goodToKnow = [
         { id: 1, label: "Come 5-10 minutes earlier"},
         { id: 2, label: "Bring a valid ID card"},
-        { id: 2, label: `You will have 60 minutes to play with ${selectedDog.name} `},
-        { id: 3, label: "The more the better, you can bring up to 3 more people with you"},
-        { id: 4, label: "You can bring toys, food, anything that would make the meeting better"}
+        { id: 3, label: `You will have 60 minutes to play with ${selectedDog.name} `},
+        { id: 4, label: "The more the better, you can bring up to 3 more people with you"},
+        { id: 5, label: "You can bring toys, food, anything that would make the meeting better"}
     ];
 
     return (
@@ -28,23 +28,25 @@ const StepConfirmation = () => {
                 </>
             ) : (
                 <>
-                <h1>Review your meeting!</h1>
                 <p>Confirm your meeting details below and click "Schedule Meeting"</p>
                 </>
             )}
 
 
             {/* Meeting details card */} 
-            <div className="p-4 gap-4 flex items-center flex-col mt-6 border-2 border-yellow-300 rounded-xl sm:min-w-[300px] md:min-w-[400px] lg:min-w-[500px]">
+            <div className="p-3 gap-4 flex items-center flex-col mt-6 border-2 border-yellow-300 rounded-xl sm:min-w-[300px] md:min-w-[400px] lg:min-w-[500px]">
                 
                 {/* Details title */}
-                <h2>Meeting details</h2>
+                <div className="
+                    w-full mt-0 flex justify-center items-center rounded-xl h-30 
+                    bg-yellow-300 text-lg font-black text-yellow-900">
+                <h2>Review your meeting!</h2>
+                </div>
 
                 {/* Selected dog card */}
                 {/* Image + Name + Breed container */}
                 <div className='w-full flex flex-col self-start'>
-                    <p>You are meeting with:</p>
-                <div className="p-3 mt-2 flex flex-row justify-self items-center gap-3 border-3 border-yellow-300 rounded-xl" >
+                <div className="p-3 mt-2 flex flex-row justify-center items-center gap-3 border-3 border-yellow-300 rounded-xl" >
                     {/* Image container */}
                     <div className="h-20 w-20 rounded-full border-4 border-white shadow-xl overflow-hidden">
                         <img src={selectedDog.mainImage} className='h-full w-full object-cover' alt={`${selectedDog.name} - ${selectedDog.breed}`} />
@@ -61,7 +63,7 @@ const StepConfirmation = () => {
                 {/* Meeting date and time  */}
                 {/* When to meet section -> date */}
                 <div className="mt-3 flex flex-col gap-3 w-full ">
-                    <div className="px-3 py-1 flex items-center justify-between gap-2 border-2 border-sky-400/30 rounded-lg">
+                    <div className="px-3 py-2 flex flex-col gap-2 border-2 border-sky-400/30 rounded-lg">
                         <div className="flex flex-row gap-2">
                             <Calendar className="h-5 w-5 text-yellow-600" />
                             <p className="text-gray-600 text-md">Date</p>
@@ -70,7 +72,7 @@ const StepConfirmation = () => {
                     </div>
                     
                     {/* When to meet section -> time */}
-                    <div className="px-3 py-1 flex items-center justify-between gap-2 border-2 border-sky-400/30 rounded-lg">
+                    <div className="px-3 py-2 flex flex-col gap-2 border-2 border-sky-400/30 rounded-lg">
                         <div className="flex flex-row gap-2">
                             <Clock className="h-5 w-5 text-yellow-600" />
                             <p className="text-gray-600 text-md">Time</p>
@@ -79,7 +81,7 @@ const StepConfirmation = () => {
                     </div>
 
                     {/* Where to meet section -> based on dog data = location + shelter for now, later -> shelter name with address */}
-                    <div className="px-3 py-1 flex items-center justify-between gap-2 border-2 border-sky-400/30 rounded-lg">
+                    <div className="px-3 py-2 flex flex-col gap-2 border-2 border-sky-400/30 rounded-lg">
                         <div className="flex flex-row gap-2">
                             <MapPin className="h-5 w-5 text-yellow-600" />
                             <p className="text-gray-600 text-md">Location</p>
@@ -92,12 +94,12 @@ const StepConfirmation = () => {
 
 
                      {/* Contact info section */}
-                     <div className="px-3 py-1 flex flex-row justify-between items-center gap-2 border-2 border-sky-400/30 rounded-lg">
+                     <div className="px-3 py-2 flex flex-col gap-2 border-2 border-sky-400/30 rounded-lg">
                         <div className="flex flex-row items-center gap-2">
                             < UserRound className="h-5 w-5 text-yellow-600" />
                             <p className="text-gray-600 text-md">Contact</p>
                         </div>
-                        <div className="flex flex-col items-center gap-2">
+                        <div className="flex flex-col gap-2">
                             <span className="text-gray-700 font-bold text-sm">{userInfo.name}</span>
                             <span className="text-gray-600 italic text-sm">{userInfo.email}</span>
                             <span className="text-gray-600 italic text-sm">{userInfo.phone}</span>

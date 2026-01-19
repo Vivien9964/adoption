@@ -15,10 +15,12 @@ const ScheduleMeetingContent = () => {
     const location = useLocation();
 
     // Take step variables and functions from meeting context
-    const { currentStep, 
+    const { currentStep,
+            setCurrentStep, 
             nextStep, 
             prevStep, 
-            selectedDog, 
+            selectedDog,
+            setSelectedDog, 
             selectedDate, 
             selectedTime, 
             userInfo, 
@@ -28,6 +30,14 @@ const ScheduleMeetingContent = () => {
 
     // State to track if user is currently submitting meeting appointment -> meaning they are at the confirmation stage
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Check if navigation comes with an object, if so then select the given dog and proceed to step two in the scheduling process
+    useEffect(() => {
+        if( location.state?.selectedDog) {
+            setSelectedDog(location.state.selectedDog);
+            setCurrentStep(2);
+        }
+    }, []);
 
     // Step labels for buttons
     const stepLabels = ["Choose a dog", "Date & Time", "Your Info", "Confirm"];

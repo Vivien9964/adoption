@@ -1,7 +1,7 @@
 import { Calendar, Clock } from 'lucide-react';
 import { useMeeting } from '../../context/MeetingContext';
 import Button from '../common/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DatePicker from "react-datepicker"; // react date picker library
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -9,6 +9,9 @@ const StepSelectTimeDate = ({ dog }) => {
 
     // Taking necessary data from context
     const { selectedDate, setSelectedDate, selectedTime, setSelectedTime } = useMeeting();
+
+    // Already booked time slots 
+    const [ bookedSlots, setBookedSlots ] = useState([]);
 
     // New date object for today -> in date formatting
     const today = new Date();
@@ -97,6 +100,32 @@ const StepSelectTimeDate = ({ dog }) => {
         return dateTimeObj.toISOString();
     }
 
+
+    // Get booked slots for a pet
+    useEffect(() => {
+        const fetchBookings = async () => {
+            if(!dog) return;
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/meetings/availability/${dog.id}`);
+                const data = await response.json();
+                console.log("Bookings:", data.bookings);
+                setBookedSlots(data.bookings);
+            } catch(err) {
+                console.error("Error:", err);
+            }
+        }
+
+        fetchBookings();
+
+    }, [dog]);
+
+    // Helper function to find if the date and time combination exists in the bookings
+    const isTimeBooked = (dateString, hour) => {
+        return bookedSlots.some(booking => {
+            return booking.meetingDate === dateString && Number(booking.meetingTime) === hour;
+        });
+    }
 
 
     return (
@@ -201,24 +230,30 @@ const StepSelectTimeDate = ({ dog }) => {
 
                 {/* Time availability grid */}
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-3'>
-                    {visitingHours.map((hour, index) => (
+                    {visitingHours.map((hour, index) => {
+                        const booked = selectedDate ? isTimeBooked(selectedDate, hour) : false;
                         // Time card
-                        <div 
-                            key={index}
-                            onClick={() => handleSelectTime(hour)}
-                            className={
-                                `p-3 text-center text-gray-700 font-bold rounded-xl
-                                border-3 cursor-pointer whitespace-nowrap transition-all duration-300
-                                ${selectedTime === hour
-                                    ? "bg-sky-500/30 border-sky-400/50 shadow-sky-400/50 ring-2 ring-sky-300/50 scale-105" 
-                                    : "bg-sky-50 hover:bg-gray-200/50 border-sky-300/50 hover:scale-102 hover:shadow-md"
-                                }
+                        return (
+                            <div 
+                                key={index}
+                                onClick={() => handleSelectTime(hour)}
+                                className={
+                                    `p-3 text-center text-gray-700 font-bold rounded-xl
+                                    border-3 cursor-pointer whitespace-nowrap transition-all duration-300
+                                    ${booked 
+                                       ? "bg-gray-200 border-gray-400 text-gray-500 cursor-not-allowed opacity-60"
+                                       : selectedTime === hour
+                                        ? "bg-sky-500/30 border-sky-400/50 shadow-sky-400/50 ring-2 ring-sky-300/50 scale-105" 
+                                        : "bg-sky-50 hover:bg-gray-200/50 border-sky-300/50 hover:scale-102 hover:shadow-md"
+                                    }
                                 `}
-                        >
-                            <span>{hour}:00</span>
-                        </div>
-
-                    ))}
+                                
+                            >
+                                <span>{hour}:00</span>
+        
+                            </div>
+                        )
+                    })}
 
                 </div>
 

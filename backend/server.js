@@ -74,6 +74,19 @@ app.get("/api/dogs/:id", async( req, res ) => {
 });
 
 
+// Get available meeting dates for a dog
+app.get("/api/meetings/availability/:dogId", async( req, res) => {
+    try {
+        const { dogId } = req.params;
+        const [meetings] = await db.query(`SELECT meetingDate, meetingTime FROM meetings WHERE dogId = ?`, [dogId]);
+        res.status(200).json({ bookings: meetings });
+    } catch(err) {
+        console.error("Error fetching available date and time.", err);
+        res.status(500).json({ error: "Failed to fetch availabe date and time!" });
+    }
+})
+
+
 // Send user data to the database -> scheduled meeting
 app.post("/api/meetings", async( req, res) => {
     try {

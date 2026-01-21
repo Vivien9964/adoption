@@ -53,10 +53,8 @@ const StepSelectDog = () => {
 
 
     return (
-        <div className="p-4 mt-4 border-3 border-yellow-300 rounded-xl">
+        <div className="p-6 mt-4 rounded-xl shadow-lg border-l-4 border-yellow-400 bg-white">
             
-            <h1 className="mb-4 text-gray-700 font-black text-xl md:text-4xl">Step 1: Choose a dog</h1>
-
             {/* Filter component */}
             <Filter />
 

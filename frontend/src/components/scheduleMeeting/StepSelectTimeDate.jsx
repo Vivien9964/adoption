@@ -129,10 +129,7 @@ const StepSelectTimeDate = ({ dog }) => {
 
 
     return (
-        <div className="p-4 mt-4 border-3 border-yellow-300 rounded-xl bg-white">
-            
-            <h1 className='mb-8 text-gray-700 font-black text-xl md:text-4xl'>Step 2: Choose Date & Time</h1>
-
+        <div className="p-4 mt-4 rounded-xl shadow-lg border-l-4 border-yellow-400 bg-white">
             
             <h2 className="text-gray-800/80 text-base">Meeting with: </h2>
             {/* Selected dog card */}

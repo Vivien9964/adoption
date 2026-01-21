@@ -43,7 +43,7 @@ const StepConfirmation = () => {
 
                         </>
                     ) : (
-                        <p className="text-xs text-gray-600 font-medium leading-tight">Confirm your meeting details below and continue with "Schedule Meeting"</p>
+                        <p className="text-center text-xs text-gray-600 font-medium">One step away from meeting <span className="text-yellow-800 font-black">{selectedDog.name}</span>!</p>
                     )}
 
                 </div>
@@ -51,7 +51,10 @@ const StepConfirmation = () => {
                 {/* Selected dog card */}
                 {/* Image + Name + Breed container */}
                 <div className='w-full flex flex-col self-start'>
-                <div className="p-3 mt-2 flex flex-row justify-center items-center gap-3 border-3 border-yellow-300 rounded-xl" >
+                <div className="
+                    p-3 mt-2 flex flex-row justify-center items-center gap-3 rounded-xl
+                    border-2 border-sky-200 shadow-sm bg-sky-50" 
+                >
                     {/* Image container */}
                     <div className="h-20 w-20 rounded-full border-4 border-white shadow-xl overflow-hidden">
                         <img src={selectedDog.mainImage} className='h-full w-full object-cover' alt={`${selectedDog.name} - ${selectedDog.breed}`} />

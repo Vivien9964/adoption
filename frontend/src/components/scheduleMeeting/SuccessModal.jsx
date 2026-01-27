@@ -1,9 +1,11 @@
+import { useEffect, useState } from "react";
 import { useMeeting, MeetingProvider } from "../../context/MeetingContext";
 import { Calendar, Clock, MapPin, Check, Dog, Mail, Bell, CircleAlert, Download } from 'lucide-react';
 
 const SuccessModalContent = () => {
 
     const { selectedDog, selectedDate, selectedTime, userInfo } = useMeeting();
+    const [ message, setMessage ] = useState(null);
 
     // Mock data for testing
     const dog = selectedDog || {
@@ -23,6 +25,26 @@ const SuccessModalContent = () => {
     const time = selectedTime || "15:00";
 
 
+    useEffect(() => {
+
+        const welcomeMessages = [
+            { messageTop: "I'm so happy you're coming to visit me!", messageBottom:"Who knows… this might be the start of our story."},
+            { messageTop: "Yay! You're coming to see me!", messageBottom:"I hope this visit is just the first step in our story together."},
+            { messageTop: "I'm so excited to see you!", messageBottom:"See you soon!"},
+            { messageTop: "Woohoo! A visitor!", messageBottom:"I promise, I'll make our meeting unforgettable!"},
+            { messageTop: "Thanks for coming to see me!", messageBottom:"I'm looking forward to meeting you."},
+        ];
+
+        if(dog) {
+            const randomIndex = Math.floor(Math.random() * welcomeMessages.length);
+            setMessage(welcomeMessages[randomIndex]);
+        }
+
+    }, [])
+    
+
+
+
     return (
         <div className="
             px-2 py-6 m-auto grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-2 rounded-3xl
@@ -33,28 +55,28 @@ const SuccessModalContent = () => {
             <div className="flex flex-col gap-3 items-center"> 
 
                 {/* Header with confirmation icon and main title */}
-                <div className="flex flex-col gap-2 items-center">
+                <div className="flex flex-col gap-3 items-center">
                     <div className="p-4 rounded-full bg-white border-white shadow-lg max-w-[70px]">
                         <Check className="h-10 w-10 text-green-500 font-black" />
                     </div>
                     <h1 
                         className="text-3xl md:text-4xl font-black text-gray-700"
-                        style={{ fontFamily: "Arial Black, sans-serif"}}
-
-                        
+                        style={{ fontFamily: "Arial Black, sans-serif"}} 
                     >
                         All Set!
                     </h1>
-                    <p className="text-md md:text-lg text-gray-700"><span className="text-yellow-800 font-black">{dog.name}</span> can't wait to meet you!</p>
+                    <p className="text-md md:text-lg text-gray-700 font-semibold">
+                        <span className="text-yellow-800 font-black">{dog.name}</span> can't wait to meet you!
+                    </p>
                 </div>
 
 
                 {/* Profile card with message and meeting details */}
                 <div className="p-3 bg-white rounded-xl w-xs md:w-xs lg:w-md">
                     {/* Image + Name + Breed container */}
-                    <div className='w-full flex flex-col self-start'>
+                    <div className='w-full flex flex-col'>
                         <div className="
-                            p-3 mt-2 flex flex-row justify-center items-center gap-3 rounded-xl
+                            p-3 mt-2 flex flex-row gap-3 rounded-xl 
                             border-2 border-sky-200 shadow-sm bg-sky-50" 
                         >
                             {/* Image container */}
@@ -73,6 +95,14 @@ const SuccessModalContent = () => {
 
                     {/* Short message */}
                     <div>
+
+                        <p>
+                            {message?.messageTop} 
+                        </p>
+
+                        <p>
+                            {message?.messageBottom}
+                        </p>
 
                     </div>
 

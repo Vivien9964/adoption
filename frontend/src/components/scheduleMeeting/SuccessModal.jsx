@@ -52,7 +52,7 @@ const SuccessModalContent = () => {
         >
             
             {/* Confirmation details with profile card, meeting details */}
-            <div className="flex flex-col gap-3 items-stretch w-full"> 
+            <div className="flex flex-col gap-3 w-full"> 
 
                 {/* Header with confirmation icon and main title */}
                 <div className="flex flex-col gap-3 items-center">
@@ -65,7 +65,7 @@ const SuccessModalContent = () => {
                     >
                         All Set!
                     </h1>
-                    <p className="text-md md:text-lg text-gray-700 font-semibold">
+                    <p className="text-lg md:text-xl text-gray-700 font-normal">
                         <span className="text-yellow-800 font-black">{dog.name}</span> can't wait to meet you!
                     </p>
                 </div>
@@ -76,34 +76,30 @@ const SuccessModalContent = () => {
                     {/* Image + Name + Breed container */}
                     <div className='w-full flex flex-col'>
                         <div className="
-                            p-3 mt-2 flex flex-row gap-3 rounded-xl 
+                            p-3 mt-2 flex flex-row items-center gap-4 rounded-xl 
                             border-2 border-sky-200 shadow-sm bg-sky-50" 
                         >
                             {/* Image container */}
-                            <div className="h-20 w-20 rounded-full border-4 border-white shadow-xl overflow-hidden">
+                            <div className="h-35 w-35 rounded-full border-4 border-white shadow-xl overflow-hidden">
                                 <img src={dog.mainImage} className='h-full w-full object-cover' alt={`${dog.name} - ${dog.breed}`} />
                             </div>
 
                             {/* Name and breed container */}
                             <div>
-                                <h2 className="mb-1 text-gray-700 font-bold text-md md:text-lg">{dog.name}</h2>
-                                <p className="text-gray-500 text-sm">{dog.breed}</p> 
+                                <h2 className="mb-1 text-gray-700 font-bold text-2xl md:text-3xl">{dog.name}</h2>
+                                <p className="text-gray-500 text-lg">{dog.breed}</p> 
                             </div>
 
                         </div>
                     </div>
 
                     {/* Short message */}
-                    <div className="
-                        mt-2 p-2 flex flex-col rounded-2xl 
-                        text-yellow-800 font-semibold text-center"
-                    >
-
-                        <p>
+                    <div className="mt-2 p-2 flex flex-col rounded-2xl text-center">
+                        <p className="text-lg text-yellow-800 font-semibold">
                             {message?.messageTop} 
                         </p>
 
-                        <p>
+                        <p className="text-lg text-yellow-800 font-semibold">
                             {message?.messageBottom}
                         </p>
                     </div>
@@ -120,8 +116,8 @@ const SuccessModalContent = () => {
                                 <Calendar className="m-2 h-5 w-5 text-yellow-800" />
                             </div>
                             <div className="flex flex-col">
-                                <p className="text-gray-600 text-md">Date</p>
-                                <span className="text-gray-800 font-bold text-md">{date}</span>
+                                <p className="text-gray-600 text-lg">Date</p>
+                                <span className="text-gray-800 font-bold text-lg">{date}</span>
                             </div>
                         </div>
 
@@ -131,8 +127,8 @@ const SuccessModalContent = () => {
                                 <Clock className="m-2 h-5 w-5 text-yellow-800" />
                             </div>
                             <div className="flex flex-col">
-                                <p className="text-gray-600 text-md">Time</p>
-                                <span className="text-gray-800 font-bold text-md">{time}</span>
+                                <p className="text-gray-600 text-lg">Time</p>
+                                <span className="text-gray-800 font-bold text-lg">{time}</span>
                             </div>
                         </div>
 
@@ -142,9 +138,9 @@ const SuccessModalContent = () => {
                                 <MapPin className="m-2 h-5 w-5 text-yellow-800" />
                             </div>
                             <div className="flex flex-col">
-                                <p className="text-gray-600 text-md">Location</p>
+                                <p className="text-gray-600 text-lg">Location</p>
                                 <div>
-                                    <span className="text-gray-800 font-bold text-md">{dog.location} Shelter</span>
+                                    <span className="text-gray-800 font-bold tex-lg">{dog.location} Shelter</span>
                                     <p className="mt-2 text-sm text-gray-500 italic">Address, Arad 12</p>
                                 </div>
                             </div>
@@ -154,69 +150,92 @@ const SuccessModalContent = () => {
 
                 </div>
 
-
-
-               
-
-
             </div>
+
+
+
 
             {/* Booking code with further steps and CTA buttons */}
             <div className="
-                p-3 flex flex-col gap-2 rounded-xl md:rounded-tr-xl md:rounded-br-xl
-                w-full
-                bg-white"
-            >
+                px-3 py-5 flex flex-col gap-3 rounded-xl md:rounded-tr-xl md:rounded-br-xl w-full bg-white">
 
                 {/* Booking code */}
-                <div className="border-2 border-sky-200 text-gray-700 font-black text-xl p-4 rounded-lg">
-                    Booking code
+                <div className="
+                    p-4 text-center rounded-lg border-2 border-sky-200 bg-sky-50"
+                >
+                    <p className="mb-2 text-gray-500 font-semibold uppercase text-sm md:text-md">Booking Code</p>
+                    <p className="text-gray-700 font-black uppercase text-2xl md:text-3xl">
+                        {dog.name + "-" + crypto.randomUUID().split("-")[0]}
+                    </p>
                 </div>
 
 
                 {/* What's next?  */}
-                <div className="flex flex-col gap-3 p-3">
+                <div className="flex flex-col gap-4 p-3 mt-3">
 
                     {/* Title with icon */}
-                    <div className="flex items-center gap-3">
+                    <div className="mt-6 flex items-center gap-3">
                         <div className="bg-yellow-300 rounded-full p-2 text-center">
-                            <Dog className="h-6 w-6 text-yellow-900" />
+                            <Dog className="h-8 w-8 md:h-10 md:w-10 text-yellow-900" />
                         </div>
-                        <h2 className="text-yellow-900 font-black text-lg md:text-xl">What happens next?</h2>
+                        <h2 className="text-yellow-900 font-black text-xl md:text-2xl">What happens next?</h2>
                     </div>
 
                     {/* Confirmation sent to, reminder, extra tip */}
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-5">
 
                         {/* Email */}
-                        <div className="flex gap-2 items-center">
-                            <Mail className="h-4 w-4 text-yellow-800" />
-                            <p>Confirmation sent to <span className="text-yellow-800 italic">{user.email}</span></p>
+                        <div className="flex gap-3 items-center">
+                            <Mail className="h-6 w-6 text-yellow-800" />
+                            <p className="font-normal text-xl text-gray-700">
+                                Confirmation sent to <span className="text-yellow-800 italic cursor-pointer">{user.email}</span>
+                            </p>
                         </div>
 
                         {/* Reminder */}
-                        <div className="flex gap-2 items-center">
-                            <Bell className="h-4 w-4 text-yellow-800" />
-                            <p>We'll give you a reminder 24 hours before your visit.</p>
+                        <div className="flex gap-3 items-center">
+                            <Bell className="h-6 w-6 text-yellow-800" />
+                            <p className="font-normal text-xl text-gray-700">
+                                We'll give you a reminder 24 hours before your visit.
+                            </p>
                         </div>
 
                         {/* Important */}
-                        <div className="flex gap-2 items-center mb-3">
-                            <CircleAlert className="h-4 w-4 text-yellow-800" />
-                            <p>Remember to bring your ID card and booking confirmation.</p>
+                        <div className="flex gap-3 items-center mb-8">
+                            <CircleAlert className="h-6 w-6 text-yellow-800" />
+                            <p className="font-normal text-xl text-gray-700">
+                                Remember to bring your ID card and booking confirmation.
+                            </p>
                         </div>
 
                         <button className="
-                            flex gap-2 items-center m-auto px-3 py-4 max-w-[200px] rounded-xl bg-yellow-300 text-yellow-900 font-black">
+                            flex gap-2 items-center justify-center m-auto px-3 py-4 w-sm rounded-xl 
+                            bg-yellow-300 text-yellow-800 text-lg font-black shadow-md cursor-pointer
+                            hover:bg-yellow-400/80
+                            "
+                        >
                            <Download className="h-6 w-6 text-yellow-800" />
                             Save Confirmation
                         </button>
                     </div>
 
                     {/* CTA buttons */}
-                    <div className="flex justify-evenly mt-3">
-                        <button>Back to Dogs</button>
-                        <button>Close</button>
+                    <div className="flex justify-evenly mt-6">
+                        <button className="
+                            px-3 py-4 rounded-xl
+                            bg-yellow-300 text-yellow-800 font-black cursor-pointer shadow-md
+                            hover:bg-yellow-400/80">
+                            Back to Dogs
+                        </button>
+
+                        <button className="
+                            px-4 py-3 rounded-xl
+                            text-gray-500 font-black bg-gray-200 cursor-pointer shadow-md
+                            hover:bg-gray-300/90
+                        "
+                        >
+                            Close
+                        </button>
                     </div>
 
                 </div>

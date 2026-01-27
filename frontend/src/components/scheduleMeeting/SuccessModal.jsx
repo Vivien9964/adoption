@@ -48,11 +48,11 @@ const SuccessModalContent = () => {
     return (
         <div className="
             px-2 py-6 m-auto grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-2 rounded-3xl
-            bg-yellow-300 border-2 border-yellow-300 shadow-2xl max-w-[1000px]"
+            bg-yellow-300 border-2 border-yellow-300 shadow-2xl max-w-md md:max-w-[1200px]"
         >
             
             {/* Confirmation details with profile card, meeting details */}
-            <div className="flex flex-col gap-3 items-center"> 
+            <div className="flex flex-col gap-3 items-stretch w-full"> 
 
                 {/* Header with confirmation icon and main title */}
                 <div className="flex flex-col gap-3 items-center">
@@ -72,7 +72,7 @@ const SuccessModalContent = () => {
 
 
                 {/* Profile card with message and meeting details */}
-                <div className="p-3 bg-white rounded-xl w-xs md:w-xs lg:w-md">
+                <div className="p-3 bg-white rounded-xl w-full">
                     {/* Image + Name + Breed container */}
                     <div className='w-full flex flex-col'>
                         <div className="
@@ -94,7 +94,10 @@ const SuccessModalContent = () => {
                     </div>
 
                     {/* Short message */}
-                    <div>
+                    <div className="
+                        mt-2 p-2 flex flex-col rounded-2xl 
+                        text-yellow-800 font-semibold text-center"
+                    >
 
                         <p>
                             {message?.messageTop} 
@@ -103,14 +106,13 @@ const SuccessModalContent = () => {
                         <p>
                             {message?.messageBottom}
                         </p>
-
                     </div>
 
 
 
                      {/* Meeting details */}
                     {/* Meeting date and time  */}
-                    <div className="mt-2 p-4 flex flex-col gap-3 md:w-md">
+                    <div className="mt-1 p-4 flex flex-col gap-3">
 
                         {/* When to meet section -> date */}
                         <div className="min-h-[50px] px-3 py-3 flex flex-row gap-2">
@@ -130,7 +132,7 @@ const SuccessModalContent = () => {
                             </div>
                             <div className="flex flex-col">
                                 <p className="text-gray-600 text-md">Time</p>
-                                <span className="text-gray-800 font-bold text-md">{time}:00</span>
+                                <span className="text-gray-800 font-bold text-md">{time}</span>
                             </div>
                         </div>
 
@@ -160,7 +162,11 @@ const SuccessModalContent = () => {
             </div>
 
             {/* Booking code with further steps and CTA buttons */}
-            <div className="bg-white md:rounded-tr-xl md:rounded-br-xl rounded-xl flex flex-col gap-2">
+            <div className="
+                p-3 flex flex-col gap-2 rounded-xl md:rounded-tr-xl md:rounded-br-xl
+                w-full
+                bg-white"
+            >
 
                 {/* Booking code */}
                 <div className="border-2 border-sky-200 text-gray-700 font-black text-xl p-4 rounded-lg">

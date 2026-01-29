@@ -25,6 +25,7 @@ const ScheduleMeetingContent = () => {
             selectedTime, 
             userInfo, 
             submitMeeting,
+            isSubmitted,
             resetMeeting
         } = useMeeting();
 
@@ -91,7 +92,8 @@ const ScheduleMeetingContent = () => {
 
             {/* Progress bar -> always available to show progress in the process */}
 
-            <ProgressBar currentStep={currentStep} />
+            {!isSubmitted && <ProgressBar currentStep={currentStep} />}
+            
 
             {/* Different content based on current step */}
             { currentStep === 1 && <StepSelectDog /> }
@@ -101,33 +103,35 @@ const ScheduleMeetingContent = () => {
 
 
             {/* CTA buttons container */}
-            <div className="flex justify-center items-center gap-8 mt-8">
-
-                {/* Button always available, just like progress bar but it is disabled until user selects from options / adds data */}
-                <Button 
-                    variant="primary" 
-                    onClick={handleNextClick}
-                    disabled={
-                        (currentStep === 1 && !selectedDog) ||
-                        (currentStep === 2 && (!selectedDate || !selectedTime)) ||
-                        (currentStep === 3 && (!userInfo.name || !userInfo.email || !userInfo.phone))
-                    }
-                >
-                     { isSubmitting 
-                        ? "Scheduling..." 
-                        : currentStep >= 4 
-                            ? "Schedule Meeting" 
-                            : `Continue to ${stepLabels[currentStep]}`
-                    }
-                </Button>
-
-                {/* Only show back button when on second step and further */}
-                { currentStep > 1 && currentStep < 5 && (
-                    <Button variant="secondary" onClick={prevStep}>
-                        Back
-                    </Button>
-                )}
-            </div>
+            {!isSubmitted && (
+                 <div className="flex justify-center items-center gap-8 mt-8">
+                 {/* Button always available, just like progress bar but it is disabled until user selects from options / adds data */}
+                 <Button 
+                     variant="primary" 
+                     onClick={handleNextClick}
+                     disabled={
+                         (currentStep === 1 && !selectedDog) ||
+                         (currentStep === 2 && (!selectedDate || !selectedTime)) ||
+                         (currentStep === 3 && (!userInfo.name || !userInfo.email || !userInfo.phone))
+                     }
+                 >
+                      { isSubmitting 
+                         ? "Scheduling..." 
+                         : currentStep >= 4 
+                             ? "Schedule Meeting" 
+                             : `Continue to ${stepLabels[currentStep]}`
+                     }
+                 </Button>
+ 
+                 {/* Only show back button when on second step and further */}
+                 { currentStep > 1 && currentStep < 5 && (
+                     <Button variant="secondary" onClick={prevStep}>
+                         Back
+                     </Button>
+                 )}
+             </div>
+            )}
+           
 
 
         </Section>

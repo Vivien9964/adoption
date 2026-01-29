@@ -1,13 +1,12 @@
 import { Calendar, Clock, MapPin, UserRound, Dog, Mail, Phone } from 'lucide-react';
 import { useMeeting } from "../../context/MeetingContext";
+import SuccessModal from './SuccessModal';
 
 
 const StepConfirmation = () => {
 
     const { selectedDog, selectedDate, selectedTime, userInfo, isSubmitted } = useMeeting();
   
-
-
     // Flag field helps to differentiate facts -> Before Arrival(BA) and During Visit(DV)
     const goodToKnow = [
         { id: 1, label: "Come 5-10 minutes earlier", flag: "BA"},
@@ -19,6 +18,12 @@ const StepConfirmation = () => {
 
     const beforeArrival = goodToKnow.filter((fact) => fact.flag === "BA");
     const duringVisit = goodToKnow.filter((fact) => fact.flag === "DV");
+
+    if(isSubmitted) {
+        return <SuccessModal />
+    }
+
+
 
     return (
         <div className="
@@ -37,16 +42,8 @@ const StepConfirmation = () => {
                     bg-yellow-300"
                 >
                     <h2 className="font-black text-xl text-yellow-900">Review your meeting!</h2>
-
-                    { isSubmitted ? (
-                        <>
-                            <h1>Meeting confirmed!</h1>
-                            <p>We are excited for you to meet {selectedDog.name}! A confirmation was sent to {userInfo.email}</p>
-
-                        </>
-                    ) : (
-                        <p className="text-center text-xs text-gray-600 font-medium">One step away from meeting <span className="text-yellow-800 font-black">{selectedDog.name}</span>!</p>
-                    )}
+                    <p className="text-center text-xs text-gray-600 font-medium">One step away from meeting <span className="text-yellow-800 font-black">{selectedDog.name}</span>!</p>
+                    
 
                 </div>
 

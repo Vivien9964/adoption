@@ -1,4 +1,3 @@
-import SuccessModal from "../components/scheduleMeeting/SuccessModal";
 
 const AboutPage = () => {
 
@@ -6,7 +5,6 @@ const AboutPage = () => {
         <>
             <p>About page</p>
 
-            <SuccessModal />
         </>
     ) 
 }

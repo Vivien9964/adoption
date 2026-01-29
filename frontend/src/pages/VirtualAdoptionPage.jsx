@@ -1,9 +1,17 @@
+import HeroDonations from "../components/virtualAdoption/HeroDonations";
+import UrgentNeedsSection from "../components/virtualAdoption/UrgentNeedsSection"
+
 const VirtualAdoptionPage = () => {
 
     return (
-        <div>
-            <p>Virtual</p>
-        </div>
+
+        <>
+
+            <HeroDonations />
+            <UrgentNeedsSection />
+            
+        </>
+        
     )
 }
 

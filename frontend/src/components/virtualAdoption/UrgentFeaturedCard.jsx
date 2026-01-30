@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { urgentCareDogs } from "../../data/urgentCareData";
 import { HeartPulse } from 'lucide-react';
 
 
@@ -22,7 +21,7 @@ const UrgentFeaturedCard = ({ dog }) => {
             <div className="
                 absolute top-4 left-6 px-3 py-2 rounded-full
                 bg-yellow-800 animate-pulse text-white text-md font-black">
-                <p>CRITICAL</p>
+                <p>URGENT</p>
             </div>
                 <img 
                     src={dog.image} 
@@ -79,7 +78,7 @@ const UrgentFeaturedCard = ({ dog }) => {
                     hover:bg-amber-500 transition-colors duration-200
                     "
                 >
-                Donate
+                Donate to {dog.name}
                 </button>
 
                 <button className="

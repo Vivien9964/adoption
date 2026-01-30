@@ -1,21 +1,16 @@
-// Link component from react router
 import { Link } from 'react-router-dom';
 
-// Custom components
 import Section from '../layout/Section';
 import Button from '../common/Button';
 import PetCardCarousel from '../pets/PetCardCarousel';
 
-// Components from Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 
-// Swiper 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-// Context - get pet objects from to pass on to pet card shown in carousel
 import { usePets } from '../../context/PetsContext';
 
 
@@ -23,7 +18,7 @@ import { usePets } from '../../context/PetsContext';
 const FeaturedPetsSection = () => {
 
     const { getFeaturedPets } = usePets();
-    const featuredPets = getFeaturedPets(); // array of featured pets
+    const featuredPets = getFeaturedPets(); 
 
     return (
         <Section background="blue" padding="normal" maxWidth="7xl" id="featured-pets">

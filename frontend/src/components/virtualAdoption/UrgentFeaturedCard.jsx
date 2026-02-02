@@ -17,12 +17,8 @@ const UrgentFeaturedCard = ({ dog }) => {
         <div className="flex flex-col h-full w-full rounded-xl overflow-hidden border-4 border-amber-500 shadow-xl">
             
             {/* Image container */}
-            <div className="relative aspect-square w-full overflow-hidden">
-            <div className="
-                absolute top-4 left-6 px-3 py-2 rounded-full
-                bg-yellow-800 animate-pulse text-white text-md font-black">
-                <p>URGENT</p>
-            </div>
+            <div className="aspect-square w-full overflow-hidden">
+        
                 <img 
                     src={dog.image} 
                     alt={`${dog.name}-${dog.breed}`} 

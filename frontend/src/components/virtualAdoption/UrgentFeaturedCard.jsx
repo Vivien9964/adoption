@@ -14,10 +14,20 @@ const UrgentFeaturedCard = ({ dog }) => {
     return (
         // Main card body
         <>
-        <div className="flex flex-col h-full w-full rounded-xl overflow-hidden border-4 border-amber-500 shadow-xl">
+        <div className="
+            flex flex-col h-full w-full rounded-2xl overflow-hidden 
+            border border-amber-200 shadow-md hover:shadow-xl transition-shadow"
+        >
             
             {/* Image container */}
-            <div className="aspect-square w-full overflow-hidden">
+            <div className="relative aspect-square w-full overflow-hidden">
+
+            <div className="
+                absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1 rounded-full
+                bg-red-500 text-white text-xs font-bold animate-pulse"
+            >
+                CRITICAL
+            </div>
         
                 <img 
                     src={dog.image} 
@@ -27,39 +37,39 @@ const UrgentFeaturedCard = ({ dog }) => {
             </div>
 
             {/* Urgent care data - condition, story, progress */}
-            <div className="bg-white p-3 flex-1 flex flex-col">
+            <div className="bg-white p-5 flex-1 flex flex-col">
 
-                <div className="mb-3 flex gap-3 items-center">
-                    <HeartPulse className="h-6 w-6 text-amber-700 font-black" />
-                    <h1 className="font-bold text-xl text-gray-700">{dog.name}</h1>
-                </div>
+                {/* Name */}
+                <h1 className="mb-3 font-bold text-xl text-gray-700">{dog.name}</h1>
+                
 
+                {/* Condition */}
                 <div className="
-                    p-2 rounded-full
+                    px-3 py-2 mb-3 rounded-full
                     text-center text-md text-gray-700 font-black
-                    border-2 border-amber-500
+                    border-l-2 border-r-2 border-amber-500 bg-amber-50
                     ">
-                    <p>{dog.condition}</p>
+                    <p className="text-md font-semibold text-amber-900">{dog.condition}</p>
                 </div>
 
-                <p className="p-2 text-xs text-gray-600 line-clamp-3">{dog.description}</p>
+                {/* Condition description */}
+                <p className="mb-4 text-xs text-gray-600 line-clamp-3">{dog.description}</p>
 
-                <div className="mb-2 p-6 rounded-2xl border-2 border-amber-400">
-                    <div className="mb-1 flex justify-between text-sm text-gray-600">
-                        <p>Progress</p>
-                        <div>
-                            <span className="font-black text-lg text-gray-700">{donations}Lei / </span>
-                            <span className="text-gray-600 text-xs">{dog.donationsGoal}Lei</span>
-                        </div>
+                {/* Donation progress section */}
+                <div className="mt-auto p-6 rounded-2xl border-2 border-amber-400">
+
+                    <div className="flex justify-between mb-2 text-sm">
+                            <span className="font-black text-lg text-gray-700">{donations}Lei</span>
+                            <span className="text-gray-500">{progressPercentage.toFixed(0)}%</span>
                     </div>
-                    <div className="w-full h-3 rounded-full bg-gray-200">
+
+
+                    <div className="w-full h-2 rounded-full bg-gray-100">
                         <div className="bg-amber-500 h-full rounded-full transition-all duration-500" style={{ width: `${progressPercentage}%`}}></div>
                     </div>
 
-                    <div className="mt-2 flex justify-between">
-                        <p className="text-xs font-bold text-yellow-900">{progressPercentage.toFixed(0)}% funded!</p>
-                        <p className="text-xs font-bold text-gray-600">{dog.donationsGoal - donations}Lei to go!</p>
-                    </div>
+                    <p className="mt-1 text-xs font-bold text-gray-600">{dog.donationsGoal - donations}Lei to go!</p>
+                
 
                 </div>
 

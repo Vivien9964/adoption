@@ -1,6 +1,8 @@
 const DonationStatsSection = () => {
     return (
-        <div></div>
+        <div>
+            Your impact
+        </div>
     )
 }
 

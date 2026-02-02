@@ -1,6 +1,8 @@
 import { useState } from "react";
 import HeroDonations from "../components/virtualAdoption/HeroDonations";
 import UrgentNeedsSection from "../components/virtualAdoption/UrgentNeedsSection";
+import ShelterProjectsSection from "../components/virtualAdoption/ShelterProjectsSection";
+import DonationStatsSection from "../components/virtualAdoption/DonationStatsSection";
 
 const VirtualAdoptionPage = () => {
 
@@ -29,25 +31,25 @@ const VirtualAdoptionPage = () => {
                             </button>
 
                             <button
-                                    onClick={() => setSelectedSection('urgent')}
+                                    onClick={() => setSelectedSection('projects')}
                                     className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
-                                        selectedSection === 'urgent'
+                                        selectedSection === 'projects'
                                             ? "bg-white text-amber-600 shadow-md"
                                             : "text-gray-600 hover:text-gray-900"
                                     }`}
                                 >
-                                    Urgent Care
+                                 Shelter Projects   
                             </button>
                             
                             <button
-                                    onClick={() => setSelectedSection('urgent')}
+                                    onClick={() => setSelectedSection('stats')}
                                     className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
-                                        selectedSection === 'urgent'
+                                        selectedSection === 'stats'
                                             ? "bg-white text-amber-600 shadow-md"
                                             : "text-gray-600 hover:text-gray-900"
                                     }`}
                                 >
-                                    Urgent Care
+                                    YOUR impact
                             </button>
 
                         </div>
@@ -61,11 +63,24 @@ const VirtualAdoptionPage = () => {
 
             <div className="min-h-creen">
                 {selectedSection === "urgent" && (
-                    <div>
+                    <div className="animate-fadeIn">
                         <UrgentNeedsSection />
                     </div>
                 )}
 
+                {selectedSection === "projects" && (
+                    <div className="animate-fadeIn">
+                        <ShelterProjectsSection />
+                    </div>
+                )}
+
+                {selectedSection === "stats" && (
+                    <div className="animate-fadeIn">
+                        <DonationStatsSection />
+                    </div>
+                )}
+                
+                
             </div>
 
 

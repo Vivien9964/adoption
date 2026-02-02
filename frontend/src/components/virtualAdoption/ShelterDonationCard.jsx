@@ -60,7 +60,7 @@ const ShelterDonationCard = ({ project }) => {
 
 
     return (
-        <div className={`rounded-xl overflow-hidden shadow-xl border-4 ${config.border}`}>
+        <div className={`max-w-sm rounded-xl overflow-hidden shadow-xl border-4 ${config.border}`}>
 
             {/* Header with category badge */}
             <div className="relative h-48 overflow-hidden">
@@ -87,11 +87,12 @@ const ShelterDonationCard = ({ project }) => {
                 </div>
 
                 {/* Benefits section */}
-                <div className="mt-3 flex flex-col gap-3 items-center">
+                <div className="mt-3 flex flex-wrap gap-2">
 
-                    {project.benefits.map((benefit) => (
+                    {project.benefits.map((benefit, index) => (
                         <div 
-                            className={`w-full px-3 py-2 ${config.text} ${config.bg} rounded-full border-2 ${config.border} text-sm text-center shadow-sm`}
+                            key={index}
+                            className={`px-3 py-2 ${config.text} ${config.bg} rounded-full border-2 ${config.border} text-sm font-semibold shadow-sm`}
                         >
                             {benefit}
                         </div>

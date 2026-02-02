@@ -15,25 +15,42 @@ const UrgentCardGrid = () => {
     }
 
     return (
-        <div className="flex flex-col overflow-hidden border-4 border-sky-500/80 rounded-2xl shadow-xl">
+        <div className="
+            flex flex-col overflow-hidden rounded-2xl 
+            border border-sky-200 shadow-md hover:shadow-lg transition-shadow">
+
              {/* Image container */}
-             <div className="relative w-full h-48 overflow-hidden">
+             <div className="relative w-full h-44 overflow-hidden">
                 <img 
                     src={dog.image} 
                     alt={`${dog.name}-${dog.breed}`} 
                     className="h-full w-full object-cover"
                 />
             </div>
-
-            <div className="p-2">
-                <h2 className="font-black text-gray-800 text-xl">{dog.name}</h2>
-                <div className="px-3 py-2 mt-2 text-center border-2 border-sky-500 rounded-full">
-                    <p className="text-md text-gray-600 font-black">{dog.condition}</p>
+            
+            {/* Name and condition with donations */}
+            <div className="p-4">
+                {/* Name */}
+                <h3 className="mb-2 font-bold text-gray-800 text-lg">
+                    {dog.name}
+                </h3>
+                
+                {/* Condition */}
+                <div className="
+                    mb-3 px-3 py-2 mt-2 rounded-full
+                    text-center border-l-2 border-r-2 border-sky-500 bg-sky-50"
+                >
+                    <p className="text-md text-sky-900 font-semibold">{dog.condition}</p>
                 </div>
-                <p className="mt-2 text-xl font-black text-gray-800">{donations}Lei / <span className="text-xs text-gray-600 font-black">{dog.donationsGoal}Lei</span>
-                </p>
-            </div>
 
+                {/* Donations */}
+                <div className="flex items-end gap-2 mb-2">
+                    <span className="text-lg font-bold text-gray-900">{donations}</span>
+                    <span className="text-xs text-gray-500 mb-1">/ {dog.donationsGoal} Lei</span>
+                </div>
+            </div>
+            
+            {/* CTA buttons */}
             <div className="p-3 flex justify-evenly gap-2">
                 <button 
                     className="

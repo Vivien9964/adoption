@@ -60,10 +60,10 @@ const ShelterDonationCard = ({ project }) => {
 
 
     return (
-        <div className={`max-w-sm rounded-xl overflow-hidden shadow-xl border-4 ${config.border}`}>
+        <div className={`flex flex-col max-w-sm rounded-2xl overflow-hidden bg-white shadow-lg hover:shadow-xl transition-shadow border-4 ${config.border}`}>
 
             {/* Header with category badge */}
-            <div className="relative h-48 overflow-hidden">
+            <div className="relative h-44 overflow-hidden">
                 <img 
                     src={project.image} 
                     alt={`${project.title}-${project.category}`} 
@@ -75,63 +75,69 @@ const ShelterDonationCard = ({ project }) => {
             </div>
 
             {/* Main card content */}
-            <div className="p-4">
+            <div className="p-5 flex flex-col flex-1">
 
                 {/* Card title wit icon and description */}
-                <div className="flex flex-col gap-2">
-                    <div className="flex gap-2">
-                    <Icon className={`h-6 w-6 ${config.text}`} />
-                    <h2 className={`${config.text} font-black tracking-wide`}>{project.title}</h2>
+                <div className="mb-4">
+                    <div className="mb-2 flex items-center gap-2">
+                    <Icon className={`h-5 w-5 ${config.text}`} />
+                    <h3 className={`${config.text} text-lg font-black text-gray-700`}>{project.title}</h3>
                     </div>
                     <p className="text-sm text-gray-600">{project.description}</p>
                 </div>
 
                 {/* Benefits section */}
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className="mb-2 flex flex-wrap gap-2">
 
                     {project.benefits.map((benefit, index) => (
                         <div 
                             key={index}
-                            className={`px-3 py-2 ${config.text} ${config.bg} rounded-full border-2 ${config.border} text-sm font-semibold shadow-sm`}
+                            className={`px-2 py-1 ${config.text} ${config.bg} rounded-full border-2 ${config.border} text-sm font-medium`}
                         >
                             {benefit}
                         </div>
                     ))}
 
                 </div>
+                    
+                <div className="mt-auto">
+                     {/* Progress section with progress bar and donation amount  */}
+                    <div className={`my-6 p-6 rounded-2xl border-l-2 ${config.border} shadow-md`}>
+                        <div className="mb-1 flex justify-between text-sm text-gray-600">
+                            <p>Progress</p>
+                            <div>
+                                <span className="font-black text-lg text-gray-700">{donations}Lei / </span>
+                                <span className="text-gray-600 text-xs">{project.goalAmount}Lei</span>
+                            </div>
+                        </div>
+                        <div className="w-full h-3 rounded-full bg-gray-200">
+                            <div className={`${config.progress} h-full rounded-full transition-all duration-500`} style={{ width: `${progressPercentage}%`}}></div>
+                        </div>
 
-
-                {/* Progress section with progress bar and donation amount  */}
-                <div className={`my-6 p-6 rounded-2xl border-l-2 ${config.border} shadow-md`}>
-                    <div className="mb-1 flex justify-between text-sm text-gray-600">
-                        <p>Progress</p>
-                        <div>
-                            <span className="font-black text-lg text-gray-700">{donations}Lei / </span>
-                            <span className="text-gray-600 text-xs">{project.goalAmount}Lei</span>
+                        <div className="mt-2 flex justify-between">
+                            <p className="text-xs font-bold text-yellow-900">{progressPercentage.toFixed(0)}% funded!</p>
+                            <p className="text-xs font-bold text-gray-600">{project.goalAmount - donations}Lei to go!</p>
                         </div>
                     </div>
-                    <div className="w-full h-3 rounded-full bg-gray-200">
-                        <div className={`${config.progress} h-full rounded-full transition-all duration-500`} style={{ width: `${progressPercentage}%`}}></div>
-                    </div>
 
-                    <div className="mt-2 flex justify-between">
-                        <p className="text-xs font-bold text-yellow-900">{progressPercentage.toFixed(0)}% funded!</p>
-                        <p className="text-xs font-bold text-gray-600">{project.goalAmount - donations}Lei to go!</p>
-                    </div>
+                     {/* CTA buttons */}
+                        <div>
+                        <button 
+                            onClick={()=> addDonation(50)}
+                            className={`w-full px-3 py-2 text-white rounded-lg font-semibold ${config.button}`}
+                        >
+                                Support Project
+                        </button>
+                        </div>
+
+
                 </div>
 
-                {/* CTA buttons */}
-                <div>
-                <button 
-                    onClick={()=> addDonation(50)}
-                    className={`w-full px-3 py-2 rounded-xl ${config.button}`}
-                >
-                        Donate
-                </button>
-                </div>
-
-
+               
             </div>
+
+            
+               
         </div>
     )
 }

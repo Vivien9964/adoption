@@ -19,11 +19,12 @@ const UrgentFeaturedCard = ({ dog }) => {
             border border-amber-200 shadow-md hover:shadow-xl transition-shadow"
         >
             
-            {/* Image container */}
+            {/* Image container with badge */}
             <div className="relative aspect-square w-full overflow-hidden">
-
+            
+            {/* Urgent badge */}
             <div className="
-                absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1 rounded-full
+                absolute top-3 right-3 flex items-center px-4 py-2 rounded-full
                 bg-red-500 text-white text-xs font-bold animate-pulse"
             >
                 CRITICAL
@@ -74,7 +75,8 @@ const UrgentFeaturedCard = ({ dog }) => {
                 </div>
 
             </div>
-
+            
+            {/* CTA buttons */}
             <div className="flex justify-evenly p-2 gap-2 mb-2">
                 <button 
                     onClick={() => addDonation(50)}

@@ -60,7 +60,7 @@ const ShelterDonationCard = ({ project }) => {
 
 
     return (
-        <div className={`flex flex-col max-w-sm rounded-2xl overflow-hidden bg-white shadow-lg hover:shadow-xl transition-shadow border-4 ${config.border}`}>
+        <div className={`flex flex-col max-w-sm rounded-2xl overflow-hidden bg-white shadow-lg hover:shadow-xl transition-shadow border-2 ${config.border}`}>
 
             {/* Header with category badge */}
             <div className="relative h-44 overflow-hidden">

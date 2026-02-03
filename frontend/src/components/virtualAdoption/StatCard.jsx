@@ -2,7 +2,7 @@ import CountUp from "react-countup";
 
 
 
-const StatCard = ({ icon, label, value, growthPercent, color }) => {
+const StatCard = ({ icon, label, value, suffix, color }) => {
 
     const Icon = icon;
 
@@ -62,7 +62,7 @@ const StatCard = ({ icon, label, value, growthPercent, color }) => {
                     duration={3}
                     separator=","
                 />
-                <span className="ml-1 text-lg "> Lei</span>
+               { suffix && ( <span className="ml-1 text-lg "> Lei</span> )} 
             </h2>
 
         </div>

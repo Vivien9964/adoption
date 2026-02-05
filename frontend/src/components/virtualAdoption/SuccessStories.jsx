@@ -146,7 +146,7 @@ const SuccessStories = () => {
 
 
     return (
-      <div className="py-8 px-6">
+      <div className="py-18 px-6">
 
         {/* Header */}
         <div className="mb-12 text-center">

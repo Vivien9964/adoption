@@ -1,4 +1,5 @@
-import { Dog, House, ShoppingBasket } from "lucide-react"
+import { Dog, House, ShoppingBasket } from "lucide-react";
+import Button from "../common/Button";
 
 // Card component used in donation breakdown component
 const DonationBreakDownCard = ({ donationData }) => {
@@ -34,7 +35,8 @@ const DonationBreakDownCard = ({ donationData }) => {
         <div className={`
           p-6 flex flex-col items-center justify-center gap-3 
           bg-white rounded-2xl border-2 ${config.border}
-          shadow-md hover:shadow-lg transition-shadow duration-300
+          shadow-md hover:shadow-lg transition-all duration-300
+          hover:scale-105 hover:-rotate-1
         `}>
           
           {/* Icon */}
@@ -101,7 +103,7 @@ const DonationBreakDown = () => {
     ];
 
     return (
-        <div className="py-8 px-6">
+        <div className="py-18 px-6">
             
             {/* Header */}
             <div className="mb-12 text-center">
@@ -120,7 +122,18 @@ const DonationBreakDown = () => {
                     <DonationBreakDownCard key={item.id} donationData={item} />
                 ))}
             </div>
+            
 
+            <div className="pt-6 flex flex-col gap-6 items-center">
+              <h2 className="text-2xl text-yellow-900 font-black">
+                Ready to take action?
+              </h2>
+              
+              <div className="flex items-center justify-evenly gap-8">
+                <Button size="large"> Make a one-time donation</Button>
+                <Button variant="outline" size="large"> Become a monthly donor</Button>
+              </div>
+            </div>
 
         </div>
     )

@@ -1,5 +1,6 @@
 import CountUp from "react-countup";
-import { Coins, Dog, CheckCircle2, Users } from "lucide-react"
+import { Coins, Dog, CheckCircle2, Users } from "lucide-react";
+import Button from "../common/Button";
 
 // Card component used in stat cards component
 const StatCard = ({ icon, label, value, suffix, color }) => {
@@ -42,9 +43,9 @@ const StatCard = ({ icon, label, value, suffix, color }) => {
 
     return (
         <div className={`
-            w-full p-6 flex flex-col items-center justify-center rounded-xl 
-            shadow-md bg-white hover:shadow-lg transition-shadow duration-300
-            border-2 ${config.border}
+            w-full p-6 flex flex-col items-center justify-center gap-2 rounded-xl 
+            shadow-md bg-white hover:shadow-lg transition-all duration-300
+            border-2 ${config.border} hover:scale-105 hover:-rotate-1
             `
         }>
 
@@ -54,9 +55,9 @@ const StatCard = ({ icon, label, value, suffix, color }) => {
                 <Icon className={`w-8 h-8 ${config.iconText}`} /> 
             </div>
 
-            <p className="mb-2 text-center text-sm text-gray-600 font-medium">{label}</p>
-
-            <h2 className={`mb-1 text-4xl font-black ${config.valueText}`}>
+            <p className="mb-2 text-center text-lg text-gray-800 font-bold">{label}</p>
+            
+            <h2 className={`mb-1 text-4xl font-black ${config.valueText} drop-shadow-sm`}>
                 <CountUp
                     end={value}
                     duration={3}
@@ -74,7 +75,7 @@ const StatCard = ({ icon, label, value, suffix, color }) => {
 const StatCards = () => {
 
   return (
-    <div className="py-8 px-6">
+    <div className="py-18 px-6 text-center">
       
       {/* Header */}
       <div className="mb-12 text-center">
@@ -88,11 +89,11 @@ const StatCards = () => {
       </div>
 
       {/* Cards grid */}
-      <div className="mb-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="mb-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard
             icon={Coins}
             label="Total Collected"
-            value={60230}
+            value={62430}
             color="amber"
             suffix="Lei"
           />
@@ -119,6 +120,14 @@ const StatCards = () => {
           />
           
         </div>
+        
+        {/* CTA button */}
+        <Button 
+          size="large"
+          className="mt-8"
+        >
+            Donate to change lives!
+        </Button>
     </div>
   )
 }

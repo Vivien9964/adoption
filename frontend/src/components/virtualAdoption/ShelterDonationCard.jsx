@@ -15,7 +15,7 @@ const ShelterDonationCard = ({ project }) => {
 
     const categoryConfig = {
         Infrastructure: {
-            border: 'border-green-500',
+            border: 'border-green-200',
             bg: 'bg-green-50',
             badge: 'bg-green-500',
             progress: 'bg-green-500',
@@ -24,7 +24,7 @@ const ShelterDonationCard = ({ project }) => {
             icon: Hammer
           },
           Healthcare: {
-            border: 'border-blue-500',
+            border: 'border-blue-200',
             bg: 'bg-blue-50',
             badge: 'bg-blue-500',
             progress: 'bg-blue-500',
@@ -33,7 +33,7 @@ const ShelterDonationCard = ({ project }) => {
             icon: Cross
           },
           'Food & Supplies': {
-            border: 'border-orange-500',
+            border: 'border-orange-200',
             bg: 'bg-orange-50',
             badge: 'bg-orange-500',
             progress: 'bg-orange-500',
@@ -42,7 +42,7 @@ const ShelterDonationCard = ({ project }) => {
             icon: Bone
           },
           Equipment: {
-            border: 'border-purple-500',
+            border: 'border-purple-200',
             bg: 'bg-purple-50',
             badge: 'bg-purple-500',
             progress: 'bg-purple-500',
@@ -60,7 +60,11 @@ const ShelterDonationCard = ({ project }) => {
 
 
     return (
-        <div className={`flex flex-col max-w-sm rounded-2xl overflow-hidden bg-white shadow-lg hover:shadow-xl transition-shadow border-2 ${config.border}`}>
+        <div className={`
+                flex flex-col max-w-sm rounded-2xl overflow-hidden 
+                bg-white shadow-lg hover:shadow-xl border-2 ${config.border}
+                hover:-translate-y-2 transition-all duration-300
+        `}>
 
             {/* Header with category badge */}
             <div className="relative h-44 overflow-hidden">

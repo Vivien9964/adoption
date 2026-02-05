@@ -20,7 +20,7 @@ const ShelterProjectsSection = () => {
             </div>
 
             {/* Shelter projects grid to display shelter project cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-8">
             { shelterProjects.map((project) => (
                     <ShelterDonationCard key={project.id} project={project} />
                 ))}

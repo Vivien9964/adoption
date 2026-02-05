@@ -71,7 +71,7 @@ const ShelterDonationCard = ({ project }) => {
                 <img 
                     src={project.image} 
                     alt={`${project.title}-${project.category}`} 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-300  hover:scale-110"
                 />
                 <div className={`absolute top-3 left-3 px-3 py-1 rounded-full text-white ${config.badge}` }>
                     {project.category}
@@ -81,7 +81,7 @@ const ShelterDonationCard = ({ project }) => {
             {/* Main card content */}
             <div className="p-5 flex flex-col flex-1">
 
-                {/* Card title wit icon and description */}
+                {/* Card title with icon and description */}
                 <div className="mb-4">
                     <div className="mb-2 flex items-center gap-2">
                     <Icon className={`h-5 w-5 ${config.text}`} />
@@ -115,7 +115,10 @@ const ShelterDonationCard = ({ project }) => {
                             </div>
                         </div>
                         <div className="w-full h-3 rounded-full bg-gray-200">
-                            <div className={`${config.progress} h-full rounded-full transition-all duration-500`} style={{ width: `${progressPercentage}%`}}></div>
+                            <div 
+                            className={`${config.progress} h-full rounded-full transition-all duration-500`} 
+                            style={{width: `${progressPercentage}%`}}
+                            ></div>
                         </div>
 
                         <div className="mt-2 flex justify-between">
@@ -128,7 +131,10 @@ const ShelterDonationCard = ({ project }) => {
                         <div>
                         <button 
                             onClick={()=> addDonation(50)}
-                            className={`w-full px-3 py-2 text-white rounded-lg font-semibold ${config.button}`}
+                            className={`
+                                w-full px-3 py-2 text-white rounded-lg font-semibold shadow-md
+                                ${config.button} transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg
+                            `}
                         >
                                 Support Project
                         </button>

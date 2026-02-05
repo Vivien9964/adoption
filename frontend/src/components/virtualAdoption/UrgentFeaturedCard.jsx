@@ -16,7 +16,8 @@ const UrgentFeaturedCard = ({ dog }) => {
         <>
         <div className="
             flex flex-col h-full w-full rounded-2xl overflow-hidden 
-            border border-amber-200 shadow-md hover:shadow-xl transition-shadow"
+            border-2 border-amber-200 shadow-md hover:shadow-xl
+            transition-all duration-300 hover:-translate-y-2"
         >
             
             {/* Image container with badge */}
@@ -33,7 +34,7 @@ const UrgentFeaturedCard = ({ dog }) => {
                 <img 
                     src={dog.image} 
                     alt={`${dog.name}-${dog.breed}`} 
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover hover:scale-110 transition-transform duration-300"
                 />
             </div>
 
@@ -77,13 +78,14 @@ const UrgentFeaturedCard = ({ dog }) => {
             </div>
             
             {/* CTA buttons */}
-            <div className="flex justify-evenly p-2 gap-2 mb-2">
+            <div className="flex justify-evenly px-4 py-2 gap-4 mb-2">
                 <button 
                     onClick={() => addDonation(50)}
                    className="
                     flex-1 px-3 py-2 rounded-xl cursor-pointer
-                    bg-amber-400 font-black text-yellow-800 text-sm
-                    hover:bg-amber-500 transition-colors duration-200
+                    bg-amber-300 font-semibold text-yellow-800 text-sm
+                    hover:bg-amber-400 hover:scale-105 active:scale-95
+                    transition-all duration-300
                     "
                 >
                 Donate to {dog.name}
@@ -92,7 +94,7 @@ const UrgentFeaturedCard = ({ dog }) => {
                 <button className="
                 px-3 py-1 rounded-xl cursor-pointer
                 bg-gray-300 font-black text-gray-700 text-sm
-                hover:bg-gray-400 transition-colors duration-200
+                hover:bg-gray-400 transition-colors duration-300
                 "
                 
                 >

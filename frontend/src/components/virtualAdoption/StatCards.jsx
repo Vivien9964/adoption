@@ -75,7 +75,7 @@ const StatCard = ({ icon, label, value, suffix, color }) => {
 const StatCards = () => {
 
   return (
-    <div className="py-18 px-6 text-center">
+    <div className="py-4 px-6 text-center">
       
       {/* Header */}
       <div className="mb-12 text-center">

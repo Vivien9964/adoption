@@ -17,14 +17,16 @@ const UrgentCardGrid = () => {
     return (
         <div className="
             flex flex-col overflow-hidden rounded-2xl 
-            border border-sky-200 shadow-md hover:shadow-lg transition-shadow">
+            border border-sky-200 shadow-md hover:shadow-lg 
+            transition-all duration-300 hover:-translate-y-3"
+        >
 
              {/* Image container */}
              <div className="relative w-full h-44 overflow-hidden">
                 <img 
                     src={dog.image} 
                     alt={`${dog.name}-${dog.breed}`} 
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover hover:scale-110 transition-transform duration-300"
                 />
             </div>
             
@@ -45,24 +47,34 @@ const UrgentCardGrid = () => {
 
                 {/* Donations */}
                 <div className="flex items-end gap-2 mb-2">
-                    <span className="text-lg font-bold text-gray-900">{donations}</span>
+                    <span className="text-lg font-bold text-gray-900">{donations}Lei</span>
                     <span className="text-xs text-gray-500 mb-1">/ {dog.donationsGoal} Lei</span>
+                </div>
+
+                <div className="w-full h-2 rounded-full bg-gray-200 mb-3">
+                    <div 
+                        className="bg-sky-500 h-full rounded-full transition-all duration-500" 
+                        style={{ width: `${(donations / dog.donationsGoal) * 100}%` }}
+                    />
                 </div>
             </div>
             
             {/* CTA buttons */}
-            <div className="p-3 flex justify-evenly gap-2">
+            <div className="flex justify-evenly px-4 py-2 gap-4">
                 <button 
                     className="
                         flex-1 px-3 py-2 rounded-xl cursor-pointer
                         bg-sky-500/80 font-black text-gray-800
-                        hover:bg-sky-500 transition-colors duration-200"
-                    onClick={() => addDonation(50)}>Donate</button>
+                        hover:bg-sky-500 hover:scale-105 active:scale-95
+                        transition-all duration-300"
+                    onClick={() => addDonation(50)}>
+                        Donate
+                </button>
                 <button 
                     className="
                     px-3 py-1 rounded-xl cursor-pointer
                     bg-gray-300 font-black text-gray-700 text-sm
-                    hover:bg-gray-400 transition-colors duration-200"
+                    hover:bg-gray-400 transition-colors duration-300"
                     onClick={resetDonation}>Share</button>
             </div>
             

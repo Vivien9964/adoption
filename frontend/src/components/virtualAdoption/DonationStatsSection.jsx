@@ -7,7 +7,7 @@ import StatCards from "./StatCards";
 
 const DonationStatsSection = () => {
     return (
-        <Section padding="normal">
+        <Section padding="small">
 
             {/* Donation status cards */}
             <StatCards />

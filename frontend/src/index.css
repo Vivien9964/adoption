@@ -80,6 +80,14 @@ html, body {
 }
 
 
+/* Number input styles */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
 /* Animation for number to check transition in ProgressBar component */
 @keyframes checkPop {
   0% { transform: scale(0) rotate(-180deg); opacity: 1; }

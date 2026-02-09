@@ -52,7 +52,7 @@ const HeroSection = () => {
                         </Link>
 
                         {/* Donate button */}
-                        <Link to='/donate'>
+                        <Link to='/virtual-adoption'>
                             <Button
                                 variant="outline"
                                 size="large"

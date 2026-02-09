@@ -6,8 +6,8 @@ const VirtualAdoption = () => {
     const virtualOptions = [
         {
             id: 1,
-            title: "Sponsor a Dog",
-            description: "Cover monthly care costs such as grooming and food for a dog of your choice. You can get updates and photos of your sponsored friend!",
+            title: "Help dogs in Need",
+            description: "Support urgent medical cases or shelter projects. Every donation makes a difference!",
             bgColor: "bg-yellow-300/80",
             hoverBg: "group-hover:bg-yellow-300"
         },
@@ -93,7 +93,7 @@ const VirtualAdoption = () => {
             
             {/* CTA button */}
             <div className="flex justify-center">
-                <Button variant="accent" size="large" href="/virtualadoption" className="group">
+                <Button variant="accent" size="large" href="/virtual-adoption" className="group">
                     Learn More
                 </Button>
             </div>

@@ -1,7 +1,5 @@
 import { shelterProjects } from "../../data/shelterProjectsData";
 import Section from "../layout/Section";
-import QuickDonationModal from "./QuickDonationModal";
-import DonationSuccessCard from "./DonationSuccessCard";
 import { Hammer, Cross, Bone, ShoppingBasket } from 'lucide-react';
 import { useState } from 'react';
 
@@ -10,11 +8,6 @@ import { useState } from 'react';
 const ShelterDonationCard = ({ project, onDonateClick }) => {
 
     const [ donations, setDonations ] = useState(project.currentAmount);
-
-    const addDonation = (amount) => {
-        setDonations(prev => Math.min(prev + amount), project.goalAmount);
-    }
-
     const progressPercentage = (donations / project.goalAmount) * 100;
 
 

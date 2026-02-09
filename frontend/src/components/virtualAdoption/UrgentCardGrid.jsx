@@ -6,14 +6,7 @@ const UrgentCardGrid = ({ onDonateClick }) => {
     const dog = standardUrgentCareDogs[0];
     const [ donations, setDonations ] = useState(dog.donationsReceived);
 
-    const addDonation = (amount) => {
-        setDonations(prev => Math.min(prev + amount, dog.donationsGoal));
-    }
-
-    const resetDonation = () => {
-        setDonations(dog.donationsReceived);
-    }
-
+    
     return (
         <div className="
             flex flex-col overflow-hidden rounded-2xl 

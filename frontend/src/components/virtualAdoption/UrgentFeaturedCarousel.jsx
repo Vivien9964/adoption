@@ -1,6 +1,4 @@
 import { urgentCareDogs } from "../../data/urgentCareData";
-import QuickDonationModal from "./QuickDonationModal";
-import DonationSuccessCard from "./DonationSuccessCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 

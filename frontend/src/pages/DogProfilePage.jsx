@@ -1,6 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import Section from '../components/layout/Section';
+import { useEffect, useState } from "react";
+import Section from "../components/layout/Section";
+import QuickDonationModal from "../components/virtualAdoption/QuickDonationModal";
+import DonationSuccessCard from "../components/virtualAdoption/DonationSuccessCard";
 import { 
     MapPin, 
     Calendar, 
@@ -24,7 +26,6 @@ import {
     Mail
 
 } from 'lucide-react';
-import { useState } from 'react';
 
 const DogProfilePage = () => {
 
@@ -32,8 +33,14 @@ const DogProfilePage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    // Local states
     const [ dog, setDog ] = useState(null);
     const [ loading, setLoading ] = useState(true);
+
+    // States for the donation modal and success card
+    const [ isModalOpen, setIsModalOpen ] = useState(false);
+    const [ isSuccessCardOpen, setIsSuccessCardOpen ] = useState(false);
+    const [ donationAmount, setDonationAmount ] = useState(0);
 
     // Fetching individual dog profile 
     useEffect(() => {
@@ -58,6 +65,13 @@ const DogProfilePage = () => {
         return (
             <div>Loading...</div>
         );
+    }
+
+    // Function to open donation success card
+    const handleDonationSuccess = (amount) => {
+        setDonationAmount(amount);
+        setIsModalOpen(false);
+        setIsSuccessCardOpen(true);
     }
 
 
@@ -98,7 +112,7 @@ const DogProfilePage = () => {
                 state: { selectedDog: dog }
             });
         } else {
-            navigate('/virtual-adoption');
+            setIsModalOpen(true);
         }
     }
 
@@ -126,8 +140,6 @@ const DogProfilePage = () => {
     }
 
     
-
-
 
     return (
         <>
@@ -549,7 +561,21 @@ const DogProfilePage = () => {
 
                 </div>
 
+            {/* Donation modal */}
+            <QuickDonationModal 
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                target={dog}
+                onSuccess={handleDonationSuccess}
+            />
 
+            {/* Success Card */}
+            <DonationSuccessCard 
+                isOpen={isSuccessCardOpen}
+                onClose={() => setIsSuccessCardOpen(false)}
+                amount={donationAmount}
+                target={dog}
+            />
 
         </Section>
 

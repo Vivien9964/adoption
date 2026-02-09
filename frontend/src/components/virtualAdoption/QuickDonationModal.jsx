@@ -110,7 +110,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
 
                 {/* Target image */}
                     <img 
-                        src={target.image}
+                        src={target.image || target.mainImage}
                         alt="image" 
                         className="h-full w-full object-cover rounded-lg"
                     />
@@ -230,6 +230,14 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                             <input 
                                 type="text" 
                                 placeholder="XXXX XXXX XXXX XXXX"
+                                maxLength="16"
+                                required
+                                value={cardNumber}
+                                onChange={(e) => {
+                                    // Clear the input -> keep the first 16 digits
+                                    const validCardNum = e.target.value.replace(/\D/g, "").slice(0, 16); 
+                                    setCardNumber(validCardNum);
+                                }}
                                 className="
                                     w-full px-4 py-3 rounded-lg
                                     text-gray-800 font-mono border-2 border-gray-300
@@ -247,6 +255,9 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                             <input 
                                 type="text" 
                                 placeholder="BINGI BINGUSZ"
+                                required
+                                value={cardName}
+                                onChange={(e) => setCardName(e.target.value)}
                                 className="
                                     w-full px-4 py-3 rounded-lg
                                     text-gray-800 uppercase border-2 border-gray-300
@@ -261,7 +272,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                         <div className="mb-4 flex gap-4">
 
                             {/* Exp date */}
-                            <div className="felx-1">
+                            <div className="flex-1">
                                 <label className="block mb-2 text-sm font-bold text-gray-700">
                                     Expiry Date
                                 </label>
@@ -269,6 +280,18 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                                     type="text" 
                                     placeholder="MM/YY"
                                     maxLength="5"
+                                    required
+                                    value={expDate}
+                                    onChange={(e) => {
+                                        // Valid expiry date -> keep numbers only
+                                        let validExpDate = e.target.value.replace(/\D/g, "");
+                                        // Formatting for "MM/YY"
+                                        if(validExpDate.length >= 2) {
+                                            validExpDate = validExpDate.slice(0,2) + "/" + validExpDate.slice(2,4);
+                                        }
+
+                                        setExpDate(validExpDate);
+                                    }}
                                     className="
                                         w-full px-4 py-3 rounded-lg
                                         text-gray-800 text-center font-mono
@@ -288,6 +311,12 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                                     type="text" 
                                     placeholder="XXX"
                                     maxLength="4"
+                                    required
+                                    value={cvv}
+                                    onChange={(e) => {
+                                        const validCvv = e.target.value.replace(/\D/g, "").slice(0, 4);
+                                        setCvv(validCvv);
+                                    }}
                                     className="
                                         w-full px-4 py-3 rounded-lg
                                         text-gray-800 text-center font-mono
@@ -307,7 +336,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                 {/* Donate button - active only if the user selected the donation amount and enetered their data */}
                 <button
                     type="submit"
-                    disabled={(!amount || amount <=0) || (!name || !email)}
+                    disabled={!amount || amount <= 0 || !name || !email || !cardNumber || !cardName || !expDate || !cvv}
                     className="
                         w-full py-4 mt-6 rounded-xl shadow-md
                         bg-yellow-400 text-yellow-900 text-lg font-bold
@@ -317,7 +346,8 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                         transition-all duration-300"
                 >
 
-                    {(amount > 0 && name && email) ? `Donate ${amount} Lei` : "Enter all data to continue"}
+                    {(amount > 0 && name && email && cardNumber && cardName && expDate && cvv) 
+                    ? `Donate ${amount} Lei` : "Enter all data to continue"}
 
                 </button>
                 </form>

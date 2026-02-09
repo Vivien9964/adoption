@@ -1,5 +1,6 @@
 import { urgentCareDogs } from "../../data/urgentCareData";
 import QuickDonationModal from "./QuickDonationModal";
+import DonationSuccessCard from "./DonationSuccessCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 
@@ -86,7 +87,7 @@ const UrgentFeaturedCard = ({ dog, onDonateClick }) => {
             <div className="flex justify-evenly px-4 py-2 gap-4 mb-2">
                 <button 
                     onClick={() => onDonateClick(dog)}
-                   className="
+                    className="
                     flex-1 px-3 py-2 rounded-xl cursor-pointer
                     bg-amber-300 font-semibold text-yellow-800 text-sm
                     hover:bg-amber-400 hover:scale-105 active:scale-95
@@ -114,15 +115,7 @@ const UrgentFeaturedCard = ({ dog, onDonateClick }) => {
 
 
 // Main component used in Virtual adoption page
-const UrgentFeaturedCarousel = () => {
-
-    const [ isModalOpen, setIsModalOpen ] = useState(false);
-    const [ selectedDog, setSelectedDog ] = useState(null);
-
-    const openDonationModal = (dog) => {
-        setSelectedDog(dog);
-        setIsModalOpen(true);
-    }
+const UrgentFeaturedCarousel = ({ onDonateClick }) => {
 
     return (
 
@@ -160,7 +153,7 @@ const UrgentFeaturedCarousel = () => {
                     <SwiperSlide key={dog.id}>
                         <UrgentFeaturedCard 
                             dog={dog}
-                            onDonateClick={openDonationModal} 
+                            onDonateClick={onDonateClick} 
                         />
                     </SwiperSlide>
                 ))}
@@ -168,11 +161,6 @@ const UrgentFeaturedCarousel = () => {
 
         </div>
 
-        <QuickDonationModal 
-                 isOpen={isModalOpen}
-                 onClose={() => setIsModalOpen(false)}
-                 target={selectedDog}
-        />
           
     </>
     )

@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { X } from "lucide-react";
+import { X, CreditCard } from "lucide-react";
 
 // Card component to display donation amount in donation modal
 const DonationAmountCard = ({ amount, onClick, isSelected }) => {
     return (
         <div className={`
-        py-2 px-2 rounded-xl text-center 
-            border-2 border-amber-200 bg-yellow-400 
+        py-2 px-2 rounded-xl text-center  
             text-yellow-900 text-lg font-black 
             cursor-pointer hover:scale-105 transition-transform duration-300
              ${isSelected 
@@ -24,13 +23,17 @@ const DonationAmountCard = ({ amount, onClick, isSelected }) => {
 
 
 // Main component used for quick donation in Virtual adoption page
-const QuickDonationModal = ({ isOpen, onClose, target }) => {
+const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
 
-    // State variables to store donation amount and donor data
+    // State variables to store donation amount and donor, and card data, states for modal
     const [ amount, setAmount ] = useState(0);
     const [ customAmount, setCustomAmount ] = useState("");
     const [ name, setName ] = useState("");
-    const [email, setEmail ] = useState("");
+    const [ email, setEmail ] = useState("");
+    const [ cardNumber, setCardNumber ] = useState("");
+    const [ cardName, setCardName ] = useState("");
+    const [ expDate, setExpDate ] = useState("");
+    const [ cvv, setCvv ] = useState("");
 
     // Preset donation amounts
     const presetAmounts = [ 25, 50, 100, 150, 200, 400 ];
@@ -45,7 +48,7 @@ const QuickDonationModal = ({ isOpen, onClose, target }) => {
     const handleCustomAmount = (e) => {
         const value = e.target.value;
         setCustomAmount(value);
-        setAmount(value);
+        setAmount(Number(value));
     }
 
     // Function to handle form submission
@@ -62,39 +65,52 @@ const QuickDonationModal = ({ isOpen, onClose, target }) => {
             return;
         }
 
-        console.log("Donation:", { amount, name, email, target: target.name });
+        if(!cardNumber || !cardName || !expDate || !cvv) {
+            alert("Enter payment details!");
+            return;
+        }
 
-        onClose();
+        console.log("Donation:", { amount, name, email, target: target.name || target.title, cardNum: cardNumber});
+
+        onSuccess(amount);
         setAmount(0);
         setCustomAmount("");
         setName("");
         setEmail("");
+        setCardNumber("");
+        setCardName("");
+        setExpDate("");
+        setCvv("");
     }
 
-    // returns null when the modal is closed
+    // Returns null when the modal is closed
     if(!isOpen) return null;
 
 
     return (
         // Overlay
-        <div className="z-10 fixed inset-0 flex items-center justify-center bg-black/50">
+        <div className="z-50 p-4 fixed inset-0 flex items-center justify-center bg-black/50">
             
             {/* Main modal card */}
-            <div className="py-4 px-2 relative bg-white max-w-md w-fulll max-h-[90vh] overflow-y-auto rounded-2xl">
+            <div className="
+                pb-4 relative max-w-md w-full max-h-[90vh] overflow-y-auto rounded-2xl 
+                bg-white hide-scrollbar"
+            >
 
                 {/* Close button */}
-                <div className="sticky top-1 right-0 flex justify-end">
                     <button 
                         onClick={onClose}
-                        className="bg-yellow-400 p-2 rounded-full"
+                        className="
+                        absolute top-3 right-3 z-20 p-2 rounded-full
+                        bg-yellow-400 hover:bg-yellow-500 hover:scale-110
+                        backdrop-blur-sm shadow-lg transition-all duration-300"
                     >
                         <X  className="h-6 w-6 text-yellow-900 font-bold"/>
                     </button>
-                </div>
 
                 {/* Target image */}
                     <img 
-                        src="https://picsum.photos/400/300"
+                        src={target.image}
                         alt="image" 
                         className="h-full w-full object-cover rounded-lg"
                     />
@@ -102,14 +118,14 @@ const QuickDonationModal = ({ isOpen, onClose, target }) => {
                 <div className="p-2 md:p-4">
                     {/* Target title / name */}
                     <h2 className="mb-2 text-2xl md:text-3xl font-bold text-gray-800">
-                        Donate to {target?.name}
+                        Donate to {target?.name || target.title}
                     </h2>
                 </div>
 
                
 
                 {/* Donation amount preset */}
-                <div className="flex flex-col gap-4">
+                <div className="px-4 flex flex-col gap-4">
 
                     <h3 className="mb-2 text-lg font-bold text-gray-800">
                         Choose amount:
@@ -131,7 +147,7 @@ const QuickDonationModal = ({ isOpen, onClose, target }) => {
                 </div>
 
                 {/* Donation amount custom */}
-                <div className="mb-6 mt-4">
+                <div className="px-4 mb-6 mt-4">
                     <label className="block mb-2 text-gray-800 font-bold">
                         Or enter custom amount:
                     </label>
@@ -156,8 +172,11 @@ const QuickDonationModal = ({ isOpen, onClose, target }) => {
                 </div>
 
 
-                {/* Donor data */}
-                <form onSubmit={handleSubmit}>
+                {/* Donor data - personal and card info */}
+                <form 
+                    onSubmit={handleSubmit}
+                    className="px-4 space-y-4"
+                >
                     
                     {/* Name */}
                     <div>
@@ -171,7 +190,7 @@ const QuickDonationModal = ({ isOpen, onClose, target }) => {
                             placeholder="Bingi Bingusz"
                             required
                             className="
-                                w-full px-4 py-3 rounded-lg borer-2 border-gray-300 text-gray-800
+                                w-full px-4 py-3 rounded-lg border-2 border-gray-300 text-gray-800
                                 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
                                 placeholder:text-gray-400 transition-all duration-200"
                         />
@@ -190,27 +209,115 @@ const QuickDonationModal = ({ isOpen, onClose, target }) => {
                             placeholder="example@example.com"
                             required
                             className="
-                                w-full px-4 py-3 rounded-lg borer-2 border-gray-300 text-gray-800
+                                w-full px-4 py-3 rounded-lg border-2 border-gray-300 text-gray-800
                                 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
                                 placeholder:text-gray-400 transition-all duration-200"
                         />
+                    </div>
+                    
+                    {/* Payment details */}
+                    <div className="pt-6 mt-6 border-t-2 border-gray-200 flex flex-col gap-4">
+                        <h3 className="flex items-center gap-4">
+                            <CreditCard />
+                            <span>Payment Details</span>
+                        </h3>
+
+                        {/* Card number */}
+                        <div className="mb-4">
+                            <label className="block mb-2 text-sm font-bold text-gray-700">
+                                Card Number
+                            </label>
+                            <input 
+                                type="text" 
+                                placeholder="XXXX XXXX XXXX XXXX"
+                                className="
+                                    w-full px-4 py-3 rounded-lg
+                                    text-gray-800 font-mono border-2 border-gray-300
+                                    placeholder:text-gray-400 placeholder:font-sans
+                                    focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
+                                    transition-all duration-200"
+                            />
+                        </div>
+
+                        {/* Cardholder */}
+                        <div className="mb-4">
+                            <label className="block mb-2 text-sm font-bold text-gray-700">
+                                Cardholder Name
+                            </label>
+                            <input 
+                                type="text" 
+                                placeholder="BINGI BINGUSZ"
+                                className="
+                                    w-full px-4 py-3 rounded-lg
+                                    text-gray-800 uppercase border-2 border-gray-300
+                                    placeholder:text-gray-400 placeholder:font-sans
+                                    focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
+                                    transition-all duration-200"
+                            />
+                        </div>
+
+
+                        {/* Expiry date and cvv */}
+                        <div className="mb-4 flex gap-4">
+
+                            {/* Exp date */}
+                            <div className="felx-1">
+                                <label className="block mb-2 text-sm font-bold text-gray-700">
+                                    Expiry Date
+                                </label>
+                                <input 
+                                    type="text" 
+                                    placeholder="MM/YY"
+                                    maxLength="5"
+                                    className="
+                                        w-full px-4 py-3 rounded-lg
+                                        text-gray-800 text-center font-mono
+                                        border-2 border-gray-300 
+                                        focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
+                                        placeholder:text-gray-400 placeholder:font-sans
+                                        transition-all duration-200"
+                                />
+                            </div>
+
+                            {/* CVV */}
+                            <div className="flex-1">
+                                <label className="block mb-2 text-sm font-bold text-gray-700">
+                                        CVV
+                                </label>
+                                <input 
+                                    type="text" 
+                                    placeholder="XXX"
+                                    maxLength="4"
+                                    className="
+                                        w-full px-4 py-3 rounded-lg
+                                        text-gray-800 text-center font-mono
+                                        border-2 border-gray-300 
+                                        focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
+                                        placeholder:text-gray-400 placeholder:font-sans
+                                        transition-all duration-200"
+                                />
+                            </div>
+
+                        </div>
+
+
                     </div>
 
 
                 {/* Donate button - active only if the user selected the donation amount and enetered their data */}
                 <button
                     type="submit"
-                    disabled={(!amount || !amount <=0) && (!name || !email)}
+                    disabled={(!amount || amount <=0) || (!name || !email)}
                     className="
                         w-full py-4 mt-6 rounded-xl shadow-md
-                        bg-yellow-500 text-yellow-900 text-lg font-bold
-                        hover:bg-yellow-600 hover:shadow-lg hover:scale-[1.02]
+                        bg-yellow-400 text-yellow-900 text-lg font-bold
+                        hover:bg-yellow-500 hover:shadow-lg hover:scale-[1.02]
                         disabled:bg-gray-300 disabled:text-gray-500
                         disabled:cursor-not-allowed disabled:hover:scale-100
                         transition-all duration-300"
                 >
 
-                    {amount > 0 ? `Donate ${amount} Lei` : "Choose amount to continue"}
+                    {(amount > 0 && name && email) ? `Donate ${amount} Lei` : "Enter all data to continue"}
 
                 </button>
                 </form>

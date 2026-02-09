@@ -79,6 +79,16 @@ html, body {
   background: var(--color-yellow-500);
 }
 
+/* Hidden scrollbar styles*/
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;  
+}
+
 
 /* Number input styles */
 input[type="number"]::-webkit-inner-spin-button,

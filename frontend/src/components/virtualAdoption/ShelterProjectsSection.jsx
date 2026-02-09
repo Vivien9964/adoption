@@ -1,11 +1,13 @@
 import { shelterProjects } from "../../data/shelterProjectsData";
 import Section from "../layout/Section";
+import QuickDonationModal from "./QuickDonationModal";
+import DonationSuccessCard from "./DonationSuccessCard";
 import { Hammer, Cross, Bone, ShoppingBasket } from 'lucide-react';
 import { useState } from 'react';
 
 
 // Shelter project card used in shelter projects component
-const ShelterDonationCard = ({ project }) => {
+const ShelterDonationCard = ({ project, onDonateClick }) => {
 
     const [ donations, setDonations ] = useState(project.currentAmount);
 
@@ -133,7 +135,7 @@ const ShelterDonationCard = ({ project }) => {
                      {/* CTA buttons */}
                         <div>
                         <button 
-                            onClick={()=> addDonation(50)}
+                            onClick={()=> onDonateClick(project)}
                             className={`
                                 w-full px-3 py-2 text-white rounded-lg font-semibold shadow-md
                                 ${config.button} transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg
@@ -157,7 +159,7 @@ const ShelterDonationCard = ({ project }) => {
 
 
 // Main component used in Virtual adoption page
-const ShelterProjectsSection = () => {
+const ShelterProjectsSection = ({ onDonateClick }) => {
     return (
         <Section padding="small">
             
@@ -174,7 +176,11 @@ const ShelterProjectsSection = () => {
             {/* Shelter projects grid to display shelter project cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-8">
             { shelterProjects.map((project) => (
-                    <ShelterDonationCard key={project.id} project={project} />
+                    <ShelterDonationCard 
+                        key={project.id} 
+                        project={project} 
+                        onDonateClick={onDonateClick}
+                    />
                 ))}
             </div>
         </Section>

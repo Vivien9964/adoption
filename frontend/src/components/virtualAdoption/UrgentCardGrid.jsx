@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { standardUrgentCareDogs } from "../../data/urgentCareData";
 
-const UrgentCardGrid = () => {
+const UrgentCardGrid = ({ onDonateClick }) => {
 
     const dog = standardUrgentCareDogs[0];
     const [ donations, setDonations ] = useState(dog.donationsReceived);
@@ -67,7 +67,7 @@ const UrgentCardGrid = () => {
                         bg-sky-500/80 font-black text-gray-800
                         hover:bg-sky-500 hover:scale-105 active:scale-95
                         transition-all duration-300"
-                    onClick={() => addDonation(50)}>
+                    onClick={() => onDonateClick(dog)}>
                         Donate
                 </button>
                 <button 
@@ -75,7 +75,7 @@ const UrgentCardGrid = () => {
                     px-3 py-1 rounded-xl cursor-pointer
                     bg-gray-300 font-black text-gray-700 text-sm
                     hover:bg-gray-400 transition-colors duration-300"
-                    onClick={resetDonation}>Share</button>
+                    onClick={() => alert("Share feature")}>Share</button>
             </div>
             
 

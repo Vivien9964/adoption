@@ -4,7 +4,7 @@ import UrgentCardGrid from "./UrgentCardGrid";
 import { Activity } from 'lucide-react';
 
 
-const UrgentNeedsSection = () => {
+const UrgentNeedsSection = ({ onDonateClick }) => {
     return (
         // Main section container
         <Section padding="small">
@@ -32,7 +32,7 @@ const UrgentNeedsSection = () => {
             </div>
 
                 {/* Carousel */}
-                <UrgentFeaturedCarousel />
+                <UrgentFeaturedCarousel onDonateClick={onDonateClick} />
             </div>
 
             {/* Standard care donations container */}
@@ -51,12 +51,11 @@ const UrgentNeedsSection = () => {
 
                 {/* Standard donations card grid witg cards*/}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <UrgentCardGrid />
-                    <UrgentCardGrid />
-                    <UrgentCardGrid />
-                    <UrgentCardGrid />
-                    <UrgentCardGrid />
-                    <UrgentCardGrid />
+                    <UrgentCardGrid onDonateClick={onDonateClick} />
+                    <UrgentCardGrid onDonateClick={onDonateClick} />
+                    <UrgentCardGrid onDonateClick={onDonateClick} />
+                    <UrgentCardGrid onDonateClick={onDonateClick} />
+                  
                 </div>
             </div>
 

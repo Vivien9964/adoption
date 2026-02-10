@@ -41,6 +41,8 @@ const DogProfilePage = () => {
     const [ isModalOpen, setIsModalOpen ] = useState(false);
     const [ isSuccessCardOpen, setIsSuccessCardOpen ] = useState(false);
     const [ donationAmount, setDonationAmount ] = useState(0);
+    const [ isMonthly, setIsMonthly ] = useState(false);
+
 
     // Fetching individual dog profile 
     useEffect(() => {
@@ -68,10 +70,11 @@ const DogProfilePage = () => {
     }
 
     // Function to open donation success card
-    const handleDonationSuccess = (amount) => {
+    const handleDonationSuccess = (amount, isMonthly) => {
         setDonationAmount(amount);
         setIsModalOpen(false);
         setIsSuccessCardOpen(true);
+        setIsMonthly(isMonthly);
     }
 
 
@@ -575,6 +578,7 @@ const DogProfilePage = () => {
                 onClose={() => setIsSuccessCardOpen(false)}
                 amount={donationAmount}
                 target={dog}
+                isMonthly={isMonthly}
             />
 
         </Section>

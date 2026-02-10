@@ -1,7 +1,7 @@
 import { Check } from "lucide-react";
 
 
-const DonationSuccessCard = ({ isOpen, onClose, amount, target }) => {
+const DonationSuccessCard = ({ isOpen, onClose, amount, target, isMonthly }) => {
 
     // If not set to true, return null
     if(!isOpen) return null;
@@ -23,12 +23,35 @@ const DonationSuccessCard = ({ isOpen, onClose, amount, target }) => {
 
                 {/* Title and message */}
                 <h2 className="mb-4 text-2xl md:text-3xl font-bold text-gray-800">
-                    Thank you!
+                    Success!
                 </h2>
                 
-                <p className=" mb-6 text-gray-600">
-                    Your donation of <strong className="text-gray-800">{amount}</strong> Lei to {" "}
-                    <strong className="text-gray-800">{target?.name || target?.title}</strong> has been received!
+                <p className="mb-6 text-gray-600 leading-7">
+                    {isMonthly ? (
+                        <>
+                            Thank you for sponsoring{" "}
+                            <strong className="text-gray-800">{target?.name || target?.title}</strong>
+                            {" "}with <strong className="text-gray-800">{amount} Lei/month</strong>!
+
+                            <br />
+
+                            <span className="block mt-2 text-sm text-gray-500">
+                                You will receive monthly updates and can cancel anytime.
+                            </span>
+
+                        </>
+                    ): (
+                        <>
+                            Your donation of <strong>{amount} Lei </strong> to {" "}
+                            <strong>{target?.name || target?.title}</strong>
+                            {" "}has been received!
+
+                            <br />
+                            
+                            <span className="font-bold text-gray-800 text-xl">Thank you for your support! </span>
+                        </>
+                    )}
+
                 </p>
 
                 <button

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import Button from '../common/Button';
 import { Heart, HandHeart } from 'lucide-react';
 
-const HeroSection = () => {
+const HeroSection = ({ onDonateClick }) => {
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
 
@@ -52,8 +52,8 @@ const HeroSection = () => {
                         </Link>
 
                         {/* Donate button */}
-                        <Link to='/virtual-adoption'>
                             <Button
+                                onClick={onDonateClick}
                                 variant="outline"
                                 size="large"
                                 className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white/20"
@@ -61,7 +61,6 @@ const HeroSection = () => {
                                 <HandHeart className="w-5 h-5 mr-2" />
                                 Support Our Mission
                             </Button>
-                        </Link>
                     </div>
 
 

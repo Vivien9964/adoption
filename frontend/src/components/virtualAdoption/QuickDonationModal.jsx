@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, CreditCard } from "lucide-react";
+import { X, CreditCard, User, HeartHandshake, Coins } from "lucide-react";
 
 // Card component to display donation amount in donation modal
 const DonationAmountCard = ({ amount, onClick, isSelected }) => {
@@ -34,6 +34,9 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
     const [ cardName, setCardName ] = useState("");
     const [ expDate, setExpDate ] = useState("");
     const [ cvv, setCvv ] = useState("");
+    const [ isMonthly, setIsMonthly ] = useState(false);
+
+    const [ errors, setErrors ] = useState({});
 
     // Preset donation amounts
     const presetAmounts = [ 25, 50, 100, 150, 200, 400 ];
@@ -51,9 +54,45 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
         setAmount(Number(value));
     }
 
+     // Function to validate inputs
+     const validateForm = () => {
+
+        const formErrors = {};
+
+        // Amount validation
+        // Amount must be a value bigger than 0
+        if(!amount || amount <= 0) {
+            formErrors.amount = "Select or enter donation amount!";
+        }
+
+        // Name validation 
+        // Name must be a valid full name consisting of two words and cannot contain special characters
+        const nameTrimmed = name.trim();
+        const nameParts = nameTrimmed.split(" ").filter((part) => part.length > 0);
+        const hasValidChars = /^[\p{L}\s\-']+$/u.test(nameTrimmed);
+
+        if(!nameTrimmed) {
+            formErrors.name = "Name is required!";
+        } else if(nameTrimmed.length < 2) {
+            formErrors.name = "Name is too short!";
+        } else if(!hasValidChars) {
+            formErrors.name = "Name cannot contain special characters and numbers!";
+        } else if(nameParts.length < 2) {
+            formErrors.name = "Enter first and last name!";
+        }
+    }
+
+
     // Function to handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const formErrors = validateForm();
+
+        if(Object.keys(errors).length > 0) {
+            setErrors(formErrors);
+            return;
+        }
 
         if(!amount || amount <= 0) {
             alert("Select or enter donation amount!");
@@ -70,9 +109,17 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
             return;
         }
 
-        console.log("Donation:", { amount, name, email, target: target.name || target.title, cardNum: cardNumber});
+        console.log("Donation:", { 
+            amount, 
+            name, 
+            email, 
+            target: target.name || target.title, 
+            cardNum: cardNumber,
+            isMonthly: isMonthly
+        });
 
-        onSuccess(amount);
+        setErrors({});
+        onSuccess(amount, isMonthly);
         setAmount(0);
         setCustomAmount("");
         setName("");
@@ -81,7 +128,18 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
         setCardName("");
         setExpDate("");
         setCvv("");
+        setIsMonthly(false);
     }
+
+   
+
+
+
+
+
+
+
+
 
     // Returns null when the modal is closed
     if(!isOpen) return null;
@@ -118,20 +176,21 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                 <div className="p-2 md:p-4">
                     {/* Target title / name */}
                     <h2 className="mb-2 text-2xl md:text-3xl font-bold text-gray-800">
-                        Donate to {target?.name || target.title}
+                        {target ? `Donate to ${target.name || target.title}` : "Support our shelter"}
                     </h2>
                 </div>
 
                
 
-                {/* Donation amount preset */}
+                {/* Donation amount ->  preset */}
                 <div className="px-4 flex flex-col gap-4">
 
-                    <h3 className="mb-2 text-lg font-bold text-gray-800">
-                        Choose amount:
+                <h3 className="flex items-center gap-4 mb-4">
+                        <Coins className="p-2 h-10 w-10 rounded-full text-yellow-900 bg-yellow-400"/>
+                        <span className="text-xl md:text-2xl text-gray-700 font-bold">Choose </span>
                     </h3>
                     
-                    {/* {reset amount grid} */}
+                    {/* Preset amount grid */}
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
 
                         {presetAmounts.map((presetAmount) => (
@@ -140,13 +199,12 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                                 amount={presetAmount}
                                 onClick={() => handlePresetAmount(presetAmount)}
                                 isSelected={amount === presetAmount && !customAmount}
-                            
                             />
                         ))}
                     </div>
                 </div>
 
-                {/* Donation amount custom */}
+                {/* Donation amount ->  custom */}
                 <div className="px-4 mb-6 mt-4">
                     <label className="block mb-2 text-gray-800 font-bold">
                         Or enter custom amount:
@@ -166,27 +224,120 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                                 transition-all duration-200" 
                         />
                         <span className="text-gray-700 font-bold text-lg">Lei</span>
-
                     </div>
-                   
+                </div>
+
+                {/* Payment menthods */}
+                <div className="px-4 mt-8">
+
+                    <h3 className="flex items-center gap-4 mb-4">
+                        <HeartHandshake className="p-2 h-10 w-10 rounded-full text-yellow-900 bg-yellow-400"/>
+                        <span className="text-xl md:text-2xl text-gray-700 font-bold">Support Type</span>
+                    </h3>
+                    
+                    {/* One-time donation */}
+                    {/* Main container */}
+                    <div
+                        onClick={() => setIsMonthly(false)}
+                        className={`
+                            p-4 mb-3 rounded-xl cursor-pointer border-2 transition-all
+                            ${!isMonthly
+                                ? "border-yellow-400 bg-yellow-50"
+                                : "border-gray-300 hover:border-gray-400"
+                            }
+                        `}
+                    >
+                        {/* Inner container with input and text */}
+                        <div className="flex items-center gap-3">
+                            <input 
+                                type="radio" 
+                                checked={!isMonthly}
+                                onChange={() => {}}
+                                className="w-5 h-5 text-yellow-400 focus:ring-yellow-400"
+                            />
+                            <div>
+                                <p className="font-bold text-gray-800">One-time donation</p>
+                                <p className="text-sm text-gray-600">Make a single contribution</p>
+                            </div>
+                        </div>
+                    
+                    </div>
+
+                    {/* Monthly donation */}
+                    {/* Main container */}
+                    <div
+                        onClick={() => setIsMonthly(true)}
+                        className={`
+                            p-4 mb-3 rounded-xl border-2 cursor-pointer transition-all
+                            ${isMonthly 
+                                ? 'border-yellow-400 bg-yellow-50' 
+                                : 'border-gray-300 hover:border-gray-400'
+                            }
+                        `}
+                    >
+                        {/* Inner content */}
+                        <div className="flex items-center gap-3">
+                            <input 
+                                type="radio" 
+                                checked={isMonthly}
+                                onChange={() => {}}
+                                className="w-5 h-5 text-yellow-400 focus:ring-yellow-400"
+                            />
+                            <div className="flex-1">
+                                <div className="flex itemscenter gap-2">
+                                    <p className="font-bold text-gray-800">Monthly sponsorship</p>
+                                </div>
+                                <p className="text-sm text-gray-600">
+                                    Cancel anytime
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    { isMonthly && amount > 0  && (
+                        <div className="p-3 mt-3 mb-3 rounded-lg bg-sky-50 border border-sky-200">
+                            <p className="text-sm text-gray-800">
+                                You will be charged <strong>{amount} Lei monthly</strong>.
+                                You can cancel anytime by contacting us.
+                            </p>
+                        </div>
+                    )}
+
                 </div>
 
 
                 {/* Donor data - personal and card info */}
                 <form 
                     onSubmit={handleSubmit}
-                    className="px-4 space-y-4"
+                    className="px-4 mt-8 space-y-4 "
                 >
+                    
+                    <h3 className="flex items-center gap-4">
+                        <User className="p-2 h-10 w-10 rounded-full text-yellow-900 bg-yellow-400"/>
+                        <span className="text-xl md:text-2xl text-gray-700 font-bold">Your Information</span>
+                    </h3>
+                    
                     
                     {/* Name */}
                     <div>
-                        <label className="block mb-2 text-gray-800 font-bold">
+                        <label className="block mb-2 text-gray-600 font-bold">
                             Full Name
                         </label>
                         <input 
                             type="text" 
                             value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                const validChars = /^[\p{L}\s\-']*$/u;
+
+                                if(validChars.test(value)) {
+                                    setName(value);
+                                }
+
+                                if(formErrors.name) {
+                                    setFormErrors({...formErrors, name: null});
+                                }
+                            }}
                             placeholder="Bingi Bingusz"
                             required
                             className="
@@ -199,7 +350,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
 
                     {/* Email*/}
                     <div>
-                        <label className="block mb-2 text-gray-800 font-bold">
+                        <label className="block mb-2 text-gray-600 font-bold">
                             Email
                         </label>
                         <input 
@@ -218,9 +369,10 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                     {/* Payment details */}
                     <div className="pt-6 mt-6 border-t-2 border-gray-200 flex flex-col gap-4">
                         <h3 className="flex items-center gap-4">
-                            <CreditCard />
-                            <span>Payment Details</span>
+                            <CreditCard className="p-2 h-10 w-10 rounded-full text-yellow-900 bg-yellow-400"/>
+                            <span className="text-xl md:text-2xl text-gray-700 font-bold">Payment Details</span>
                         </h3>
+                    
 
                         {/* Card number */}
                         <div className="mb-4">
@@ -347,7 +499,9 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                 >
 
                     {(amount > 0 && name && email && cardNumber && cardName && expDate && cvv) 
-                    ? `Donate ${amount} Lei` : "Enter all data to continue"}
+                        ? (isMonthly ? `Sponsor with ${amount} Lei/month` : `Donate ${amount} Lei`)
+                        : "Enter all data to continue"
+                    }
 
                 </button>
                 </form>

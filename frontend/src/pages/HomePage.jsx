@@ -5,13 +5,31 @@ import AdoptionGuideSection from '../components/home/AdoptionGuideSection';
 import VirtualAdoption from '../components/home/VirtualAdoption';
 import EventsSection from '../components/home/EventsSection';
 import SuccessStories from '../components/home/SuccessStories';
+import QuickDonationModal from '../components/virtualAdoption/QuickDonationModal';
+import DonationSuccessCard from '../components/virtualAdoption/DonationSuccessCard';
+import { useState } from 'react';
+
 
 const HomePage = () => {
+
+    // States to toggle modal and success card and set donation amount
+    const [ isModalOpen, setIsModalOpen ] = useState(false);
+    const [ isSuccessCardOpen, setIsSuccessCardOpen] = useState(false);
+    const [ donationAmount, setDonationAmount ] = useState(0);
+    const [ isMonthly, setIsMonthly ] = useState(false);
+
+    // Function to handle successful donations
+    const handleDonationSuccess = (amount, isMonthly) => {
+        setDonationAmount(amount);
+        setIsModalOpen(false);
+        setIsSuccessCardOpen(true);
+        setIsMonthly(isMonthly);
+    }
 
     return(
         <>
 
-            <HeroSection />
+            <HeroSection onDonateClick={() => setIsModalOpen(true)} />
 
            <ChooseUsSection />
 
@@ -50,6 +68,22 @@ const HomePage = () => {
            <VirtualAdoption />
            <EventsSection />
            <SuccessStories />
+
+
+           <QuickDonationModal 
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                target={{ name: "Our shelter"}}  // No specific target -> general donation
+                onSuccess={handleDonationSuccess}
+            />
+
+            <DonationSuccessCard 
+                isOpen={isSuccessCardOpen}
+                onClose={() => setIsSuccessCardOpen(false)}
+                amount={donationAmount}
+                target={{ name: "Our shelter" }} 
+                isMonthly={isMonthly} 
+            />
         
         </>
     )

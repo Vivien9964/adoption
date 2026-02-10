@@ -14,6 +14,7 @@ const VirtualAdoptionPage = () => {
     // State variables for donation modal
     const [ isModalOpen, setIsModalOpen ] = useState(false);
     const [ selectedTarget, setSelectedTarget ] = useState(null);
+    const [ isMonthly, setIsMonthly ] = useState(false);
 
     // State variables for success card 
     const [ isSuccessCardOpen, setIsSuccessCardOpen ] = useState(false);
@@ -26,10 +27,11 @@ const VirtualAdoptionPage = () => {
     }
 
     // Function to open success message and set donation amount
-    const handleDonationSuccess = (amount) => {
+    const handleDonationSuccess = (amount, isMonthly) => {
         setDonationAmount(amount);
         setIsModalOpen(false);
         setIsSuccessCardOpen(true);
+        setIsMonthly(isMonthly);
     }
 
 
@@ -130,7 +132,8 @@ const VirtualAdoptionPage = () => {
                 isOpen={isSuccessCardOpen}
                 onClose={() => setIsSuccessCardOpen(false)}
                 amount={donationAmount}
-                target={selectedTarget}           
+                target={selectedTarget}
+                isMonthly={isMonthly}           
             />
 
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { X, CreditCard, User, HeartHandshake, Coins } from "lucide-react";
+import { X, CreditCard, User, HeartHandshake, Coins, CircleAlert } from "lucide-react";
+
 
 // Card component to display donation amount in donation modal
 const DonationAmountCard = ({ amount, onClick, isSelected }) => {
@@ -22,6 +23,21 @@ const DonationAmountCard = ({ amount, onClick, isSelected }) => {
 }
 
 
+const ErrorMessage = ({ message }) => {
+    if(!message) {
+        return null;
+    }
+
+    return (
+        <p className="mt-2 text-sm text-yellow-900 flex items-center gap-1">
+            <span><CircleAlert /></span>
+            <span>{message}</span>
+
+        </p>
+    )
+}
+
+
 // Main component used for quick donation in Virtual adoption page
 const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
 
@@ -31,7 +47,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
     const [ name, setName ] = useState("");
     const [ email, setEmail ] = useState("");
     const [ cardNumber, setCardNumber ] = useState("");
-    const [ cardName, setCardName ] = useState("");
+    const [ cardHolderName, setCardHolderName ] = useState("");
     const [ expDate, setExpDate ] = useState("");
     const [ cvv, setCvv ] = useState("");
     const [ isMonthly, setIsMonthly ] = useState(false);
@@ -54,8 +70,49 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
         setAmount(Number(value));
     }
 
-     // Function to validate inputs
-     const validateForm = () => {
+    // Function to format card number with space between every four digit groups
+    const formatCardNumber = (value) => {
+        const cleanedCardNumber = value.replace(/\D/g, "");
+        const formattedCardNumber = cleanedCardNumber.match(/.{1,4}/g)?.join(" ") || cleanedCardNumber;
+        return formattedCardNumber;
+    }
+
+    // Function to validate card number -> Luhn's algorithm
+    const isValidCardNumber = (number) => {
+        const cleanedCardNumber = number.replace(/\D/g, "");
+        const validCardLengths = [13, 14, 15, 16, 19];
+
+        // Only accepts real card number lengths
+        if(!validCardLengths.includes(cleanedCardNumber.length)){
+            return false;
+        };
+
+
+        let sum = 0;
+        let isSecond = false;
+
+        for(let i = cleanedCardNumber.length - 1; i >= 0; i--) {
+
+            let digit = parseInt(cleanedCardNumber[i]);
+            
+            if(isSecond) {
+                digit *= 2;
+
+                if(digit > 9) {
+                    digit -= 9;
+                }
+            }
+
+            sum += digit;
+            isSecond = !isSecond;
+        }
+
+        return sum % 10 === 0;
+
+    }
+
+    // Function to validate inputs
+    const validateForm = () => {
 
         const formErrors = {};
 
@@ -69,17 +126,89 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
         // Name must be a valid full name consisting of two words and cannot contain special characters
         const nameTrimmed = name.trim();
         const nameParts = nameTrimmed.split(" ").filter((part) => part.length > 0);
-        const hasValidChars = /^[\p{L}\s\-']+$/u.test(nameTrimmed);
+        const hasValidNameChars = /^[\p{L}\s\-']+$/u.test(nameTrimmed);
+
 
         if(!nameTrimmed) {
             formErrors.name = "Name is required!";
         } else if(nameTrimmed.length < 2) {
             formErrors.name = "Name is too short!";
-        } else if(!hasValidChars) {
+        } else if(!hasValidNameChars) {
             formErrors.name = "Name cannot contain special characters and numbers!";
         } else if(nameParts.length < 2) {
             formErrors.name = "Enter first and last name!";
         }
+
+
+        // Cardholder name validation
+        // Cardholder's name has to be longer than two characters and should not contain special characters and numbers
+        const cardHolderNameTrimmed = cardHolderName.trim();
+        const hasValidCardHolderNameChars =  /^[\p{L}\s\-']+$/u.test(cardHolderNameTrimmed);
+
+        if(!cardHolderNameTrimmed) {
+            formErrors.cardHolderName = "Cardholder name is required!";
+        } else if(cardHolderNameTrimmed.length < 2 ) {
+            formErrors.cardHolderName = "Cardholder name is too short!";
+        } else if(!hasValidCardHolderNameChars) {
+            formErrors.cardHolderName = "Name cannot contain special characters and numbers!"
+        }
+
+
+        // Email validation
+        // Valid email consist of: 
+        // username -> contains letters, numbers, dots, underscores
+        // domain name -> contains letters, dots, hyphens
+        // top level domain -> must be at least two letters
+        const trimmedEmail = email.trim();
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if(!email) {
+            formErrors.email = "Email is required!";
+        } else if(!emailRegex.test(trimmedEmail)) {
+            formErrors.email = "Enter valid email!";
+        }
+
+        // Card number validation with helper function
+        if(!cardNumber) {
+            formErrors.cardNumber = "Card number is required!";
+        } else if(!isValidCardNumber(cardNumber)) {
+            formErrors.cardNumber = "Invalid card number!";
+        }
+
+        // Expiry date validation
+        if(!expDate) {
+            formErrors.expDate= "Expiry date required!";
+        } else if(expDate.length !== 5 || !expDate.includes("/")) {
+            formErrors.expDate = "Format must be MM/YY!";
+        } else {
+            const [month, year] = expDate.split("/").map(Number);
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear() % 100;
+            const currentMonth = currentDate.getMonth() + 1;
+
+            if(month < 1 || month > 12) {
+                formErrors.expDate = "Invalid month!";
+            } else if(year < currentYear) {
+                formErrors.expDate = "Card expired!";
+            } else if(year === currentYear && month < currentMonth) {
+                formErrors.expDate = "Card expired!";
+            } else if(year > currentYear + 10) {
+                formErrors.expDate = "Expiry date year is invalid!";
+            }
+        }
+
+
+        // CVV validation 
+        if(!cvv) {
+            formErrors.cvv = "CVV is required!";
+        } else if(cvv.length < 3) {
+            formErrors.cvv = "CVV must be at least 3 digits!";
+        } else if(cvv.length > 4) {
+            formErrors.cvv = "CVV must be 3-4 digits!";
+        }
+
+        return formErrors;
+
     }
 
 
@@ -89,23 +218,8 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
 
         const formErrors = validateForm();
 
-        if(Object.keys(errors).length > 0) {
+        if(Object.keys(formErrors).length > 0) {
             setErrors(formErrors);
-            return;
-        }
-
-        if(!amount || amount <= 0) {
-            alert("Select or enter donation amount!");
-            return;
-        }
-
-        if(!name || !email) {
-            alert("Fill in valid data!");
-            return;
-        }
-
-        if(!cardNumber || !cardName || !expDate || !cvv) {
-            alert("Enter payment details!");
             return;
         }
 
@@ -125,21 +239,13 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
         setName("");
         setEmail("");
         setCardNumber("");
-        setCardName("");
+        setCardHolderName("");
         setExpDate("");
         setCvv("");
         setIsMonthly(false);
     }
 
    
-
-
-
-
-
-
-
-
 
     // Returns null when the modal is closed
     if(!isOpen) return null;
@@ -227,7 +333,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                     </div>
                 </div>
 
-                {/* Payment menthods */}
+                {/* Payment methods*/}
                 <div className="px-4 mt-8">
 
                     <h3 className="flex items-center gap-4 mb-4">
@@ -284,7 +390,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                                 className="w-5 h-5 text-yellow-400 focus:ring-yellow-400"
                             />
                             <div className="flex-1">
-                                <div className="flex itemscenter gap-2">
+                                <div className="flex items-center gap-2">
                                     <p className="font-bold text-gray-800">Monthly sponsorship</p>
                                 </div>
                                 <p className="text-sm text-gray-600">
@@ -334,17 +440,24 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                                     setName(value);
                                 }
 
-                                if(formErrors.name) {
-                                    setFormErrors({...formErrors, name: null});
+                                if(errors.name) {
+                                    setErrors({...errors, name: null});
                                 }
                             }}
                             placeholder="Bingi Bingusz"
                             required
-                            className="
+                            className={`
                                 w-full px-4 py-3 rounded-lg border-2 border-gray-300 text-gray-800
                                 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
-                                placeholder:text-gray-400 transition-all duration-200"
+                                placeholder:text-gray-400 transition-all duration-200
+                                ${errors.name 
+                                    ? 'border-red-500 focus:border-red-500' 
+                                    : 'border-gray-300 focus:border-yellow-400'
+                                }`
+                            }
                         />
+
+                        <ErrorMessage message={errors.name} />
                     </div>
 
 
@@ -356,14 +469,27 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                         <input 
                             type="email" 
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+
+                                if(errors.email) {
+                                    setErrors({...errors, email: null});
+                                }
+                            }}
                             placeholder="example@example.com"
                             required
-                            className="
+                            className={`
                                 w-full px-4 py-3 rounded-lg border-2 border-gray-300 text-gray-800
                                 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
-                                placeholder:text-gray-400 transition-all duration-200"
+                                placeholder:text-gray-400 transition-all duration-200
+                                ${errors.email 
+                                    ? 'border-red-500 focus:border-red-500' 
+                                    : 'border-gray-300 focus:border-yellow-400'
+                                }`
+                            }
                         />
+                        
+                        <ErrorMessage message={errors.email} />
                     </div>
                     
                     {/* Payment details */}
@@ -382,21 +508,45 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                             <input 
                                 type="text" 
                                 placeholder="XXXX XXXX XXXX XXXX"
-                                maxLength="16"
+                                maxLength="23"
                                 required
-                                value={cardNumber}
+                                value={formatCardNumber(cardNumber)}
                                 onChange={(e) => {
-                                    // Clear the input -> keep the first 16 digits
-                                    const validCardNum = e.target.value.replace(/\D/g, "").slice(0, 16); 
-                                    setCardNumber(validCardNum);
+                                    const cleanedCardNumber = e.target.value.replace(/\D/g, "");
+
+                                    if(cleanedCardNumber.length <= 19) {
+                                        setCardNumber(cleanedCardNumber);
+                                    }
+
+                                    if(errors.cardNumber) {
+                                        setErrors({...errors, cardNumber: null});
+                                    } 
                                 }}
-                                className="
+                                onPaste={(e) => {
+                                    e.preventDefault();
+                                    const pastedCardNumber = e.clipboardData.getData("text");
+                                    const cleanCardNumber = pastedCardNumber.replace(/\D/g, "").slice(0, 19);
+                                    setCardNumber(cleanCardNumber);
+
+                                    if(errors.cardNumber) {
+                                        setErrors({...errors, cardNumber: null});
+                                    } 
+                                }}
+                                className={`
                                     w-full px-4 py-3 rounded-lg
                                     text-gray-800 font-mono border-2 border-gray-300
                                     placeholder:text-gray-400 placeholder:font-sans
                                     focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
-                                    transition-all duration-200"
+                                    transition-all duration-200
+                                    ${errors.cardNumber 
+                                        ? 'border-red-500 focus:border-red-500' 
+                                        : 'border-gray-300 focus:border-yellow-400'
+                                    }`
+                                }
                             />
+
+                            <ErrorMessage message={errors.cardNumber} />
+
                         </div>
 
                         {/* Cardholder */}
@@ -408,15 +558,34 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                                 type="text" 
                                 placeholder="BINGI BINGUSZ"
                                 required
-                                value={cardName}
-                                onChange={(e) => setCardName(e.target.value)}
-                                className="
+                                value={cardHolderName}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    const validChars = /^[\p{L}\s\-']*$/u;
+
+                                    if(validChars.test(value)) {
+                                        setCardHolderName(value);
+                                    }
+
+                                    if(errors.cardHolderName) {
+                                        setErrors({...errors, cardHolderName: null});
+                                    }
+                                }}
+                                className={`
                                     w-full px-4 py-3 rounded-lg
                                     text-gray-800 uppercase border-2 border-gray-300
                                     placeholder:text-gray-400 placeholder:font-sans
                                     focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
-                                    transition-all duration-200"
+                                    transition-all duration-200
+                                    ${errors.cardHolderName 
+                                        ? 'border-red-500 focus:border-red-500' 
+                                        : 'border-gray-300 focus:border-yellow-400'
+                                    }`
+                                }
                             />
+
+                            <ErrorMessage message={errors.cardHolderName} />
+
                         </div>
 
 
@@ -435,7 +604,6 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                                     required
                                     value={expDate}
                                     onChange={(e) => {
-                                        // Valid expiry date -> keep numbers only
                                         let validExpDate = e.target.value.replace(/\D/g, "");
                                         // Formatting for "MM/YY"
                                         if(validExpDate.length >= 2) {
@@ -443,15 +611,25 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                                         }
 
                                         setExpDate(validExpDate);
+
+                                        if(errors.expDate){
+                                            setErrors({...errors, expDate: null})
+                                        }
                                     }}
-                                    className="
+                                    className={`
                                         w-full px-4 py-3 rounded-lg
                                         text-gray-800 text-center font-mono
                                         border-2 border-gray-300 
                                         focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
                                         placeholder:text-gray-400 placeholder:font-sans
-                                        transition-all duration-200"
+                                        transition-all duration-200
+                                        ${errors.expDate 
+                                            ? "border-red-500 focus:border-red-500"
+                                            : "border-gray-300 focus:border-yellow-400"
+                                        }`
+                                    }
                                 />
+                                <ErrorMessage message={errors.expDate} />
                             </div>
 
                             {/* CVV */}
@@ -468,15 +646,34 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                                     onChange={(e) => {
                                         const validCvv = e.target.value.replace(/\D/g, "").slice(0, 4);
                                         setCvv(validCvv);
+
+                                        if(errors.cvv) {
+                                            setErrors({...errors, cvv: null});
+                                        }
                                     }}
-                                    className="
+                                    onPaste={(e) => {
+                                        const pastedCvv = e.clipboardData.getData("text");
+                                        const cleanCvv = pastedCvv.replace(/\D/g, "").slice(0, 4);
+                                        setCvv(cleanCvv);
+
+                                        if(errors.cvv) {
+                                            setErrors({...errors, cvv: null});
+                                        }
+                                    }}
+                                    className={`
                                         w-full px-4 py-3 rounded-lg
                                         text-gray-800 text-center font-mono
                                         border-2 border-gray-300 
                                         focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
                                         placeholder:text-gray-400 placeholder:font-sans
-                                        transition-all duration-200"
+                                        transition-all duration-200
+                                        ${errors.cvv
+                                            ? "border-red-500 focus:border-red-500"
+                                            : "border-gray-300 focus:border-yellow-400"
+                                        }`
+                                    }
                                 />
+                                <ErrorMessage message={errors.cvv} />
                             </div>
 
                         </div>
@@ -485,10 +682,10 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                     </div>
 
 
-                {/* Donate button - active only if the user selected the donation amount and enetered their data */}
+                {/* Donate button - active only if the user selected the donation amount and entered their data */}
                 <button
                     type="submit"
-                    disabled={!amount || amount <= 0 || !name || !email || !cardNumber || !cardName || !expDate || !cvv}
+                    disabled={!amount || amount <= 0 || !name || !email || !cardNumber || !cardHolderName || !expDate || !cvv}
                     className="
                         w-full py-4 mt-6 rounded-xl shadow-md
                         bg-yellow-400 text-yellow-900 text-lg font-bold
@@ -498,7 +695,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                         transition-all duration-300"
                 >
 
-                    {(amount > 0 && name && email && cardNumber && cardName && expDate && cvv) 
+                    {(amount > 0 && name && email && cardNumber && cardHolderName && expDate && cvv) 
                         ? (isMonthly ? `Sponsor with ${amount} Lei/month` : `Donate ${amount} Lei`)
                         : "Enter all data to continue"
                     }

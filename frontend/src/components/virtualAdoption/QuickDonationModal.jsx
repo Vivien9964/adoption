@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, CreditCard, User, HeartHandshake, Coins, CircleAlert } from "lucide-react";
 
 
@@ -53,6 +53,25 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
     const [ isMonthly, setIsMonthly ] = useState(false);
 
     const [ errors, setErrors ] = useState({});
+
+    // Stop background scroll when the modal is open, and restore it when it is closed
+    useEffect(() => {
+
+        if(isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
+        return () => {
+            document.body.style.overflow = "auto"
+        }
+
+    }, [isOpen]);
+
+    
+
+
 
     // Preset donation amounts
     const presetAmounts = [ 25, 50, 100, 150, 200, 400 ];
@@ -253,12 +272,17 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
 
     return (
         // Overlay
-        <div className="z-50 p-4 fixed inset-0 flex items-center justify-center bg-black/50">
+        <div 
+            className="z-50 p-4 fixed inset-0 flex items-center justify-center bg-black/50"
+            onClick={onClose}
+        >
             
             {/* Main modal card */}
-            <div className="
+            <div 
+                className="
                 pb-4 relative max-w-md w-full max-h-[90vh] overflow-y-auto rounded-2xl 
-                bg-white hide-scrollbar"
+                bg-white hide-scrollbar overscroll-contain"
+                onClick={(e) => e.stopPropagation()}
             >
 
                 {/* Close button */}

@@ -123,7 +123,7 @@ const Navigation = () => {
         `   
     }
 
-    const isAdoptionActive = isActiveRoute('/dogs') || isActiveRoute('/schedule-meeting') || isActiveRoute('/virtual-adoption');
+    const isAdoptionActive = isActiveRoute('/dogs') || isActiveRoute('/schedule-meeting');
 
     return (
         <nav className="sticky top-0 z-50 shadow-lg bg-sky-100 border-blue-100 backdrop-blur-sm">
@@ -180,17 +180,13 @@ const Navigation = () => {
                                         >
                                             Schedule Meeting
                                         </Link>
-                                        <Link
-                                            to="/virtual-adoption"
-                                            className={styles.dropDownItem(2)}
-                                            onClick={() => setIsAdoptionDropdownOpen(false)}
-                                        >
-                                            Virtual Adoption
-                                        </Link>
                                     </div>
                                 )}
                             </div>
-
+                            
+                            <Link to="/virtual-adoption" className={styles.navLink(isActiveRoute('/virtual-adoption'), 2)}>
+                                Get Involved
+                            </Link>
 
                             <Link
                                 to="/about"
@@ -313,16 +309,18 @@ const Navigation = () => {
                                             >
                                                 Schedule Meeting
                                             </Link>
-                                            <Link
-                                                to="/virtual-adoption"
-                                                onClick={handleLinkClick}
-                                                className={styles.dropDownItemMobile(2)}
-                                            >
-                                                Virtual Adoption
-                                            </Link>
                                         </div>
                                     )}
                                 </div>
+                                
+                                <Link 
+                                    to="/virtual-adoption" 
+                                    onClick={handleLinkClick} 
+                                    className={styles.mobileLink(isActiveRoute('/virtiual-adoption'), 2)}
+                                >
+                                    Get Involved
+                                </Link>
+
 
                                 <Link
                                     to="/about"

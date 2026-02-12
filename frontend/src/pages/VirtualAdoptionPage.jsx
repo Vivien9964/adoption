@@ -5,11 +5,12 @@ import ShelterProjectsSection from "../components/virtualAdoption/ShelterProject
 import DonationStatsSection from "../components/virtualAdoption/DonationStatsSection";
 import QuickDonationModal from "../components/virtualAdoption/QuickDonationModal";
 import DonationSuccessCard from "../components/virtualAdoption/DonationSuccessCard";
+import VolunteerSection from "../components/virtualAdoption/VolunteerSection";
 
 const VirtualAdoptionPage = () => {
 
     // State to keep track of which section to show 
-    const [ selectedSection, setSelectedSection ] = useState();
+    const [ selectedSection, setSelectedSection ] = useState("urgent");
     
     // State variables for donation modal
     const [ isModalOpen, setIsModalOpen ] = useState(false);
@@ -44,12 +45,12 @@ const VirtualAdoptionPage = () => {
             <div className="bg-white sticky top-0 z-20 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 py-6">
                     <div className="flex justify-center">
-                        <div className="inline-flex p-1 gap-3 bg-gray-100 rounded-full">
+                        <div className="grid grid-cols-2 md:inline-flex p-2 gap-3 bg-gray-100 rounded-xl md:rounded-full">
 
                             {/* Urgent donations  */}
                             <button
                                     onClick={() => setSelectedSection("urgent")}
-                                    className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                                    className={`px-6 py-4 rounded-full text-lg font-semibold transition-all duration-300 ${
                                         selectedSection === "urgent"
                                             ? "bg-white text-amber-600 shadow-md"
                                             : "text-gray-600 hover:text-gray-900"
@@ -62,7 +63,7 @@ const VirtualAdoptionPage = () => {
                             {/* Shelter donations */}
                             <button
                                     onClick={() => setSelectedSection("projects")}
-                                    className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                                    className={`px-6 py-4 rounded-full text-lg font-semibold transition-all duration-300 ${
                                         selectedSection === "projects"
                                             ? "bg-white text-amber-600 shadow-md"
                                             : "text-gray-600 hover:text-gray-900"
@@ -72,10 +73,22 @@ const VirtualAdoptionPage = () => {
                             </button>
                             
 
+                            {/* Volunteer */}
+                            <button
+                                    onClick={() => setSelectedSection("volunteer")}
+                                    className={`px-6 py-4 rounded-full text-lg font-semibold transition-all duration-300 ${
+                                        selectedSection === "volunteer"
+                                            ? "bg-white text-amber-600 shadow-md"
+                                            : "text-gray-600 hover:text-gray-900"
+                                    }`}
+                                >
+                                    Volunteer
+                            </button>
+
                             {/* Donation breakdown, donor impact */}
                             <button
                                     onClick={() => setSelectedSection("stats")}
-                                    className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                                    className={`px-6 py-4 rounded-full text-lg font-semibold transition-all duration-300 ${
                                         selectedSection === "stats"
                                             ? "bg-white text-amber-600 shadow-md"
                                             : "text-gray-600 hover:text-gray-900"
@@ -106,6 +119,13 @@ const VirtualAdoptionPage = () => {
                 {selectedSection === "projects" && (
                     <div className="animate-fadeIn">
                         <ShelterProjectsSection onDonateClick={openDonationModal} />
+                    </div>
+                )}
+
+                {/* Show volunteering jobs when the volunteer tab is selected */}
+                {selectedSection === "volunteer" && (
+                    <div className="animate-fadeIn">
+                        <VolunteerSection />
                     </div>
                 )}
 

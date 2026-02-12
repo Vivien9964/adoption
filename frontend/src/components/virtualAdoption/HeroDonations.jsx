@@ -35,29 +35,6 @@ const HeroDonations = () => {
                     Every form of support makes a real difference.
                 </p>
 
-                {/* CTA buttons  */}
-                <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6">
-                    
-                    {/* Donate for dogs button */}
-                        <Button
-                            variant="accent"
-                            size="large"
-                            className="group"
-                        >
-                            Donate for Dogs
-                        </Button>
-                    
-
-                    {/* Donate for shelter button */}
-                        <Button
-                            variant="accent"
-                            size="large"
-                            className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white/20"
-                        >
-                            Donate for Us
-                        </Button>
-                    
-                </div>
 
             </div>
         

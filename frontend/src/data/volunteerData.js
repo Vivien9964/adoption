@@ -199,42 +199,107 @@ export const upcomingEvents = [
         id: 1,
         title: "Spring Adoption Fair",
         icon: PartyPopper,
-        iconColor: "text-blue-600",
-        iconBg: "bg-blue-100",
         date: "2026-03-15",
         time: "10:00 AM - 4:00 PM",
         location: "Central Park, Bucharest",
         description: "Help us find homes for 20+ dogs! We need volunteers for setup, dog walking, greeting visitors, and photography.",
         volunteersNeeded: 15,
         volunteersSignedUp: 8,
-        type: "adoption-fair"
+        type: "adoption-fair",
+        responsibilities: [
+            "Set up event booths and displays in the morning",
+            "Greet visitors and provide information about adoptable dogs",
+            "Walk dogs and facilitate meet-and-greets with potential adopters",
+            "Take photos and videos throughout the event",
+            "Help with paperwork and adoption applications",
+            "Tear down and clean up at the end of the day"
+        ],
+        requirements: [
+            "Good communication and people skills",
+            "Comfortable handling dogs of various sizes",
+            "Available for the full event duration (10 AM - 4 PM)",
+            "Physically able to stand and walk for extended periods",
+            "18+ years old"
+        ],
+        benefits: [
+            "See dogs find their forever homes",
+            "Meet fellow animal lovers in the community",
+            "One-time commitment with no ongoing obligations",
+            "Free lunch and refreshments provided",
+            "Receive a volunteer appreciation certificate"
+        ],
+        commitment: "One day event on March 15th, 2026. Full day commitment from 10:00 AM - 4:00 PM"
     },
     {
         id: 2,
         title: "Fundraising Bake Sale",
         icon: DollarSign,
-        iconColor: "text-green-600",
-        iconBg: "bg-green-100",
         date: "2026-03-23",
         time: "2:00 PM - 6:00 PM",
         location: "Shopping Mall, Sector 1",
         description: "Raise funds for medical care! We need volunteers for baking, managing the stand, and handling donations.",
         volunteersNeeded: 8,
         volunteersSignedUp: 3,
-        type: "fundraiser"
+        type: "fundraiser",
+        responsibilities: [
+            "Bake treats at home before the event (optional)",
+            "Set up the bake sale stand and displays",
+            "Greet customers and sell baked goods",
+            "Handle cash and card payments accurately",
+            "Share information about our shelter and mission",
+            "Pack up remaining items at the end"
+        ],
+        requirements: [
+            "Friendly and outgoing personality",
+            "Basic math skills for handling money",
+            "Available for afternoon shift (2 PM - 6 PM)",
+            "Baking skills helpful but not required",
+            "16+ years old (under 18 with parent supervision)"
+        ],
+        benefits: [
+            "Directly support dogs in need of medical care",
+            "Flexible time commitment (half-day event)",
+            "Fun, social atmosphere at the mall",
+            "Take home leftover baked goods",
+            "Learn fundraising skills"
+        ],
+        commitment: "Half-day event on March 23rd, 2026. Afternoon shift from 2:00 PM - 6:00 PM"
     },
     {
         id: 3,
         title: "Shelter Spring Cleaning",
         icon: Sparkles,
-        iconColor: "text-purple-600",
-        iconBg: "bg-purple-100",
         date: "2026-04-05",
         time: "9:00 AM - 1:00 PM",
         location: "PawSome Shelter, Bucharest",
         description: "Help us prepare for spring! We need volunteers for deep cleaning, painting, organizing supplies, and yard work.",
         volunteersNeeded: 20,
         volunteersSignedUp: 5,
-        type: "shelter-work"
+        type: "shelter-work",
+        responsibilities: [
+            "Deep clean kennels, play areas, and common spaces",
+            "Paint walls and touch up worn areas",
+            "Organize supply closets and storage areas",
+            "Yard work including weeding and planting flowers",
+            "Wash dog toys, blankets, and bowls",
+            "Minor repairs and maintenance tasks"
+        ],
+        requirements: [
+            "Physically able to do cleaning and light manual labor",
+            "Comfortable working with cleaning supplies",
+            "Willing to get dirty and work hard",
+            "Available for morning shift (9 AM - 1 PM)",
+            "18+ years old",
+            "Bring work gloves and wear old clothes"
+        ],
+        benefits: [
+            "Make a huge impact on shelter environment",
+            "See the immediate results of your work",
+            "Team bonding experience with other volunteers",
+            "Pizza lunch provided for all volunteers",
+            "Behind-the-scenes shelter tour",
+            "Meet all the dogs and staff"
+        ],
+        commitment: "Half-day event on April 5th, 2026. Morning shift from 9:00 AM - 1:00 PM with lunch provided"
     }
 ];

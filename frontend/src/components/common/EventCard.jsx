@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Button from '../common/Button';
 import { CalendarDays } from 'lucide-react';
 import { MapPin } from 'lucide-react';
@@ -5,9 +6,21 @@ import { PawPrint } from 'lucide-react';
 
 
 
-
-
 const EventCard = ({ event }) => {
+
+    const navigate = useNavigate();
+
+    const handleVolunteerClick = () => {
+        navigate("/virtual-adoption?tab=volunteer");
+
+        setTimeout(() => {
+            const element = document.getElementById("opportunities");
+
+            if(element) {
+                element.scrollIntoView({ behavior: "smooth", block: "start"});
+            }
+        }, 300)
+    }
 
 
     return (
@@ -106,7 +119,7 @@ const EventCard = ({ event }) => {
             </div>
 
             <div className="flex justify-center align-center mt-4">
-                <Button variant="primary" href={"/volunteer"} >
+                <Button variant="primary" onClick={handleVolunteerClick}>
                     I Volunteer
                 </Button>
             </div>

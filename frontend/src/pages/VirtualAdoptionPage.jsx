@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import HeroDonations from "../components/virtualAdoption/HeroDonations";
 import UrgentNeedsSection from "../components/virtualAdoption/UrgentNeedsSection";
 import ShelterProjectsSection from "../components/virtualAdoption/ShelterProjectsSection";
@@ -9,8 +10,25 @@ import VolunteerSection from "../components/virtualAdoption/VolunteerSection";
 
 const VirtualAdoptionPage = () => {
 
+    // Dynamic tab navigation  with URL state management
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const getInitialTab = () => {
+        const params = new URLSearchParams(location.search);
+        return params.get("tab") || "urgent";
+    }
+
     // State to keep track of which section to show 
-    const [ selectedSection, setSelectedSection ] = useState("urgent");
+    const [ selectedSection, setSelectedSection ] = useState(getInitialTab());
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const tab = params.get("tab");
+        if(tab && tab !== selectedSection) {
+            setSelectedSection(tab);
+        }
+    }, [location.search])
     
     // State variables for donation modal
     const [ isModalOpen, setIsModalOpen ] = useState(false);

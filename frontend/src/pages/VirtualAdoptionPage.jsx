@@ -34,14 +34,16 @@ const VirtualAdoptionPage = () => {
     const [ isModalOpen, setIsModalOpen ] = useState(false);
     const [ selectedTarget, setSelectedTarget ] = useState(null);
     const [ isMonthly, setIsMonthly ] = useState(false);
+    const [ donationType, setDonationType ] = useState("one-time");
 
     // State variables for success card 
     const [ isSuccessCardOpen, setIsSuccessCardOpen ] = useState(false);
     const [ donationAmount, setDonationAmount ] = useState(0);
 
     // Function to open donation modal and set selected target
-    const openDonationModal = (target) => {
+    const openDonationModal = (target, type = "one-time") => {
         setSelectedTarget(target);
+        setDonationType(type);
         setIsModalOpen(true);
     }
 
@@ -150,7 +152,7 @@ const VirtualAdoptionPage = () => {
                 {/* Show donor impact when stats tab is selected */}
                 {selectedSection === "stats" && (
                     <div className="animate-fadeIn">
-                        <DonationStatsSection />
+                        <DonationStatsSection onDonateClick={openDonationModal} />
                     </div>
                 )}
                 
@@ -163,6 +165,7 @@ const VirtualAdoptionPage = () => {
                 onClose={() => setIsModalOpen(false)}
                 target={selectedTarget}
                 onSuccess={handleDonationSuccess}
+                defaultDonationType={donationType}
             />
 
             {/* Donation success card */}

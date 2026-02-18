@@ -72,7 +72,7 @@ const StatCard = ({ icon, label, value, suffix, color }) => {
 
 
 // Main component used in donation stats section
-const StatCards = () => {
+const StatCards = ({ onDonateClick }) => {
 
   return (
     <div className="py-4 px-6 text-center">
@@ -125,6 +125,7 @@ const StatCards = () => {
         <Button 
           size="large"
           className="mt-8"
+          onClick={() => onDonateClick(null, "one-time")}
         >
             Donate to change lives!
         </Button>

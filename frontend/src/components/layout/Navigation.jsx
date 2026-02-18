@@ -194,12 +194,6 @@ const Navigation = () => {
                             >
                                 About
                             </Link>
-                            <Link
-                                to="/contact"
-                                className={styles.navLink(isActiveRoute('/contact'), 3)}
-                            >
-                                Contact
-                            </Link>
                         </div>
                     </div>
 
@@ -329,15 +323,6 @@ const Navigation = () => {
                                 >
                                     About
                                 </Link>
-
-                                <Link
-                                    to="/contact"
-                                    onClick={handleLinkClick}
-                                    className={styles.mobileLink(isActiveRoute('/contact'), 3)}
-                                >
-                                    Contact
-                                </Link>
-
                                 <Link
                                     to="/login"
                                     onClick={handleLinkClick}
@@ -347,12 +332,6 @@ const Navigation = () => {
                                 </Link>
 
                             </div>
-
-
-
-
-
-
                         </div>
                     </div>
 

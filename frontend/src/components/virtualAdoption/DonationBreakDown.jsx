@@ -62,15 +62,13 @@ const DonationBreakDownCard = ({ donationData }) => {
           </p>
           <p className="mt-2 text-sm font-semibold text-gray-600"> = {donationData.stat}</p>
 
-
-          
         </div>
     );
 }
 
 
 // Main component that is used in donation stats section
-const DonationBreakDown = () => {
+const DonationBreakDown = ({ onDonateClick }) => {
 
     const breakdownData = [
         {
@@ -130,8 +128,19 @@ const DonationBreakDown = () => {
               </h2>
               
               <div className="flex items-center justify-evenly gap-8">
-                <Button size="large"> Make a one-time donation</Button>
-                <Button variant="outline" size="large"> Become a monthly donor</Button>
+                <Button 
+                  size="large"
+                  onClick={() => onDonateClick(null, "one-time")}
+                > 
+                  Make a one-time donation
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="large"
+                  onClick={() => onDonateClick(null, "monthly")}
+                > 
+                  Become a monthly donor
+                </Button>
               </div>
             </div>
 

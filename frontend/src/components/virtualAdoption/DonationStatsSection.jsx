@@ -5,18 +5,18 @@ import StatCards from "./StatCards";
 
 
 
-const DonationStatsSection = () => {
+const DonationStatsSection = ({ onDonateClick }) => {
     return (
         <Section padding="small">
 
             {/* Donation status cards */}
-            <StatCards />
+            <StatCards onDonateClick={onDonateClick} />
             
             {/* Success stories */}
             <SuccessStories />
 
             {/* Donations breakdown */}
-            <DonationBreakDown />
+            <DonationBreakDown onDonateClick={onDonateClick} />
 
         </Section>
     )

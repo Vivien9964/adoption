@@ -2,6 +2,11 @@ import { useState, useEffect } from "react";
 import { X, Check, Briefcase, CheckSquare, Clock, FileCheck, Gift, User, CircleEllipsis, CircleAlert, Calendar } from "lucide-react";
 
 
+
+const isOneTimeEvent = (opportunity) => {
+    return opportunity?.isOneTimeEvent === true;
+}
+
 const OpportunityDetailsView = ({ opportunity, onApply, onClose }) => {
 
     return (
@@ -59,17 +64,28 @@ const OpportunityDetailsView = ({ opportunity, onApply, onClose }) => {
             <div className="mb-6 p-6 rounded-xl shadow-md bg-yellow-50 border-2 border-yellow-200">
             <h2 className="mb-4 flex items-center gap-4 text-lg font-bold text-gray-800">
                 <Clock className="h-6 w-6 text-yellow-800" />
-                Time commitment
+                {isOneTimeEvent(opportunity) ? "Event details" : "Time commitment"}
             </h2>
             <div className="text-gray-700">
-                {opportunity.commitment.split(".").length > 1 ? (
-                    <>
-                    <p>{opportunity.commitment.split(".")[0]}</p>
-                    <p>{opportunity.commitment.split(".")[1]}</p>
-                    </>
+                {isOneTimeEvent(opportunity) ? (
+                    <div className="space-y-2">
+                        <p><strong>Date:</strong> {opportunity.date}</p>
+                        <p><strong>Time:</strong> {opportunity.time}</p>
+                        <p><strong>Location:</strong> {opportunity.location}</p>
+                    </div>
                 ) : (
-                    <p>{opportunity.commitment}</p>
+
+                    opportunity.commitment.split(".").length > 1 ? (
+                        <>
+                        <p>{opportunity.commitment.split(".")[0]}</p>
+                        <p>{opportunity.commitment.split(".")[1]}</p>
+                        </>
+                    ) : (
+                        <p>{opportunity.commitment}</p>
+                    )
                 )}
+
+               
             </div>
             </div>
 
@@ -220,10 +236,11 @@ const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, fo
             formErrors.phone = "Please enter a valid phone number!";
         }
 
-        // Availability validation
-        if(formData.availability.length === 0) {
-            formErrors.availability = "Please select at least one availability option!";
+        // Availability validation only for long term applicants
+        if(!isOneTimeEvent(opportunity) && formData.availability.length === 0) {
+            formErrors.availability = "Select at least one availability option!";
         }
+       
 
         return formErrors;
     };
@@ -347,8 +364,10 @@ const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, fo
                         <ErrorMessage message={errors.phone} />
                     </div>
 
-                    {/* Availability */}
-                    <div className="mb-6">
+                    {/* Availability for long term volunteering */}
+                    {!isOneTimeEvent(opportunity) && (
+
+                        <div className="mb-6">
 
                         <h3 className="mb-4 flex items-center gap-4">
                             <Calendar className="p-2 h-10 w-10 rounded-full text-yellow-900 bg-yellow-400" />
@@ -379,7 +398,30 @@ const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, fo
                             ))}
                         </div>
                         <ErrorMessage message={errors.availability} />
-                    </div>
+                        </div>
+                    )}
+
+                    {/* Confirmation for one-time opportunities */}
+                    {isOneTimeEvent(opportunity) && (
+                        <div className="mb-6 p-6 rounded-xl shadow-md bg-yellow-50 border-2 border-yellow-200">
+                            <h3 className="mb-4 flex items-center gap-4">
+                                <Calendar className="h-6 w-6 text-yellow-800" />
+                                <span className="text-lg font-bold text-gray-800">
+                                    Event confirmation
+                                </span>
+                            </h3>
+                            <div className="space-y-2 text-gray-700">
+                                <p><strong>Date:</strong> {opportunity.date}</p>
+                                <p><strong>Time:</strong> {opportunity.time}</p>
+                                <p><strong>Location:</strong> {opportunity.location}</p>
+                                <p className="mt-4 text-sm text-gray-600">
+                                    By submitting this application, you confirm that you are available  for the entire event duration.
+                                </p>
+
+                            </div>
+                        </div>
+                    )}
+                    
 
                     <h3 className="mb-4 flex items-center gap-4">
                         <CircleEllipsis className="p-2 h-10 w-10 rounded-full text-yellow-900 bg-yellow-400" />
@@ -501,9 +543,22 @@ const ApplicationSuccessView = ({ opportunity, formData, onClose }) => {
                     <p className="text-gray-700"><strong>Name:</strong> {formData.name}</p>
                     <p className="text-gray-700"><strong>Email:</strong> {formData.email}</p>
                     <p className="text-gray-700"><strong>Phone:</strong> {formData.phone}</p>
-                    <p className="text-gray-700">
-                        <strong>Availability:</strong> {formData.availability.join(', ')}
-                    </p>
+
+                    {/* Availability is shown only for long term applicants */}
+                    {isOneTimeEvent(opportunity) && formData.availability.length > 0 && (
+                         <p className="text-gray-700">
+                            <strong>Availability:</strong> {formData.availability.join(', ')}
+                        </p>
+                    )}
+
+                    {isOneTimeEvent(opportunity) && (
+                        <div className="mt-2 pt-2 border-t border-yellow-300">
+                        <p className="text-gray-700"><strong>Event:</strong> {opportunity.title}</p>
+                        <p className="text-gray-700"><strong>Date:</strong> {opportunity.date}</p>
+                        <p className="text-gray-700"><strong>Time:</strong> {opportunity.time}</p>
+                      </div>
+                    )}
+                   
                 </div>
                
             </div>
@@ -511,7 +566,11 @@ const ApplicationSuccessView = ({ opportunity, formData, onClose }) => {
             {/* Next steps in the process */}
             <div className="mb-6 text-gray-600">
                 <p className="mb-4 ">
-                    We will review your application and get back to you in a couple of days!
+
+                    {isOneTimeEvent(opportunity) 
+                        ? "We have received your application! You will receive a confirmation email with event details soon!"
+                        : "We will review your application and get back to you soon!"
+                    } 
                 </p>
 
                 <button 

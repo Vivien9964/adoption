@@ -39,7 +39,7 @@ const ErrorMessage = ({ message }) => {
 
 
 // Main component used for quick donation in Virtual adoption page
-const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
+const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonationType = "one-time" }) => {
 
     // State variables to store donation amount and donor, and card data, states for modal
     const [ amount, setAmount ] = useState(0);
@@ -50,7 +50,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
     const [ cardHolderName, setCardHolderName ] = useState("");
     const [ expDate, setExpDate ] = useState("");
     const [ cvv, setCvv ] = useState("");
-    const [ isMonthly, setIsMonthly ] = useState(false);
+    const [ isMonthly, setIsMonthly ] = useState(defaultDonationType === "monthly");
 
     const [ errors, setErrors ] = useState({});
 
@@ -69,7 +69,12 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
 
     }, [isOpen]);
 
-    
+
+    useEffect(() => {
+        if(isOpen) {
+            setIsMonthly(defaultDonationType === "monthly");
+        }
+    }, [isOpen, defaultDonationType]);
 
 
 
@@ -297,11 +302,13 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess }) => {
                     </button>
 
                 {/* Target image */}
+                {target && (
                     <img 
                         src={target.image || target.mainImage}
                         alt="image" 
                         className="h-full w-full object-cover rounded-lg"
                     />
+                )}
               
                 <div className="p-2 md:p-4">
                     {/* Target title / name */}

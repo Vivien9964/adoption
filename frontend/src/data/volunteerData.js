@@ -38,7 +38,7 @@ export const volunteerOpportunities = [
             "Learn dog care and behavior skills",
             "Join a community of animal lovers",
         ],
-        type: "ongoing"
+        isOneTimeEvent: false,
     },
     {
         id: 2,
@@ -67,7 +67,7 @@ export const volunteerOpportunities = [
             "Flexible commitment",
             "Fun and social environment"
         ],
-        type: "events"
+        isOneTimeEvent: false,
     },
     {
         id: 3,
@@ -99,7 +99,7 @@ export const volunteerOpportunities = [
             "All supplies provided",
             "Veterinary care covered"
         ],
-        type: "foster"
+        isOneTimeEvent: false,
     },
     {
         id: 4,
@@ -129,7 +129,7 @@ export const volunteerOpportunities = [
             "Help dogs find homes through storytelling",
             "Flexible schedule"
         ],
-        type: "remote"
+        isOneTimeEvent: false,
     },
     {
         id: 5,
@@ -159,7 +159,7 @@ export const volunteerOpportunities = [
             "Critical role in operations",
             "Short time commitment"
         ],
-        type: "occasional"
+        isOneTimeEvent: false,
     },
     {
         id: 6,
@@ -190,7 +190,7 @@ export const volunteerOpportunities = [
             "Work with vet professionals",
             "Make critical impact",
         ],
-        type: "specialized"
+        isOneTimeEvent: false,
     }
 ];
 
@@ -228,7 +228,9 @@ export const upcomingEvents = [
             "Free lunch and refreshments provided",
             "Receive a volunteer appreciation certificate"
         ],
-        commitment: "One day event on March 15th, 2026. Full day commitment from 10:00 AM - 4:00 PM"
+        commitment: "One day event on March 15th, 2026. Full day commitment from 10:00 AM - 4:00 PM",
+        isOneTimeEvent: true,
+
     },
     {
         id: 2,
@@ -263,7 +265,8 @@ export const upcomingEvents = [
             "Take home leftover baked goods",
             "Learn fundraising skills"
         ],
-        commitment: "Half-day event on March 23rd, 2026. Afternoon shift from 2:00 PM - 6:00 PM"
+        commitment: "Half-day event on March 23rd, 2026. Afternoon shift from 2:00 PM - 6:00 PM",
+        isOneTimeEvent: true,
     },
     {
         id: 3,
@@ -300,6 +303,8 @@ export const upcomingEvents = [
             "Behind-the-scenes shelter tour",
             "Meet all the dogs and staff"
         ],
-        commitment: "Half-day event on April 5th, 2026. Morning shift from 9:00 AM - 1:00 PM with lunch provided"
+        commitment: "Half-day event on April 5th, 2026. Morning shift from 9:00 AM - 1:00 PM with lunch provided",
+        isOneTimeEvent: true,
+
     }
 ];

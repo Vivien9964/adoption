@@ -1,6 +1,4 @@
- 
-const HeroDonations = () => {
-
+const AboutHero = () => {
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
 
@@ -8,7 +6,7 @@ const HeroDonations = () => {
         <div 
             className="absolute inset-0 -z-10"
             style={{
-                backgroundImage: `url("/images/Donation-hero.jpg")`,
+                backgroundImage: `url("/images/About-hero.jpg")`,
                 backgroundSize: "cover",
                 backgroundPosition: "center 30%",
                 backgroundRepeat: "no-repeat"
@@ -25,12 +23,11 @@ const HeroDonations = () => {
 
                 {/* Main title with text */}
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mt-8 mb-8 drop-shadow-lg">
-                    Can't Adopt Now?  <br />
-                    You can still change lives!
+                    About PawSome Shelter                
                 </h1>
 
                 <p className="max-w-2xl mx-auto mb-10 md:mb-12 text-lg md:text-xl lg:text-2xl text-gray-100 drop-shadow-md">
-                    Every form of support makes a real difference.
+                    Changing lives - One paw at a time!
                 </p>
 
 
@@ -41,4 +38,4 @@ const HeroDonations = () => {
     )
 }
 
-export default HeroDonations;
+export default AboutHero;

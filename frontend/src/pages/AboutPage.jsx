@@ -1,11 +1,22 @@
+import AboutHero from "../components/about/AboutHero";
+import MissionStats from "../components/about/MissionStats";
+import MissionStroySection from "../components/about/MissionStorySection";
 
 const AboutPage = () => {
 
     return (
+
         <>
-            <p>About page</p>
+            <AboutHero />
+
+            <MissionStroySection />
+
+            <MissionStats />
 
         </>
+
+      
+
     ) 
 }
 

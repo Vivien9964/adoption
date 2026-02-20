@@ -2,28 +2,28 @@ import { Dog, House, ShoppingBasket } from "lucide-react";
 import Button from "../common/Button";
 
 // Card component used in donation breakdown component
-const DonationBreakDownCard = ({ donationData }) => {
+export const DonationBreakDownCard = ({ donationData, showAmount = true }) => {
 
     const colorConfig = {
         yellow: {
           border: 'border-yellow-200',
           iconBg: 'bg-amber-50',
           iconColor: 'text-yellow-800',
-          percentageColor: 'text-yellow-800',
+          valueColor: 'text-yellow-800',
           amountColor: 'text-yellow-900'
         },
         purple: {
           border: 'border-purple-200',
           iconBg: 'bg-purple-50',
           iconColor: 'text-purple-700',
-          percentageColor: 'text-purple-700',
+          valueColor: 'text-purple-700',
           amountColor: 'text-purple-600'
         },
         blue: {
           border: 'border-blue-200',
           iconBg: 'bg-blue-50',
           iconColor: 'text-blue-700',
-          percentageColor: 'text-blue-700',
+          valueColor: 'text-blue-700',
           amountColor: 'text-blue-600'
         }
       };
@@ -44,9 +44,9 @@ const DonationBreakDownCard = ({ donationData }) => {
             <Icon className={`w-10 h-10 ${config.iconColor}`} />
           </div>
           
-          {/* Percentage */}
-          <span className={`text-5xl ${config.percentageColor} font-black`}>
-            {donationData.percentage}%
+          {/* Value in percentage for donation breakdown and simple value for about page stats */}
+          <span className={`text-5xl ${config.valueColor} font-black`}>
+            {showAmount ?  `${donationData.value} %` : `${donationData.value}`}
           </span>
           
           {/* Title */}
@@ -55,11 +55,14 @@ const DonationBreakDownCard = ({ donationData }) => {
           </h3>
           
           {/* Amount */}
-          <p className="text-sm text-gray-600">
-            <span className={`text-2xl font-bold ${config.amountColor}`}>
-              {donationData.amount.toLocaleString()} Lei
-            </span> donated
-          </p>
+          {showAmount && donationData.amount > 0 && (
+            <p className="text-sm text-gray-600">
+              <span className={`text-2xl font-bold ${config.amountColor}`}>
+                {donationData.amount.toLocaleString()} Lei
+              </span> donated
+            </p>
+          )}
+          
           <p className="mt-2 text-sm font-semibold text-gray-600"> = {donationData.stat}</p>
 
         </div>
@@ -74,7 +77,7 @@ const DonationBreakDown = ({ onDonateClick }) => {
         {
           id: 1,
           icon: Dog,
-          percentage: 45,
+          value: 45,
           title: "Dog Medical Care",
           amount: 6750,
           stat: "12 dogs",
@@ -83,7 +86,7 @@ const DonationBreakDown = ({ onDonateClick }) => {
         {
           id: 2,
           icon: House,
-          percentage: 30,
+          value: 30,
           title: "Shelter Projects",
           amount: 4500,
           stat: "3 projects",
@@ -92,7 +95,7 @@ const DonationBreakDown = ({ onDonateClick }) => {
         {
           id: 3,
           icon: ShoppingBasket,
-          percentage: 25,
+          value: 25,
           title: "Food & Supplies",
           amount: 3750,
           stat: "50kg food, 20 toys",

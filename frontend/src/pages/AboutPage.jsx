@@ -1,6 +1,9 @@
 import AboutHero from "../components/about/AboutHero";
 import MissionStats from "../components/about/MissionStats";
-import MissionStroySection from "../components/about/MissionStorySection";
+import MissionStorySection from "../components/about/MissionStorySection";
+import AnnualImpact from "../components/about/AnnualImpact";
+import GetInvolvedSection from "../components/about/GetInvolvedSection";
+import ContactUsSection from "../components/about/ContactUsSection";
 
 const AboutPage = () => {
 
@@ -9,10 +12,15 @@ const AboutPage = () => {
         <>
             <AboutHero />
 
-            <MissionStroySection />
+            <MissionStorySection />
 
             <MissionStats />
 
+            <AnnualImpact />
+
+            <GetInvolvedSection />
+
+            <ContactUsSection />
         </>
 
       

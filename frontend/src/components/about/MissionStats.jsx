@@ -46,14 +46,11 @@ const MissonStatCard = ({ stat }) => {
 
 
 
-
-
-
 const MissionStats = () => {
 
     const stats = [
-        { icon: Dog, value: 500, label: "Dogs Rescued", info: "100%", description: "Vaccinated"},
-        { icon: Heart, value: 350, label: "Dogs Adopted", info: "0 Lei", description: "Adoption fee"},
+        { icon: Dog, value: 380, label: "Dogs Rescued", info: "100%", description: "Vaccinated"},
+        { icon: Heart, value: 285, label: "Dogs Adopted", info: "0 Lei", description: "Adoption fee"},
         { icon: Clock, value: 10, label: "Years Active", info: "50+", description: "Active volunteers"}
     ];
 
@@ -64,8 +61,8 @@ const MissionStats = () => {
              {/* Header */}
              <div className="mb-12 text-center">
                 <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
-                    <span className="text-yellow-400">Our</span>{" "}
-                    <span className="text-yellow-900">Work</span>
+                    <span className="text-yellow-400">10 Years</span>{" "}
+                    <span className="text-yellow-900">of Dedication</span>
                 </h2>
             </div>
 

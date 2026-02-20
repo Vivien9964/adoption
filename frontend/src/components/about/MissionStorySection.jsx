@@ -1,6 +1,6 @@
 import Section from "../layout/Section";
 
-const MissionStroySection = () => {
+const MissionStorySection = () => {
 
     return (
         <Section padding="small">
@@ -75,4 +75,4 @@ const MissionStroySection = () => {
     )
 }
 
-export default MissionStroySection;
+export default MissionStorySection;

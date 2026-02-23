@@ -51,7 +51,9 @@ const AdoptionGuideSection = ({
                 <div className="w-full md:w-[60%] flex items-center justify-center">
 
                     {/* Image and decor background container */}
-                    <div className="w-3/4 sm:w-2/3 md:w-full md:max-w-lg relative mt-2 aspect-square group cursor-pointer">
+                    <div className="
+                            w-3/4 sm:w-2/3 md:w-full md:max-w-lg relative mt-2 aspect-square 
+                            min-h-[400px] md:min-h-[500px] group cursor-pointer">
 
                         {/* Background */}
                         <div className={`
@@ -71,8 +73,9 @@ const AdoptionGuideSection = ({
                         <img 
                             src={imageSrc} 
                             alt={imageAlt}
+                            loading="eager"
                             className="
-                                w-full h-auto object-cover
+                                w-full h-full object-cover
                                 group-hover:scale-105 transition-transform duration-500"
                         />
 

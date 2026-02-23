@@ -247,15 +247,6 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
             return;
         }
 
-        console.log("Donation:", { 
-            amount, 
-            name, 
-            email, 
-            target: target.name || target.title, 
-            cardNum: cardNumber,
-            isMonthly: isMonthly
-        });
-
         setErrors({});
         onSuccess(amount, isMonthly);
         setAmount(0);

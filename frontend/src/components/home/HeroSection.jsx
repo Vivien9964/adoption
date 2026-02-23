@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import Button from '../common/Button';
-import { Heart, HandHeart } from 'lucide-react';
 
 const HeroSection = ({ onDonateClick }) => {
     return (
@@ -41,34 +40,30 @@ const HeroSection = ({ onDonateClick }) => {
                         
                         {/* Adopt button */}
                         <Link to='/dogs'>
-                            <Button
-                                variant="accent"
-                                size="large"
-                                className="group"
-                            >
-                                <Heart className="w-5 h-5 mr-2 group-hover:fill-current transition-all" />
-                                Adopt
-                            </Button>
+                            <button className="
+                                    group px-8 py-4 flex items-center gap-3
+                                    rounded-2xl shadow-xl
+                                    bg-yellow-400 hover:bg-yellow-500
+                                    text-yellow-900 text-lg font-bold
+                                    hover:shadow-2xl hover:scale-105
+                                    transition-all duration-300"
+                        >
+                                Adopt a Dog
+                            </button>
                         </Link>
 
                         {/* Donate button */}
                             <Button
                                 onClick={onDonateClick}
-                                variant="outline"
+                                variant="accent"
                                 size="large"
-                                className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white/20"
                             >
-                                <HandHeart className="w-5 h-5 mr-2" />
                                 Support Our Mission
                             </Button>
                     </div>
 
-
-
-
                 </div>
-            
-
+        
             </div>
         </section>
     )

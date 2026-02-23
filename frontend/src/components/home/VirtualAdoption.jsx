@@ -1,99 +1,103 @@
 import Section from '../layout/Section';
 import Button from '../common/Button';
+import { Heart, Coins } from "lucide-react";
+
+
+// Separate card component for showing help options
+const HelpOptionCard = ({ option }) => {
+
+    const IconComponent = option.icon;
+
+    return (
+        <div
+        key={option.id}
+        className="
+            p-6 md:p-8 group rounded-2xl
+            border-2 border-transparent hover:border-yellow-300
+            bg-sky-50 hover:bg-white
+            transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+    >
+        {/* Icon container with icon */}
+        <div className="
+            w-14 h-14 md:w-16 md:h-16 mb-4 md:mb-5
+            flex items-center justify-center rounded-full
+            bg-yellow-300/80 group-hover:bg-yellow-300
+            group-hover:scale-110 group-hover:rotate-6
+            transition-all duration-300"
+        >
+            <IconComponent 
+                className="w-7 h-7 md:w-8 md:h-8 text-yellow-800"
+                strokeWidth={2}
+            />
+        </div>
+
+        {/* Title */}
+        <h3 className="mb-3 text-xl md:text-2xl font-bold text-yellow-900">
+            {option.title}
+        </h3>
+        
+        {/* Description */}
+        <p className="text-gray-700 leading-relaxed">
+            {option.description}
+        </p>
+    </div>
+    )
+
+}
+
+
 
 const VirtualAdoption = () => {
 
     const virtualOptions = [
         {
             id: 1,
-            title: "Help dogs in Need",
-            description: "Support urgent medical cases or shelter projects. Every donation makes a difference!",
-            bgColor: "bg-yellow-300/80",
-            hoverBg: "group-hover:bg-yellow-300"
+            icon: Heart,
+            title: "Urgent Medical Cases",
+            description: "Support dogs with urgent medical needs. Your donation can save a life and give them a second chance.",
         },
         {
             id: 2,
-            title: "Donations for All",
-            description: "Every and any donation helps! Buy food, toys, medical care, you name it!",
-            bgColor: "bg-sky-300/80",
-            hoverBg: "group-hover:bg-sky-300"
-        },
+            icon: Coins,
+            title: "General donations",
+            description: "Help with food, toys, shelter maintenance, and daily care. Every lei makes a difference in a dog's life!",
+        }
+    ];
 
-
-    ]
 
 
     return(
-        <Section padding="small" background="white">
+        <Section padding="large" background="white">
 
-            {/* Header */}
-            <div className="flex flex-col items-center text-center gap-6 mb-12 md:mb-16">
-
-                {/* Badge */}
-                <div className="
-                        inline-flex items-center gap-3 px-6 py-3
-                        bg-yellow-300 rounded-full shadow-md
-                        hover:shadow-lg hover:scale-105 transition-all duration-300"
-                >
-                    
-                    {/* Title */}
-                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-yellow-900">
-                        Can't Adopt Now?
-                    </h2>
-                </div>
-
-                {/* Subtitle */}
-                <p className="max-w-3xl text-base md:text-lg lg:text-xl text-gray-700 leading-relaxed">
-                    You can still make a big difference in a dog's life, even from a far!
-                    Help us from anywhere with the <strong>Virtual Adoption Program</strong>.
+            {/* Header with title and description */}
+            <div className="mb-12 text-center">
+                <h2 className="mb-4 text-3xl md:text-4xl lg:text-5xl font-bold text-yellow-800">
+                    Can't Adopt <span className="text-yellow-400">Right Now?</span>
+                </h2>
+                <p className="max-w-3xl mx-auto text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed">
+                    You can still make a huge difference! Support our dogs through the{" "}
+                    <span className="font-bold text-gray-700">Virtual Adoption Program</span>.
                 </p>
             </div>
 
-            {/* Options grid */}
+            {/* Options grid with option cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-10 md:mb-12">
-                {virtualOptions.map((option) => {
-                    return (
-                        <div
-                            key={option.id}
-                            className="
-                               group p-6 md:p-8 rounded-2xl relative overflow-hidden
-                                bg-white hover:bg-sky-50/50 text-center
-                                border-2 border-transparent hover:border-yellow-300
-                                hover:shadow-xl hover:-translate-2
-                                transition-all duration-300 cursor-pointer"
-                        >
-
-                            {/* Decor blob */}
-                            <div className="
-                                absolute -top-8 -right-8 w-24 h-24
-                                bg-yellow-200 rounded-full blur-lg
-                                group-hover:scale-150 transition-transform duration-500">
-                            </div>
-
-                             {/* Decor blob */}
-                             <div className="
-                                absolute -bottom-8 -left-8 w-24 h-24
-                                bg-yellow-400/50 rounded-full blur-lg
-                                group-hover:scale-150 transition-transform duration-500">
-                            </div>
-
-                            {/* Option title */}
-                            <h3 className="mb-3 text-xl md:text-2xl font-bold text-yellow-900">
-                                {option.title}
-                            </h3>
-
-                            {/* Option description*/}
-                            <p className="text-yellow-900 leading-relaxed text-sm md:text-base">
-                                {option.description}
-                            </p>
-                        </div>
-                    )
-                })}
+               {virtualOptions.map((option) => (
+                    <HelpOptionCard
+                        key={option.id}
+                        option={option}
+                    />
+               ))}
             </div>
             
-            {/* CTA button */}
+            {/* CTA button to go to get involved page*/}
             <div className="flex justify-center">
-                <Button variant="accent" size="large" href="/virtual-adoption" className="group">
+                <Button 
+                    variant="accent" 
+                    size="large" 
+                    href="/virtual-adoption" 
+                    className="group"
+                >
                     Learn More
                 </Button>
             </div>

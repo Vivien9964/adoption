@@ -1,18 +1,47 @@
-import { PawPrint, Calendar, Clock, UserRound, Mail, Phone, MessageCircle } from 'lucide-react';
+import { useState } from 'react';
+import { PawPrint, Calendar, Clock, UserRound, Mail, Phone, MessageCircle, CircleAlert, Circle } from 'lucide-react';
 import { useMeeting } from "../../context/MeetingContext";
+
+
+
+// Component to display error messages for inputs
+const ErrorMessage = ({ message, id}) => {
+
+    if(!message) {
+        return null;
+    }
+
+    return (
+        <p
+            id={id}
+            role="alert"
+            className="mt-2 flex items-center gap-1 text-sm text-red-600"
+        >
+
+            <span aria-hidden="true"><CircleAlert className="h-4 w-4" /></span>
+            <span>{message}</span>
+
+        </p>
+    )
+}
+
+
+
 
 const StepAddInfo = () => {
 
     // Get necessary data from context
     const { selectedDog, selectedDate, selectedTime, userInfo, setUserInfo } = useMeeting();
 
+    // State to store validation errors
+    const [ errors, setErrors ] = useState({}); 
+
     // Function to manage controlled inputs for userInfo
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        
+    const handleInputChange = (field, value) => {
+    
         setUserInfo( prev => ({
             ...prev,
-            [name]: value
+            [field]: value
         }));
     }
 
@@ -20,6 +49,59 @@ const StepAddInfo = () => {
         const dateParts = dateString.split(", ");
         return dateParts[1];
     }
+
+    // Function to validate form fields
+    const validateForm = () => {
+        const formErrors = {};
+
+        // Name validation 
+        // Name must be a valid full name consisting of two words and cannot contain special characters
+        const nameTrimmed = userInfo.name.trim();
+        const nameParts = nameTrimmed.split(" ").filter((part) => part.length > 0);
+        const hasValidNameChars = /^[\p{L}\s\-']+$/u.test(nameTrimmed);
+
+        if(!nameTrimmed) {
+            formErrors.name = "Name is required!";
+        } else if(nameTrimmed.length < 2) {
+            formErrors.name = "Name is too short!";
+        } else if(!hasValidNameChars) {
+            formErrors.name = "Name cannot contain special characters and numbers!";
+        } else if(nameParts.length < 2) {
+            formErrors.name = "Enter first and last name!";
+        }
+
+        // Email validation
+        // Valid email consist of: 
+        // username -> contains letters, numbers, dots, underscores
+        // domain name -> contains letters, dots, hyphens
+        // top level domain -> must be at least two letters
+        const trimmedEmail = userInfo.email.trim();
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if(!trimmedEmail) {
+            formErrors.email = "Email is required!";
+        } else if(!emailRegex.test(trimmedEmail)) {
+            formErrors.email = "Enter valid email!";
+        }
+
+        // Phone validation
+        // Valid phone must be 10 digits starting with 07
+        const trimmedPhone = userInfo.phone.trim();
+        const phoneRegex = /^07\d{8}$/;
+
+        if(!trimmedPhone) {
+            formErrors.phone = "Phone is required!";
+        } else if(!phoneRegex.test(trimmedPhone)) {
+            formErrors.phone = "Phone must be 10 digits starting with 07!";
+        }
+
+        return formErrors;
+    }
+
+
+
+
+
 
     return (
         // Main container with base styles for content
@@ -84,30 +166,60 @@ const StepAddInfo = () => {
                 </div>
 
             {/* User data form - main container */}
-            <div className="w-full flex flex-col mt-6 max-w-[700px] gap-4">
+            <div
+                role="form"
+                aria-label="Meeting contact information" 
+                className="w-full flex flex-col mt-6 max-w-[700px] gap-4">
 
                 {/* Full name input */}
                 <div className="flex flex-col gap-2">
                     {/* Label for name input with icon */}
                     <div className="flex gap-2">
-                        <UserRound className="h-5 w-5 text-gray-700" />
-                        <label className="text-gray-700 text-md">
-                            Full name:*
+                        <UserRound 
+                            aria-hidden="true"
+                            className="h-5 w-5 text-gray-700" />
+                        <label 
+                            htmlFor="contact-name"
+                            className="text-gray-700 text-md">
+                            Full Name:*
                         </label>
                     </div>
                     <input 
+                        id="contact-name"
                         type="text" 
-                        placeholder="Bob Bingi"
+                        autoComplete="name"
+                        placeholder="Johhny Doe"
                         name="name"
                         value={userInfo.name}
-                        onChange={handleInputChange}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            const validChars = /^[\p{L}\s\-']*$/u;
+
+                            if(validChars.test(value)) {
+                                handleInputChange("name", value)
+                            }
+
+                            if(errors.name) {
+                                setErrors({...errors, name: null});
+                            }
+                        }}
                         required
-                        className="
-                            w-full px-4 py-3 border-2 border-sky-300 shadow-sm rounded-xl outline-none 
+                        aria-invalid={errors.name ? "true" : "false"}
+                        aria-describedby={errors.name ? "name-error" : undefined}
+                        className={`
+                            w-full px-4 py-3 border-2 shadow-sm rounded-xl outline-none 
                             text-gray-700 text-md bg-white transition-all duration-200 placeholder:text-gray-400
-                            focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:shadow-lg 
-                            hover:border-sky-400"
+                            focus:ring-2 focus:ring-yellow-200 focus:shadow-lg 
+                            focus-visible:ring-1 focus-visible:ring-yellow-300
+                            hover:border-sky-400
+                            ${errors.name 
+                                ? 'border-red-500 focus:border-red-500' 
+                                : 'border-sky-300 focus:border-yellow-400'
+                            }
+                        `}
                     />
+
+                    <ErrorMessage message={errors.name} id="name-error" />
                 </div>
 
 
@@ -115,25 +227,46 @@ const StepAddInfo = () => {
                 <div className="flex flex-col gap-2">
                 {/* Label for email input with icon */}
                 <div className="flex gap-2">
-                        <Mail className="h-5 w-5 text-gray-700" />
-                        <label className="text-gray-700 text-md">
+                        <Mail 
+                            aria-hidden="true"
+                            className="h-5 w-5 text-gray-700" />
+                        <label 
+                            htmlFor="contact-email"
+                            className="text-gray-700 text-md">
                             Email:*
                         </label>
                     </div>
                     <input 
+                        id="contact-email"
                         type="email" 
+                        autoComplete="email"
                         placeholder="bob123Bingi@example.com"
                         name="email"
                         value={userInfo.email}
-                        onChange={handleInputChange}
+                        onChange={(e) => {
+                            handleInputChange("email", e.target.value);
+
+                            if(errors.email) {
+                                setErrors({...errors, email: null})
+                            }
+                        }}
                         required
-                        autoComplete="off"
-                        className="
-                            w-full px-4 py-3 border-2 border-sky-300 shadow-sm rounded-xl outline-none 
+                        aria-invalid={errors.email ? "true" : "false"}
+                        aria-describedby={errors.email ? "email-error" : undefined}
+                        className={`
+                            w-full px-4 py-3 border-2 shadow-sm rounded-xl outline-none 
                             text-md text-gray-700 bg-white transition-all duration-200 placeholder:text-gray-400
-                            focus:border-yellow-300 focus:ring-2 focus:ring-yellow-200 focus:shadow-lg 
-                            hover:border-sky-300"
+                            focus:ring-2 focus:ring-yellow-200 focus:shadow-lg 
+                            focus-visible:ring-1 focus-visible:ring-yellow-300
+                            hover:border-sky-300
+                            ${errors.email 
+                                ? 'border-red-500 focus:border-red-500' 
+                                : 'border-sky-300 focus:border-yellow-400'
+                            }
+                        `}
                     />
+
+                    <ErrorMessage message={errors.email} id="email-error" />
                 </div>
 
                 {/* Phone number input */}
@@ -141,27 +274,48 @@ const StepAddInfo = () => {
 
                     {/* Label for phone numbet input with icon */}
                     <div className="flex gap-2">
-                        <Phone className="h-5 w-5 text-gray-700" />
-                        <label className="text-gray-700 text-md">
+                        <Phone 
+                            aria-hidden="true"
+                            className="h-5 w-5 text-gray-700" />
+                        <label 
+                            htmlFor="contact-phone"
+                            className="text-gray-700 text-md">
                             Phone:*
                         </label>
                     </div>
                     <input 
-                        type="tel" 
+                        id="contact-phone"
+                        type="tel"
+                        autoComplete="tel"
                         pattern="^07\d{8}$"
                         inputMode="numeric"
                         placeholder="0785674123"
                         name="phone"
                         value={userInfo.phone}
-                        onChange={handleInputChange}
+                        onChange={(e) => {
+                            handleInputChange("phone", e.target.value)
+
+                            if(errors.phone) {
+                                setErrors({...errors, phone: null})
+                            }
+                        }}
                         required
-                        autoComplete="off"
-                        className="
-                            w-full px-4 py-3 border-2 border-sky-300 shadow-sm rounded-xl outline-none 
+                        aria-invalid={errors.phone ? "true" : "false"}
+                        aria-describedby={errors.phone ? "phone-error" : undefined}
+                        className={`
+                            w-full px-4 py-3 border-2 shadow-sm rounded-xl outline-none 
                             text-gray-700 text-md bg-white transition-all duration-200 placeholder:text-gray-400
-                            focus:border-yellow-300 focus:ring-2 focus:ring-yellow-200 focus:shadow-lg 
-                            hover:border-sky-300"
+                            focus:ring-2 focus:ring-yellow-200 focus:shadow-lg 
+                            focus-visible:ring-1 focus-visible:ring-yellow-300
+                            hover:border-sky-300
+                            ${errors.phone 
+                                ? 'border-red-500 focus:border-red-500' 
+                                : 'border-sky-300 focus:border-yellow-400'
+                            }
+                        `}
                     />
+
+                    <ErrorMessage message={errors.phone} id="phone-error" />
                 </div>
 
 
@@ -170,31 +324,37 @@ const StepAddInfo = () => {
 
                     {/* Label for notes with icon */}
                     <div className="flex gap-2">
-                        <MessageCircle className="h-5 w-5 text-gray-700" />
-                        <label className="text-gray-700 text-md">
+                        <MessageCircle 
+                            aria-hidden="true"
+                            className="h-5 w-5 text-gray-700" />
+                        <label 
+                            htmlFor="notes"
+                            className="text-gray-700 text-md">
                             Additional notes:
                         </label>
                     </div>
                     <textarea 
+                        id="notes"
                         rows={4}
+                        maxLength={1000}
                         placeholder="Any questions or special requests?"
                         name="notes"
                         value={userInfo.notes}
-                        onChange={handleInputChange}
+                        onChange={(e) => {
+                            handleInputChange("notes", e.target.value)
+                        }}
                         className="
                             w-full px-4 py-3 border-2 border-sky-300 shadow-md rounded-xl outline-none 
                             text-gray-700 text-md bg-white transition-all duration-200 placeholder:text-gray-400
                             focus:border-yellow-300 focus:ring-2 focus:ring-yellow-200 focus:shadow-lg 
                             hover:border-sky-300"
-                        
-                    ></textarea>
+                    />
+                    <span className="text-sm text-gray-600">
+                        {userInfo.notes.length} / 1000
+                    </span>
                 </div>
             </div>
-
-
-
         </div>
-
     </div>
 
     )

@@ -5,32 +5,39 @@ import { X, CreditCard, User, HeartHandshake, Coins, CircleAlert } from "lucide-
 // Card component to display donation amount in donation modal
 const DonationAmountCard = ({ amount, onClick, isSelected }) => {
     return (
-        <div className={`
-        py-2 px-2 rounded-xl text-center  
-            text-yellow-900 text-lg font-black 
-            cursor-pointer hover:scale-105 transition-transform duration-300
-             ${isSelected 
-                    ? 'border-amber-500 bg-yellow-400 text-yellow-900 ring-2 ring-amber-300'
-                    : 'border-amber-200 bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
-                }`
-        }
-            onClick={onClick}
+        <button
+            type="button"
+            onClick={onClick} 
+            aria-pressed={isSelected}
+            aria-label={`Donate ${amount} lei`}
+            className={`
+                py-2 px-2 rounded-xl text-center  
+                text-yellow-900 text-lg font-black 
+                cursor-pointer hover:scale-105 transition-transform duration-300
+                ${isSelected 
+                        ? 'border-amber-500 bg-yellow-400 text-yellow-900 ring-2 ring-amber-300'
+                        : 'border-amber-200 bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
+                    }
+                `}
         >
             {amount} Lei
-        </div>
+        </button>
 
     )
 }
 
 
-const ErrorMessage = ({ message }) => {
+const ErrorMessage = ({ message, id }) => {
     if(!message) {
         return null;
     }
 
     return (
-        <p className="mt-2 text-sm text-yellow-900 flex items-center gap-1">
-            <span><CircleAlert /></span>
+        <p 
+            id={id}
+            role="alert"
+            className="mt-2 text-sm text-yellow-900 flex items-center gap-1">
+            <span aria-hidden="true"><CircleAlert className="h-4 w-4" /></span>
             <span>{message}</span>
 
         </p>
@@ -269,6 +276,9 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
     return (
         // Overlay
         <div 
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
             className="z-50 p-4 fixed inset-0 flex items-center justify-center bg-black/50"
             onClick={onClose}
         >
@@ -284,26 +294,30 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                 {/* Close button */}
                     <button 
                         onClick={onClose}
+                        aria-label="Close donation form"
                         className="
                         absolute top-3 right-3 z-20 p-2 rounded-full
                         bg-yellow-400 hover:bg-yellow-500 hover:scale-110
                         backdrop-blur-sm shadow-lg transition-all duration-300"
                     >
-                        <X  className="h-6 w-6 text-yellow-900 font-bold"/>
+                        <X aria-hidden="true" className="h-6 w-6 text-yellow-900 font-bold"/>
                     </button>
 
                 {/* Target image */}
                 {target && (
                     <img 
                         src={target.image || target.mainImage}
-                        alt="image" 
+                        alt={target ? `${target.name || target.title}`: "Donation target" } 
                         className="h-full w-full object-cover rounded-lg"
                     />
                 )}
               
                 <div className="p-2 md:p-4">
                     {/* Target title / name */}
-                    <h2 className="mb-2 text-2xl md:text-3xl font-bold text-gray-800">
+                    <h2 
+                        id="modal-title"
+                        className="mb-2 text-2xl md:text-3xl font-bold text-gray-800"
+                    >
                         {target ? `Donate to ${target.name || target.title}` : "Support our shelter"}
                     </h2>
                 </div>
@@ -334,11 +348,14 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
 
                 {/* Donation amount ->  custom */}
                 <div className="px-4 mb-6 mt-4">
-                    <label className="block mb-2 text-gray-800 font-bold">
+                    <label
+                        htmlFor="custom-donation-amount" 
+                        className="block mb-2 text-gray-800 font-bold">
                         Or enter custom amount:
                     </label>
                     <div className="flex items-center gap-2">
                         <input 
+                            id="custom-donation-amount"
                             type="number" 
                             value={customAmount}
                             onChange={handleCustomAmount}
@@ -436,22 +453,32 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
 
                 {/* Donor data - personal and card info */}
                 <form 
+                    aria-label="Donation form"
                     onSubmit={handleSubmit}
                     className="px-4 mt-8 space-y-4 "
                 >
                     
                     <h3 className="flex items-center gap-4">
-                        <User className="p-2 h-10 w-10 rounded-full text-yellow-900 bg-yellow-400"/>
+                        <User 
+                            aria-hidden="true"
+                            className="p-2 h-10 w-10 rounded-full text-yellow-900 bg-yellow-400"
+                        />
                         <span className="text-xl md:text-2xl text-gray-700 font-bold">Your Information</span>
                     </h3>
                     
                     
                     {/* Name */}
                     <div>
-                        <label className="block mb-2 text-gray-600 font-bold">
-                            Full Name
+                        <label 
+                            htmlFor="contact-name"
+                            className="block mb-2 text-gray-600 font-bold"
+                        >
+                            Full Name:*
                         </label>
                         <input 
+                            id="contact-name"
+                            name="name"
+                            autoComplete="name"
                             type="text" 
                             value={name}
                             onChange={(e) => {
@@ -468,6 +495,8 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                             }}
                             placeholder="Bingi Bingusz"
                             required
+                            aria-invalid={errors.name ? "true" : "false"}
+                            aria-describedby={errors.name ? "name-error" : undefined}
                             className={`
                                 w-full px-4 py-3 rounded-lg border-2 border-gray-300 text-gray-800
                                 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
@@ -479,16 +508,22 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                             }
                         />
 
-                        <ErrorMessage message={errors.name} />
+                        <ErrorMessage message={errors.name} id="name-error" />
                     </div>
 
 
                     {/* Email*/}
                     <div>
-                        <label className="block mb-2 text-gray-600 font-bold">
-                            Email
+                        <label
+                            htmlFor="contact-email" 
+                            className="block mb-2 text-gray-600 font-bold"
+                        >
+                            Email:*
                         </label>
-                        <input 
+                        <input
+                            id="contact-email"
+                            name="email"
+                            autoComplete="email"
                             type="email" 
                             value={email}
                             onChange={(e) => {
@@ -500,6 +535,8 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                             }}
                             placeholder="example@example.com"
                             required
+                            aria-invalid={errors.email ? "true" : "false"}
+                            aria-describedby={errors.email ? "email-error" : undefined}
                             className={`
                                 w-full px-4 py-3 rounded-lg border-2 border-gray-300 text-gray-800
                                 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
@@ -511,24 +548,34 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                             }
                         />
                         
-                        <ErrorMessage message={errors.email} />
+                        <ErrorMessage message={errors.email} id="email-error" />
                     </div>
                     
                     {/* Payment details */}
                     <div className="pt-6 mt-6 border-t-2 border-gray-200 flex flex-col gap-4">
                         <h3 className="flex items-center gap-4">
-                            <CreditCard className="p-2 h-10 w-10 rounded-full text-yellow-900 bg-yellow-400"/>
+                            <CreditCard 
+                                aria-hidden="true"
+                                className="p-2 h-10 w-10 rounded-full text-yellow-900 bg-yellow-400"
+                            />
                             <span className="text-xl md:text-2xl text-gray-700 font-bold">Payment Details</span>
                         </h3>
                     
 
                         {/* Card number */}
                         <div className="mb-4">
-                            <label className="block mb-2 text-sm font-bold text-gray-700">
-                                Card Number
+                            <label
+                                htmlFor="card-number" 
+                                className="block mb-2 text-sm font-bold text-gray-700"
+                            >
+                                Card Number:*
                             </label>
                             <input 
+                                id="card-number"
+                                name="cc-number"
+                                autoComplete="cc-number"
                                 type="text" 
+                                inputMode="numeric"
                                 placeholder="XXXX XXXX XXXX XXXX"
                                 maxLength="23"
                                 required
@@ -554,6 +601,8 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                                         setErrors({...errors, cardNumber: null});
                                     } 
                                 }}
+                                aria-invalid={errors.cardNumber ? "true" : "false"}
+                                aria-describedby={errors.cardNumber ? "card-number-error" : undefined}
                                 className={`
                                     w-full px-4 py-3 rounded-lg
                                     text-gray-800 font-mono border-2 border-gray-300
@@ -567,16 +616,22 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                                 }
                             />
 
-                            <ErrorMessage message={errors.cardNumber} />
+                            <ErrorMessage message={errors.cardNumber} id="card-number-error" />
 
                         </div>
 
                         {/* Cardholder */}
                         <div className="mb-4">
-                            <label className="block mb-2 text-sm font-bold text-gray-700">
-                                Cardholder Name
+                            <label 
+                                htmlFor="cardholder-name"
+                                className="block mb-2 text-sm font-bold text-gray-700"
+                            >
+                                Cardholder Name:*
                             </label>
                             <input 
+                                id="cardholder-name"
+                                name="cc-name"
+                                autoComplete="cc-name"
                                 type="text" 
                                 placeholder="BINGI BINGUSZ"
                                 required
@@ -593,6 +648,8 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                                         setErrors({...errors, cardHolderName: null});
                                     }
                                 }}
+                                aria-invalid={errors.cardHolderName ? "true" : "false"}
+                                aria-labelledby={errors.cardHolderName ? "cardholder-name-error" : undefined}
                                 className={`
                                     w-full px-4 py-3 rounded-lg
                                     text-gray-800 uppercase border-2 border-gray-300
@@ -606,7 +663,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                                 }
                             />
 
-                            <ErrorMessage message={errors.cardHolderName} />
+                            <ErrorMessage message={errors.cardHolderName} id="cardholder-name-error" />
 
                         </div>
 
@@ -616,10 +673,16 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
 
                             {/* Exp date */}
                             <div className="flex-1">
-                                <label className="block mb-2 text-sm font-bold text-gray-700">
-                                    Expiry Date
+                                <label 
+                                    htmlFor="expiry-date"
+                                    className="block mb-2 text-sm font-bold text-gray-700"
+                                >
+                                    Expiry Date:*
                                 </label>
-                                <input 
+                                <input
+                                    id="expiry-date" 
+                                    name="cc-exp"
+                                    autoComplete="cc-exp"
                                     type="text" 
                                     placeholder="MM/YY"
                                     maxLength="5"
@@ -638,6 +701,8 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                                             setErrors({...errors, expDate: null})
                                         }
                                     }}
+                                    aria-invalid={errors.expDate ? "true" : "false"}
+                                    aria-describedby={errors.expDate ? "expiry-date-error" : undefined}
                                     className={`
                                         w-full px-4 py-3 rounded-lg
                                         text-gray-800 text-center font-mono
@@ -651,15 +716,21 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                                         }`
                                     }
                                 />
-                                <ErrorMessage message={errors.expDate} />
+                                <ErrorMessage message={errors.expDate} id="expiry-date-error" />
                             </div>
 
                             {/* CVV */}
                             <div className="flex-1">
-                                <label className="block mb-2 text-sm font-bold text-gray-700">
-                                        CVV
+                                <label 
+                                    htmlFor="cvv"
+                                    className="block mb-2 text-sm font-bold text-gray-700"
+                                >
+                                        CVV:*
                                 </label>
                                 <input 
+                                    id="cvv"
+                                    name="cc-csc"
+                                    autoComplete="cc-csc"
                                     type="text" 
                                     placeholder="XXX"
                                     maxLength="4"
@@ -682,6 +753,8 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                                             setErrors({...errors, cvv: null});
                                         }
                                     }}
+                                    aria-invalid={errors.cvv ? "true" : "false"}
+                                    aria-describedby={errors.cvv ? "cvv-number-error" : undefined}
                                     className={`
                                         w-full px-4 py-3 rounded-lg
                                         text-gray-800 text-center font-mono
@@ -695,11 +768,10 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                                         }`
                                     }
                                 />
-                                <ErrorMessage message={errors.cvv} />
+                                <ErrorMessage message={errors.cvv} id="cvv-number-error" />
                             </div>
 
                         </div>
-
 
                     </div>
 
@@ -707,6 +779,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                 {/* Donate button - active only if the user selected the donation amount and entered their data */}
                 <button
                     type="submit"
+                    aria-label="Send donation"
                     disabled={!amount || amount <= 0 || !name || !email || !cardNumber || !cardHolderName || !expDate || !cvv}
                     className="
                         w-full py-4 mt-6 rounded-xl shadow-md

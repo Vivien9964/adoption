@@ -41,14 +41,18 @@ const ContactInfoCard = ({ info }) => {
 
 
 // Error message component to display errors under input fields
-const ErrorMessage = ({ message }) => {
+const ErrorMessage = ({ message, id }) => {
     if(!message) {
         return null;
     }
 
     return (
-        <p className="mt-2 text-sm text-yellow-900 flex items-center gap-1">
-            <span><CircleAlert /></span>
+        <p  
+            id={id}
+            role="alert"
+            className="mt-2 text-sm text-yellow-900 flex items-center gap-1"
+        >
+            <span aria-hidden="true"><CircleAlert /></span>
             <span>{message}</span>
 
         </p>
@@ -233,31 +237,44 @@ const ContactUsSection = () => {
                     <form 
                         onSubmit={handleSubmit}
                         className="mt-6 space-y-6"
+                        aria-label="Contact form"
                     >
 
-                        {/* User data group */}
+                    {/* User data group */}
+                    <fieldset className="m-0 p-0 border-0">
+                            
+                            <legend className="font-2xl font-black text-yellow-800 mb-4">
+                                Personal Information
+                            </legend>
+
                         <div className="flex flex-col md:flex-row justify-between gap-4">
 
                             {/* Name input */}
                             <div className="flex-1 flex flex-col gap-2">
-                                <label className="block mb-2 text-gray-700 font-bold">Full Name*</label>
-                                <input 
+                                <label 
+                                    htmlFor="contact-name"
+                                    className="block mb-2 text-gray-700 font-bold">Full Name:*</label>
+                                <input
+                                    id="contact-name" 
                                     type="text"
-                                    placeholder="Bingus Bingu"
+                                    autoComplete="name"
+                                    placeholder="Johhny Doe"
                                     value={formData.name}
                                     onChange={(e) => {
                                         const value = e.target.value;
                                         const validChars = /^[\p{L}\s\-']*$/u;
-        
+
                                         if(validChars.test(value)) {
                                             handleInputChange("name", value)
                                         }
-        
+
                                         if(errors.name) {
                                             setErrors({...errors, name: null});
                                         }
                                     }}
                                     required
+                                    aria-invalid={errors.name ? "true" : "false"}
+                                    aria-describedby={errors.name ? "name-error" : undefined}
                                     className={`
                                         w-full px-4 py-3 rounded-lg border-2 text-gray-800
                                         focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
@@ -270,25 +287,31 @@ const ContactUsSection = () => {
                                 />
                                 
                                 {/* Error component */}
-                                <ErrorMessage message={errors.name} />
+                                <ErrorMessage message={errors.name} id="name-error" />
 
                             </div>
 
                             {/* Email input */}
                             <div className="flex-1 flex flex-col gap-2">
-                                <label className="block mb-2 text-gray-700 font-bold">Email*</label>
+                                <label 
+                                    htmlFor="contact-email"
+                                    className="block mb-2 text-gray-700 font-bold">Email:*</label>
                                 <input 
+                                    id="contact-email"
                                     type="email" 
+                                    autoComplete="email"
                                     placeholder="example@example.com"
                                     value={formData.email}
                                     onChange={(e) => {
                                         handleInputChange("email", e.target.value)
-        
+
                                         if(errors.email) {
                                             setErrors({...errors, email: null});
                                         }
                                     }}
                                     required
+                                    aria-invalid={errors.email ? "true" : "false"}
+                                    aria-describedby={errors.email ? "email-error" : undefined}
                                     className={`
                                         w-full px-4 py-3 rounded-lg border-2 text-gray-800
                                         focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
@@ -301,19 +324,23 @@ const ContactUsSection = () => {
                                 />
 
                                 {/* Error component */}
-                                <ErrorMessage message={errors.email} />
+                                <ErrorMessage message={errors.email} id="email-error" />
 
                             </div>
                         </div>
+                    </fieldset>
 
-
+                       
                         {/* Subject and message group */}
                         <div className="flex flex-col gap-4">
 
                             {/* Subject */}
                             <div className="flex flex-col gap-2">
-                                <label className="block mb-2 text-gray-700 font-bold">Subject*</label>
-                                <input 
+                                <label
+                                    htmlFor="contact-subject" 
+                                    className="block my-2 text-gray-700 font-bold">Subject:*</label>
+                                <input
+                                    id="contact-subject" 
                                     type="text" 
                                     placeholder="Volunteering..."
                                     value={formData.subject}
@@ -325,6 +352,8 @@ const ContactUsSection = () => {
                                         }
                                     }}
                                     required
+                                    aria-invalid={errors.subject ? "true" : "false"}
+                                    aria-describedby={errors.subject ? "subject-error" : undefined}
                                     className={`
                                         w-full px-4 py-3 rounded-lg border-2 text-gray-800
                                         focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
@@ -337,14 +366,17 @@ const ContactUsSection = () => {
                                 />
 
                                 {/* Error component */}
-                                <ErrorMessage message={errors.subject} />
+                                <ErrorMessage message={errors.subject} id="subject-error" />
 
                             </div>
 
                             {/* Message */}
                             <div className="flex flex-col gap-2">
-                                <label className="block mb-2 text-gray-700 font-bold">Message*</label>
+                                <label
+                                    htmlFor="contact-message" 
+                                    className="block mb-2 text-gray-700 font-bold">Message:*</label>
                                 <textarea 
+                                    id="contact-message"
                                     placeholder="Tell us how we can help..."
                                     value={formData.message}
                                     onChange={(e) => {
@@ -357,6 +389,9 @@ const ContactUsSection = () => {
                                     required
                                     rows={6}
                                     cols={40}
+                                    maxLength={2000}
+                                    aria-invalid={errors.message ? "true" : "false"}
+                                    aria-describedby={errors.message ? "message-error" : undefined}
                                     className={`
                                         w-full px-4 py-3 rounded-lg border-2 text-gray-800
                                         focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
@@ -366,11 +401,14 @@ const ContactUsSection = () => {
                                             : 'border-gray-300 focus:border-yellow-400'
                                         }
                                     `}
-                                
                                 />
+
+                                <span className="text-sm text-gray-600">
+                                    {formData.message.length} / 2000
+                                </span>
                                 
                                 {/* Error component */}
-                                <ErrorMessage message={errors.message} />
+                                <ErrorMessage message={errors.message} id="message-error" />
 
                             </div>
 
@@ -379,6 +417,7 @@ const ContactUsSection = () => {
                         {/* CTA submit button */}
                         <button 
                             type="submit"
+                            aria-label="Send contact message"
                             className="
                                 w-full py-4 mt-6 rounded-xl shadow-md
                                 bg-yellow-400 text-yellow-900 text-lg font-bold
@@ -391,18 +430,7 @@ const ContactUsSection = () => {
                     </form>
                 </div>
 
-
-
-
-
-
-
-
             </div>
-
-
-
-
         </Section>
     )
 }

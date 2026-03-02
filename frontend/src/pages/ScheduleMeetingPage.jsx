@@ -55,8 +55,16 @@ const ScheduleMeetingContent = () => {
                 await submitMeeting(); 
                 console.log("Meeting scheduled successfully!");
 
-            } catch (err) {
-                console.error("Failed to schedule meeting: ", err);
+            } catch (error) {
+                console.error("Failed to schedule meeting: ", error);
+
+                if(error.status === 409) {
+                    alert(error.message);
+                } else if(error.status === 400) {
+                    alert(error.message);
+                } else {
+                    alert("Something went wrong! Try again later!");
+                }
                 
             } finally {
                 setIsSubmitting(false);

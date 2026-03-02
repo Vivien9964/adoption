@@ -9,16 +9,23 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+// Updated cors settings to only allow API requests from Vite dev server
+app.use(cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"]
+}));
+
 app.use(express.json({ limit: "10kb" }));
 
-// General rate limiter for all routes which allows maximum 50 requests per 15 minutesper IP
+// General rate limiter for all routes which allows maximum 50 requests per 15 minutes per IP
 const limiterAllRoutes = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 50,
     message: {error: "Too many requests, please try again later!"}
 });
 
+// Meeting limiter fo meeting booking with maximum 10 requests per 15 minutes per IP
 const limiterMeeting = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 10,
@@ -63,7 +70,6 @@ const validateMeetingData = (data) => {
         errors.userName = "Enter first and last name!";
     }
 
-
     // Email validation
     const trimmedEmail = (data.userEmail || "").trim();
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -81,7 +87,7 @@ const validateMeetingData = (data) => {
     if (!trimmedPhone) {
         errors.userPhone = "Phone is required!";
     } else if (!phoneRegex.test(trimmedPhone)) {
-        errors.userPhone = "Phone must be 10 digits starting with 07!";
+        errors.userPhone = "Phone number is not valid!";
     }
 
     // Additional notes validation if exists
@@ -91,6 +97,7 @@ const validateMeetingData = (data) => {
 
     return errors;
 }
+
 
 // Get all dogs from the database
 app.get("/api/dogs", async( req, res ) => {
@@ -159,7 +166,7 @@ app.get("/api/meetings/availability/:dogId", async( req, res) => {
         console.error("Error fetching available date and time.", error);
         res.status(500).json({ error: "Failed to fetch availabe date and time!" });
     }
-})
+});
 
 
 // Send user data to the database -> scheduled meeting
@@ -206,6 +213,19 @@ app.post("/api/meetings", limiterMeeting, async( req, res) => {
             userEmail: userEmail.trim().toLowerCase(),
             userPhone: userPhone.trim(),
             notes: notes ? notes.trim() : ""
+        }
+
+        // Check if there are conflicting meetings
+        const [existingMeetings] = await db.query(
+            `SELECT id FROM meetings WHERE dogId = ? AND meetingDate = ? AND meetingTime = ?`,
+            [sanitizedMeetingData.dogId, sanitizedMeetingData.meetingDate, sanitizedMeetingData.meetingTime]
+        );
+
+        // If there are two conflicting meetings, set conflict error
+        if(existingMeetings.length > 0 ) {
+            return res.status(409).json({
+                error: "This time slot is booked! Choose a different time!"
+            })
         }
 
         const [result] = await db.query(

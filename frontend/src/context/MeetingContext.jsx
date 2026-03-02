@@ -22,10 +22,10 @@ export const MeetingProvider = ({ children }) => {
     const [ selectedDate, setSelectedDate ] = useState(null)
     const [ selectedTime, setSelectedTime ] = useState(null);
     const [ userInfo, setUserInfo ] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        notes: ''
+        name: "",
+        email: "",
+        phone: "",
+        notes: ""
     });
     const [ isSubmitted, setIsSubmitted ] = useState(false);
 
@@ -57,7 +57,7 @@ export const MeetingProvider = ({ children }) => {
                 userName: userInfo.name,
                 userEmail: userInfo.email,
                 userPhone: userInfo.phone,
-                notes: userInfo.notes || ''
+                notes: userInfo.notes || ""
             };
 
             const result = await createMeeting(meetingData);

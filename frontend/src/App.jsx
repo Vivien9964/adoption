@@ -9,6 +9,7 @@ import DogProfilePage from './pages/DogProfilePage';
 import ScheduleMeetingPage from './pages/ScheduleMeetingPage';
 import VirtualAdoptionPage from './pages/VirtualAdoptionPage';
 import AboutPage from './pages/AboutPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 // Layout components
 import Navigation from './components/layout/Navigation';
@@ -31,6 +32,7 @@ function App() {
           <Route path="/dogs/:id" element={<DogProfilePage />} />
           <Route path="/schedule-meeting" element={<ScheduleMeetingPage />} />
           <Route path="/virtual-adoption" element={<VirtualAdoptionPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
        <Footer />
       </PetsProvider>

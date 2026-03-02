@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { createMeeting } from "../services/api";
 
 const MeetingContext = createContext();
 
@@ -59,23 +60,7 @@ export const MeetingProvider = ({ children }) => {
                 notes: userInfo.notes || ''
             };
 
-            // Sending POST request to the backend with the previously created object as JSON
-            // HTTP response
-            const response = await fetch("http://localhost:3000/api/meetings", {
-                method: "POST",
-                headers: {
-                    "Content-Type" : "application/json",
-                },
-                body: JSON.stringify(meetingData)
-            });
-
-            // Check if the communication with the backend was successfull
-            if(!response.ok) {
-                throw new Error("Failed to create meeting!");
-            }
-
-            // Confirmation from the backend -> did we save the data to the database?
-            const result = await response.json();
+            const result = await createMeeting(meetingData);
             console.log("Meeting created successfully!", result);
             setIsSubmitted(true);
 
@@ -96,7 +81,7 @@ export const MeetingProvider = ({ children }) => {
         setSelectedTime(null);
         setUserInfo({
             name: "",
-            emial: "",
+            email: "",
             phone: "",
             notes: ""
         });

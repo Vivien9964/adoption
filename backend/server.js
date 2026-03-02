@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import db from "./db.js";
+import rateLimit from "express-rate-limit";
 
 dotenv.config();
 
@@ -9,14 +10,87 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "10kb" }));
 
-/*
-app.get("/", ( req, res ) => {
-    res.json({ message: "Pet adoption API is running!" });
+// General rate limiter for all routes which allows maximum 50 requests per 15 minutesper IP
+const limiterAllRoutes = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 50,
+    message: {error: "Too many requests, please try again later!"}
 });
-*/
 
+const limiterMeeting = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    message: {error: "Too many booking attemps! Try again later!"}
+});
+
+app.use(limiterAllRoutes);
+
+// Server side validation function for meeting data -> schedule meeting page
+const validateMeetingData = (data) => {
+    const errors = {};
+
+    // Field validation, to make sure required fields are not empty
+    if (!data.dogId) {
+        errors.dogId = "Dog ID is required!";
+    }
+
+    if (!data.dogName || !data.dogName.trim()) {
+        errors.dogName = "Dog name is required!";
+    }
+
+    if (!data.meetingDate || !data.meetingDate.trim()) {
+        errors.meetingDate = "Meeting date is required!";
+    }
+
+    if (!data.meetingTime && data.meetingTime !== 0) {
+        errors.meetingTime = "Meeting time is required!";
+    }
+
+    // User name validation
+    const nameTrimmed = (data.userName || "").trim();
+    const nameParts = nameTrimmed.split(" ").filter((part) => part.length > 0);
+    const hasValidNameChars = /^[\p{L}\s\-']+$/u.test(nameTrimmed);
+
+    if (!nameTrimmed) {
+        errors.userName = "Name is required!";
+    } else if (nameTrimmed.length < 2) {
+        errors.userName = "Name is too short!";
+    } else if (!hasValidNameChars) {
+        errors.userName = "Name cannot contain special characters and numbers!";
+    } else if (nameParts.length < 2) {
+        errors.userName = "Enter first and last name!";
+    }
+
+
+    // Email validation
+    const trimmedEmail = (data.userEmail || "").trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!trimmedEmail) {
+        errors.userEmail = "Email is required!";
+    } else if (!emailRegex.test(trimmedEmail)) {
+        errors.userEmail = "Enter a valid email!";
+    }
+
+    // Phone validation
+    const trimmedPhone = (data.userPhone || "").trim();
+    const phoneRegex = /^07\d{8}$/;
+
+    if (!trimmedPhone) {
+        errors.userPhone = "Phone is required!";
+    } else if (!phoneRegex.test(trimmedPhone)) {
+        errors.userPhone = "Phone must be 10 digits starting with 07!";
+    }
+
+    // Additional notes validation if exists
+    if (data.notes && data.notes.length > 1000) {
+        errors.notes = "Notes cannot contain more than 1000 characters!";
+    }
+
+    return errors;
+}
 
 // Get all dogs from the database
 app.get("/api/dogs", async( req, res ) => {
@@ -27,7 +101,7 @@ app.get("/api/dogs", async( req, res ) => {
         // JSON fields need to be converted back to arrays and objects
         // For every dog object data is transformed before sending it to the frontend
         const dogs = rows.map((dog) => ({
-            // start with the original object then override some properties (arrays, objects)
+
             ...dog,
             personality: dog.personality ? JSON.parse(dog.personality) : [],
             images: dog.images ? JSON.parse(dog.images) : [],
@@ -35,12 +109,13 @@ app.get("/api/dogs", async( req, res ) => {
             goodWith: dog.goodWith ? JSON.parse(dog.goodWith) : null,
             whyAdopt: dog.whyAdopt ? JSON.parse(dog.whyAdopt) : [],
             featured: Boolean(dog.featured)
+
         }));
 
         res.json(dogs);
 
-    } catch(err) {
-        console.error("Error while fetching dogs: ", err);
+    } catch(error) {
+        console.error("Error while fetching dogs: ", error);
         res.status(500).json({ error: "Failed to fetch dogs!" });
     }
 });
@@ -67,8 +142,8 @@ app.get("/api/dogs/:id", async( req, res ) => {
 
         res.json(dog);
         
-    } catch(err) {
-        console.error("Error while fetching dog: ", err);
+    } catch(error) {
+        console.error("Error while fetching dog: ", error);
         res.status(500).json({ error: "Failed to fetch dog!"});
     }
 });
@@ -80,16 +155,29 @@ app.get("/api/meetings/availability/:dogId", async( req, res) => {
         const { dogId } = req.params;
         const [meetings] = await db.query(`SELECT meetingDate, meetingTime FROM meetings WHERE dogId = ?`, [dogId]);
         res.status(200).json({ bookings: meetings });
-    } catch(err) {
-        console.error("Error fetching available date and time.", err);
+    } catch(error) {
+        console.error("Error fetching available date and time.", error);
         res.status(500).json({ error: "Failed to fetch availabe date and time!" });
     }
 })
 
 
 // Send user data to the database -> scheduled meeting
-app.post("/api/meetings", async( req, res) => {
+app.post("/api/meetings", limiterMeeting, async( req, res) => {
     try {
+
+        // Input validation before anything happens in the database
+        const validationErrors = validateMeetingData(req.body);
+
+        // In case of errors, return error with 400
+        if (Object.keys(validationErrors).length > 0) {
+            return res.status(400).json({
+                error: "Validation failed!",
+                fields: validationErrors
+            });
+        }
+
+
         const {
         dogId,
         dogName,
@@ -104,19 +192,42 @@ app.post("/api/meetings", async( req, res) => {
         notes
         } = req.body
 
+        // Sanitized input data to make sure the database stores inputs 
+        // without whitespace for all fields and uppercase in email
+        const sanitizedMeetingData = {
+            dogId,
+            dogName: dogName.trim(),
+            dogBreed: dogBreed ? dogBreed.trim() : "",
+            dogImage: dogImage || "",
+            dogLocation: dogLocation ? dogLocation.trim() : "",
+            meetingDate: meetingDate.trim(),
+            meetingTime,
+            userName: userName.trim(),
+            userEmail: userEmail.trim().toLowerCase(),
+            userPhone: userPhone.trim(),
+            notes: notes ? notes.trim() : ""
+        }
+
         const [result] = await db.query(
             `INSERT INTO meetings 
             (dogId, dogName, dogBreed, dogImage, dogLocation, meetingDate, meetingTime, userName, userEmail, userPhone, notes)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [dogId, dogName, dogBreed, dogImage, dogLocation, meetingDate, meetingTime, userName, userEmail, userPhone, notes]
+            [
+                sanitizedMeetingData.dogId, sanitizedMeetingData.dogName, 
+                sanitizedMeetingData.dogBreed, sanitizedMeetingData.dogImage,
+                sanitizedMeetingData.dogLocation, sanitizedMeetingData.meetingDate, 
+                sanitizedMeetingData.meetingTime, sanitizedMeetingData.userName,
+                sanitizedMeetingData.userEmail, sanitizedMeetingData.userPhone,
+                sanitizedMeetingData.notes
+            ]
         );
 
         res.status(201).json({
             message: "Meeting created successfully!",
             meetingId: result.insertId
         });
-    } catch(err) {
-        console.error("Error creating meeting: ", err);
+    } catch(error) {
+        console.error("Error creating meeting: ", error);
         res.status(500).json({ error: "Failed to create meeting!" });
     }
 });

@@ -1,11 +1,12 @@
-
 // Context to hold pet data, later on the list of available pets are going to be shared accross 
 // multiple pages
 import { createContext, useContext, useState, useEffect } from 'react';
 
+import { fetchAllPets } from '../services/api';
+
 const PetsContext = createContext();
 
-// using custom hook to make it easier to use the context in other components (no repeated imports)
+// Using custom hook to make it easier to use the context in other components (no repeated imports)
 export const usePets = () => {
     const context = useContext(PetsContext);
 
@@ -17,16 +18,12 @@ export const usePets = () => {
 };
 
 
-// provider component 
+// Provider component 
 export const PetsProvider = ({ children }) => {
 
     const [allPets, setAllPets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-
-    // filterResult  will be the array that we return based on applied filters
-    //let filterResult = dogsData;
 
 
     // Filtering states - term, size, age, gender
@@ -39,27 +36,20 @@ export const PetsProvider = ({ children }) => {
    
     // Fetch all pets from the database
     useEffect(() => {
-        const fetchPets = async () => {
+        const getPets = async () => {
             try {
                 setLoading(true);
-                const response = await fetch("http://localhost:3000/api/dogs");
-
-                if(!response.ok) {
-                    throw new Error("Failed to fetch pets!");
-                }
-                
-                const data = await response.json();
+                const data = await fetchAllPets();
                 setAllPets(data);
-                setLoading(false);
-
-            } catch(err) {
-                console.error("Failed fetching pets: ", err);
-                setError(err.message);
+            } catch(error) {
+                console.error("Failed to fetch pets:", error);
+                setError(error.message);
+            } finally {
                 setLoading(false);
             }
         }
 
-        fetchPets();
+        getPets();
         
     }, []);
 

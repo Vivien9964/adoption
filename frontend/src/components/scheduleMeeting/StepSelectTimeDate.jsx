@@ -4,6 +4,7 @@ import Button from '../common/Button';
 import { useEffect, useState } from 'react';
 import DatePicker from "react-datepicker"; // react date picker library
 import "react-datepicker/dist/react-datepicker.css";
+import { fetchMeetingAvailability } from '../../services/api';
 
 const StepSelectTimeDate = ({ dog }) => {
 
@@ -103,12 +104,11 @@ const StepSelectTimeDate = ({ dog }) => {
 
     // Get booked slots for a pet
     useEffect(() => {
-        const fetchBookings = async () => {
+        const getBookings = async () => {
             if(!dog) return;
 
             try {
-                const response = await fetch(`http://localhost:3000/api/meetings/availability/${dog.id}`);
-                const data = await response.json();
+                const data = await fetchMeetingAvailability(dog.id);
                 console.log("Bookings:", data.bookings);
                 setBookedSlots(data.bookings);
             } catch(err) {
@@ -116,7 +116,7 @@ const StepSelectTimeDate = ({ dog }) => {
             }
         }
 
-        fetchBookings();
+        getBookings();
 
     }, [dog]);
 

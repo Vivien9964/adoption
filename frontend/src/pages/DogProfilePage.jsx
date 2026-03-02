@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Section from "../components/layout/Section";
 import QuickDonationModal from "../components/virtualAdoption/QuickDonationModal";
 import DonationSuccessCard from "../components/virtualAdoption/DonationSuccessCard";
+import { fetchPetByID } from '../services/api';
 import { 
     MapPin, 
     Calendar, 
@@ -46,19 +47,18 @@ const DogProfilePage = () => {
 
     // Fetching individual dog profile 
     useEffect(() => {
-        const fetchDog = async() => {
-            try {
-                const response = await fetch(`http://localhost:3000/api/dogs/${id}`);
-                const data = await response.json();
-                setDog(data);
-                setLoading(false);
-
-            } catch(err) {
-                console.error(err);
-            }
+        const getPet = async() => {
+           try {
+            const data = await fetchPetByID(id);
+            setDog(data);
+           } catch(error) {
+            console.error(error);
+           } finally {
+            setLoading(false);
+           }
         }
 
-        fetchDog();
+        getPet();
 
     }, [id]);
 

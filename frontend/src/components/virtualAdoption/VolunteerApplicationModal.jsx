@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { submitVolunteerApplication } from "../../services/api";
 import { X, Check, Briefcase, CheckSquare, Clock, FileCheck, Gift, User, CircleEllipsis, CircleAlert, Calendar } from "lucide-react";
 
 
@@ -159,7 +160,7 @@ const ErrorMessage = ({ message }) => {
 
 const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, formData, setFormData }) => {
 
-    // Volunteer avaliability options for checkboxes
+    // Volunteer availability options for checkboxes
     const availabilityOptions = [
         { value: 'morning', label: 'Morning (8:00 AM - 12:00 PM)' },
         { value: 'afternoon', label: 'Afternoon (12:00 PM - 4:00 PM)' },
@@ -170,6 +171,8 @@ const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, fo
 
     // State to keep track of errors
     const [ errors, setErrors ] = useState({});
+    const [ serverError, setServerError ] = useState("");
+    const [ isSubmitting, setIsSubmitting ] = useState(false);
 
     // Function to update form data and to clear errors
     const handleChange = (field, value) => {
@@ -246,7 +249,7 @@ const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, fo
     };
 
 
-    // Function to handle appplication submission
+    // Function to handle application submission
     const handleSubmit = async(e) => {
         e.preventDefault();
 
@@ -258,7 +261,39 @@ const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, fo
         }
 
         setErrors({});
-        onSubmit();
+        setServerError("");
+        setIsSubmitting(true);
+
+
+
+        try {
+
+            await submitVolunteerApplication({
+                opportunityId: opportunity.id,
+                opportunityTitle: opportunity.title,
+                isOneTimeEvent: isOneTimeEvent(opportunity),
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                availability: formData.availability,
+                motivation: formData.motivation,
+                experience: formData.experience
+            });
+
+            onSubmit();
+
+        } catch(error) {
+
+            if(error.status === 409) {
+                setServerError(error.message);
+            } else if(error.status === 400 && error.fields) {
+                setErrors(error.fields);
+            } else {
+                setServerError("Something went wrong! Try again later!");
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
 
@@ -304,7 +339,7 @@ const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, fo
                                 mt-2 w-full px-4 py-3 rounded-lg
                                 border-2 border-gray-300 text-gray-800
                                 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:outline-none
-                                placeholder:text-gray-400 tarnsition-all duration-200
+                                placeholder:text-gray-400 transition-all duration-200
                                 ${errors.name 
                                     ? 'border-red-500 focus:border-red-500' 
                                     : 'border-gray-300 focus:border-yellow-400'                                    
@@ -463,6 +498,14 @@ const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, fo
                         />
                     </div>
 
+                    {serverError && (
+                        <div className="mb-6 p-4 rounded-lg bg-red-50 border-2 border-red-200">
+                            <p className="text-red-600 text-center font-semibold">
+                                {serverError}
+                            </p>
+                        </div>
+                    )}
+
                     {/* CTA buttons */}
                     <div className="flex justify-center gap-4">
                         {/* Navigate back */}
@@ -481,13 +524,17 @@ const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, fo
                         {/* Apply to position */}
                         <button
                             type="submit"
-                            className="
+                            disabled={isSubmitting}
+                            className={`
                                 px-8 py-3 rounded-xl font-bold shadow-md
-                                bg-yellow-400 text-yellow-900
-                                hover:bg-yellow-500 hover:scale-102
-                                transition-all duration-300"
+                                transition-all duration-300
+                                ${isSubmitting
+                                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                    : "bg-yellow-400 text-yellow-900 hover:bg-yellow-500 hover:scale-102"
+                                }`
+                            }
                         >
-                            Submit application
+                            {isSubmitting ? "Submitting..." : "Submit application"}
                         </button>
                     </div>
                 </div>

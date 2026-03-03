@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import db from "./db.js";
@@ -25,15 +25,25 @@ const limiterAllRoutes = rateLimit({
     message: {error: "Too many requests, please try again later!"}
 });
 
-// Meeting limiter fo meeting booking with maximum 10 requests per 15 minutes per IP
+// Meeting limiter for meeting booking with maximum 10 requests per 15 minutes per IP
 const limiterMeeting = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 10,
-    message: {error: "Too many booking attemps! Try again later!"}
+    message: {error: "Too many booking attempts! Try again later!"}
+});
+
+// Volunteer application limiter for applying to volunteer positions with maximum 5 requests per 15 minutes per IP
+const limiterVolunteerApplication = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20, 
+    message: {error: "Too many applications! Try again later!"}
 });
 
 app.use(limiterAllRoutes);
 
+
+// Validation functions to increase security
+// Validation rules in the frontend side are going to be unified in the future!!
 // Server side validation function for meeting data -> schedule meeting page
 const validateMeetingData = (data) => {
     const errors = {};
@@ -98,6 +108,79 @@ const validateMeetingData = (data) => {
     return errors;
 }
 
+
+
+//Server side validation function to validate volunteer data -> volunteer application modal
+const validateVolunteerData = (data) => {
+    const errors = {}
+
+     // Field validation to make sure data is sent by the user
+     if (!data.opportunityId) {
+        errors.opportunityId = "Opportunity ID is required!";
+    }
+
+    if (!data.opportunityTitle || !data.opportunityTitle.trim()) {
+        errors.opportunityTitle = "Opportunity title is required!";
+    }
+
+    // User name validation
+    const nameTrimmed = (data.name || "").trim();
+    const nameParts = nameTrimmed.split(" ").filter((part) => part.length > 0);
+    const hasValidNameChars = /^[\p{L}\s\-']+$/u.test(nameTrimmed);
+
+    if (!nameTrimmed) {
+        errors.name = "Name is required!";
+    } else if (nameTrimmed.length < 2) {
+        errors.name = "Name is too short!";
+    } else if (!hasValidNameChars) {
+        errors.name = "Name cannot contain special characters and numbers!";
+    } else if (nameParts.length < 2) {
+        errors.name = "Enter first and last name!";
+    }
+
+    // Email validation
+    const trimmedEmail = (data.email || "").trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!trimmedEmail) {
+        errors.email = "Email is required!";
+    } else if (!emailRegex.test(trimmedEmail)) {
+        errors.email = "Enter a valid email!";
+    }
+
+    // Phone validation
+    const trimmedPhone = (data.phone || "").trim();
+    const phoneRegex = /^[\d\s\+\-\(\)]+$/;
+
+    if (!trimmedPhone) {
+        errors.phone = "Phone number is required!";
+    } else if (trimmedPhone.length < 10) {
+        errors.phone = "Phone number is too short!";
+    } else if (!phoneRegex.test(trimmedPhone)) {
+        errors.phone = "Phone number is not valid!";
+    }
+    
+     // Availability validation for long term applicants
+     // If the user is applying to a long term position they must choose from the availability options
+     if (!data.isOneTimeEvent && (!data.availability || data.availability.length === 0)) {
+        errors.availability = "Select at least one availability option!";
+    }
+
+    // Motivation length check, if any for text length
+    if (data.motivation && data.motivation.length > 2000) {
+        errors.motivation = "Motivation cannot exceed 2000 characters!";
+    }
+
+    // Experience length check, if any, for text length
+    if (data.experience && data.experience.length > 2000) {
+        errors.experience = "Experience cannot exceed 2000 characters!";
+    }
+
+    return errors;
+}
+
+
+// API endpoints
 
 // Get all dogs from the database
 app.get("/api/dogs", async( req, res ) => {
@@ -164,7 +247,7 @@ app.get("/api/meetings/availability/:dogId", async( req, res) => {
         res.status(200).json({ bookings: meetings });
     } catch(error) {
         console.error("Error fetching available date and time.", error);
-        res.status(500).json({ error: "Failed to fetch availabe date and time!" });
+        res.status(500).json({ error: "Failed to fetch available date and time!" });
     }
 });
 
@@ -251,6 +334,94 @@ app.post("/api/meetings", limiterMeeting, async( req, res) => {
         res.status(500).json({ error: "Failed to create meeting!" });
     }
 });
+
+
+// Send volunteer application to the database -> volunteer application modal, get involved page
+// Structure is based on schedule meeting logic
+app.post("/api/volunteers", limiterVolunteerApplication, async (req, res) => {
+
+    try {
+
+        // Input validation before data is sent to the database
+        const validationErrors = validateVolunteerData(req.body);
+
+        // In case errors occurred return the error with 400
+        if(Object.keys(validationErrors).length > 0) {
+            return res.status(400).json({
+                error: "Validation failed!",
+                fields: validationErrors
+            });
+        }
+
+        const {
+            opportunityId,
+            opportunityTitle,
+            isOneTimeEvent,
+            name,
+            email,
+            phone,
+            availability,
+            motivation,
+            experience
+        } = req.body;
+
+        // Sanitized input for volunteer data
+        const sanitizedVolunteerData = {
+            opportunityId,
+            opportunityTitle: opportunityTitle.trim(),
+            isOneTimeEvent: Boolean(isOneTimeEvent),
+            name: name.trim(),
+            email: email.trim().toLowerCase(),
+            phone: phone.trim(),
+            availability: JSON.stringify(availability || []),
+            motivation: motivation ? motivation.trim() : "",
+            experience: experience ? experience.trim() : ""
+        };
+
+        // Check if applicants already applied to the position
+        const [existingCandidate] = await db.query(
+            `SELECT id FROM volunteers WHERE email = ? AND opportunityId = ?`,
+            [sanitizedVolunteerData.email, sanitizedVolunteerData.opportunityId]
+        );
+
+        // If the candidate already applied to the position send a conflict error with 409
+        if(existingCandidate.length > 0) {
+            return res.status(409).json({
+                error: "You have already applied to this position!"
+            });
+        }
+
+        // If the candidate did not apply so far, then add them to the database
+        const [result] = await db.query(
+            `INSERT INTO volunteers 
+            (opportunityId, opportunityTitle, isOneTimeEvent, name, email, phone, availability, motivation, experience)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                sanitizedVolunteerData.opportunityId, sanitizedVolunteerData.opportunityTitle,
+                sanitizedVolunteerData.isOneTimeEvent, sanitizedVolunteerData.name,
+                sanitizedVolunteerData.email, sanitizedVolunteerData.phone,
+                sanitizedVolunteerData.availability, sanitizedVolunteerData.motivation,
+                sanitizedVolunteerData.experience
+            ]
+        );
+
+        res.status(201).json({
+            message: "Application submitted successfully!",
+            applicationId: result.insertId
+        });
+
+    } catch(error) {
+        console.error("Error creating application: ", error);
+        res.status(500).json({ error: "Failed to submit application!" });
+    }
+})
+
+
+
+
+
+
+
 
 
 app.listen(PORT, () => {

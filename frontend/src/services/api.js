@@ -60,3 +60,25 @@ export const createMeeting = async (meetingData) => {
 
     return data;
 }
+
+// Submit volunteer application
+export const submitVolunteerApplication = async (volunteerData) => {
+    const response = await fetch(`${BASE_URL}/api/volunteers`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(volunteerData)
+    });
+
+    const data = await response.json();
+
+    if(!response.ok) {
+        const error = new Error(data.error || "Failed to submit application!");
+        error.status = response.status;
+        error.fields = data.fields || null;
+        throw error;
+    }
+
+    return data;
+}

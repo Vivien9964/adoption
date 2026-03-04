@@ -39,6 +39,13 @@ const limiterVolunteerApplication = rateLimit({
     message: {error: "Too many applications! Try again later!"}
 });
 
+// Donation limiter with maximum 10 requests per 15 minutes per IP
+const limiterDonation = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    message: {error: "Too many donation attempts! Try again later!"}
+});
+
 app.use(limiterAllRoutes);
 
 
@@ -178,6 +185,50 @@ const validateVolunteerData = (data) => {
 
     return errors;
 }
+
+// Server side validation function for donation data -> quick donation modal
+const validateDonationData = (data) => {
+    const errors = {};
+
+    // Target name validation
+    if (!data.targetName || !data.targetName.trim()) {
+        errors.targetName = "Donation target is required!";
+    }
+
+    // Amount validation
+    if (!data.amount || data.amount <= 0) {
+        errors.amount = "Donation amount must be greater than zero!";
+    } else if (data.amount > 100000) {
+        errors.amount = "Donation amount is too large!";
+    }
+
+    // Donor name validation
+    const nameTrimmed = (data.donorName || "").trim();
+    const nameParts = nameTrimmed.split(" ").filter((part) => part.length > 0);
+    const hasValidNameChars = /^[\p{L}\s\-']+$/u.test(nameTrimmed);
+
+    if (!nameTrimmed) {
+        errors.donorName = "Name is required!";
+    } else if (nameTrimmed.length < 2) {
+        errors.donorName = "Name is too short!";
+    } else if (!hasValidNameChars) {
+        errors.donorName = "Name cannot contain special characters and numbers!";
+    } else if (nameParts.length < 2) {
+        errors.donorName = "Enter first and last name!";
+    }
+
+    // Email validation
+    const trimmedEmail = (data.donorEmail || "").trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!trimmedEmail) {
+        errors.donorEmail = "Email is required!";
+    } else if (!emailRegex.test(trimmedEmail)) {
+        errors.donorEmail = "Enter a valid email!";
+    }
+
+    return errors;
+};
 
 
 // API endpoints
@@ -414,16 +465,68 @@ app.post("/api/volunteers", limiterVolunteerApplication, async (req, res) => {
         console.error("Error creating application: ", error);
         res.status(500).json({ error: "Failed to submit application!" });
     }
-})
+});
 
 
+// Send donation data to the database -> quick donation modal
+app.post("/api/donations", limiterDonation, async (req, res) => {
 
+    try {
 
+        // Input validation before data is sent to the database
+        const validationErrors = validateDonationData(req.body);
 
+        // If there are errors return error with 400
+        if(Object.keys(validationErrors).length > 0) {
+            return res.status(400).json({
+                error: "Validation failed!",
+                fields: validationErrors
+            });
+        }
+
+        const {
+            targetName,
+            amount,
+            isMonthly,
+            donorName,
+            donorEmail
+        } = req.body;
+
+        // Sanitized input for donation data
+        const sanitizedDonationData = {
+            targetName: targetName.trim(),
+            amount: Number(amount),
+            isMonthly: Boolean(isMonthly),
+            donorName: donorName.trim(),
+            donorEmail: donorEmail.trim().toLowerCase()
+        };
+
+        // Insert donation data to the database
+        const [result] = await db.query(
+            `INSERT INTO donations
+            (targetName, amount, isMonthly, donorName, donorEmail)
+            VALUES (?, ?, ?, ?, ?)`,
+            [
+                sanitizedDonationData.targetName, sanitizedDonationData.amount,
+                sanitizedDonationData.isMonthly, sanitizedDonationData.donorName,
+                sanitizedDonationData.donorEmail
+            ]
+        );
+
+        res.status(201).json({
+            message: "Donation registered successfully!",
+            donationId: result.insertId
+        });
+
+    } catch(error) {
+        console.error("Error registering donation: ", error);
+        res.status(500).json({ error: "Failed to register donation!" });
+    }
+});
 
 
 
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
-})
+});

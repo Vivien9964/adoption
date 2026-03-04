@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { submitDonation } from "../../services/api";
 import { X, CreditCard, User, HeartHandshake, Coins, CircleAlert } from "lucide-react";
 
 
@@ -60,6 +61,8 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
     const [ isMonthly, setIsMonthly ] = useState(defaultDonationType === "monthly");
 
     const [ errors, setErrors ] = useState({});
+    const [ isSubmitting, setIsSubmitting ] = useState(false);
+    const [ serverError, setServerError ] = useState("");
 
     // Stop background scroll when the modal is open, and restore it when it is closed
     useEffect(() => {
@@ -244,7 +247,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
 
 
     // Function to handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const formErrors = validateForm();
@@ -255,16 +258,41 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
         }
 
         setErrors({});
-        onSuccess(amount, isMonthly);
-        setAmount(0);
-        setCustomAmount("");
-        setName("");
-        setEmail("");
-        setCardNumber("");
-        setCardHolderName("");
-        setExpDate("");
-        setCvv("");
-        setIsMonthly(false);
+        setServerError("");
+        setIsSubmitting(true);
+
+        try {
+            await submitDonation({
+                targetName: target ? (target.name || target.title) : "Our shelter",
+                amount: amount,
+                isMonthly: isMonthly,
+                donorName: name,
+                donorEmail: email
+            });
+
+            // Form only resets if the API call was a success
+            onSuccess(amount, isMonthly);
+            setAmount(0);
+            setCustomAmount("");
+            setName("");
+            setEmail("");
+            setCardNumber("");
+            setCardHolderName("");
+            setExpDate("");
+            setCvv("");
+            setIsMonthly(false);
+
+        } catch(error) {
+
+            if(error.status === 400 && error.fields) {
+                setErrors(error.fields);
+            } else {
+                setServerError(error.message || "Something went wrong!");
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
+
     }
 
    
@@ -775,12 +803,20 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
 
                     </div>
 
+                    {serverError && (
+                        <div className="p-4 rounded-lg bg-red-50 border-2 border-red-200">
+                            <p className="text-red-600 text-center font-semibold">
+                                {serverError}
+                            </p>
+                        </div>
+                    )}
+
 
                 {/* Donate button - active only if the user selected the donation amount and entered their data */}
                 <button
                     type="submit"
                     aria-label="Send donation"
-                    disabled={!amount || amount <= 0 || !name || !email || !cardNumber || !cardHolderName || !expDate || !cvv}
+                    disabled={!amount || amount <= 0 || !name || !email || !cardNumber || !cardHolderName || !expDate || !cvv || isSubmitting}
                     className="
                         w-full py-4 mt-6 rounded-xl shadow-md
                         bg-yellow-400 text-yellow-900 text-lg font-bold
@@ -790,9 +826,11 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                         transition-all duration-300"
                 >
 
-                    {(amount > 0 && name && email && cardNumber && cardHolderName && expDate && cvv) 
-                        ? (isMonthly ? `Sponsor with ${amount} Lei/month` : `Donate ${amount} Lei`)
-                        : "Enter all data to continue"
+                    {isSubmitting 
+                        ? "Processing donation..."
+                        : (amount > 0 && name && email && cardNumber && cardHolderName && expDate && cvv) 
+                            ? (isMonthly ? `Sponsor with ${amount} Lei/month` : `Donate ${amount} Lei`)
+                            : "Enter all data to continue"
                     }
 
                 </button>

@@ -82,3 +82,26 @@ export const submitVolunteerApplication = async (volunteerData) => {
 
     return data;
 }
+
+
+// Submit donation
+export const submitDonation = async (donationData) => {
+    const response = await fetch(`${BASE_URL}/api/donations`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(donationData)
+    });
+
+    const data = await response.json();
+
+    if(!response.ok) {
+        const error = new Error(data.error || "Failed to register donation!");
+        error.status = response.status;
+        error.fields = data.fields || null;
+        throw error;
+    }
+
+    return data;
+}

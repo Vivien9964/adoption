@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { submitDonation } from "../../services/api";
+import { validateName, validateEmail, PATTERNS } from "../../utils/validationRules";
+import useFormValidation from "../../hooks/useFormValidation";
 import { X, CreditCard, User, HeartHandshake, Coins, CircleAlert } from "lucide-react";
 
 
@@ -45,24 +47,147 @@ const ErrorMessage = ({ message, id }) => {
     )
 }
 
+// Function to validate card number -> Luhn's algorithm
+const isValidCardNumber = (number) => {
+    const cleanedCardNumber = number.replace(/\D/g, "");
+    const validCardLengths = [13, 14, 15, 16, 19];
+
+    // Only accepts real card number lengths
+    if(!validCardLengths.includes(cleanedCardNumber.length)){
+        return false;
+    };
+
+
+    let sum = 0;
+    let isSecond = false;
+
+    for(let i = cleanedCardNumber.length - 1; i >= 0; i--) {
+
+        let digit = parseInt(cleanedCardNumber[i]);
+        
+        if(isSecond) {
+            digit *= 2;
+
+            if(digit > 9) {
+                digit -= 9;
+            }
+        }
+
+        sum += digit;
+        isSecond = !isSecond;
+    }
+
+    return sum % 10 === 0;
+
+}
+
+ // Schema used in custom validaton hook (containing validatorFn)
+// name and email are shared from validationRules.js and they are availaible in all forms
+// Other fields are unique to the donation form -> they need inline functions, no need to share them
+    const donationValidationSchema = {
+
+        amount: (value) => {
+            if(!value || value < 0) {
+                return "Select or enter donation amount!";
+            }
+
+            return null;
+        },
+
+        name: validateName,
+        email: validateEmail,
+
+        cardNumber: (value) => {
+            if(!value) {
+                return "Card number is required!";
+            }
+
+            if(!isValidCardNumber(value)) {
+                return "Invalid card number!";
+            }
+
+            return null;
+        },
+
+        cardHolderName: (value) => {
+
+            const trimmed = (value || "").trim();
+            const hasValidChars = /^[\p{L}\s\-']+$/u.test(trimmed);
+
+            if(!trimmed) {
+                return "Cardholder name is required!";
+            }
+
+            if(trimmed.length < 2) {
+                return "Cardholder name is too short!";
+            }
+
+            if(!hasValidChars) {
+                return "Name cannot contain special characters and numbers!";
+            }
+
+            return null;
+        },
+
+        expDate: (value) => {
+
+            if(!value) {
+                return "Expiry date required!";
+            }
+
+            if(value.length !== 5 || !value.includes("/")) {
+                return "Format must be MM/YY!";
+            }
+
+            const [month, year] = value.split("/").map(Number);
+
+            const currentDate = new Date();
+
+            const currentYear = currentDate.getFullYear() % 100;
+
+            const currentMonth = currentDate.getMonth() + 1;
+
+            if(month < 1 || month > 12) { 
+                return "Invalid month!";
+            }
+
+            if(year < currentYear) {
+                return "Card expired!";
+            }
+
+            if(year === currentYear && month < currentMonth) {
+                return "Card expired!";
+            }
+
+            if(year > currentYear + 10) {
+                 return "Expiry date year is invalid!";
+            }
+
+            return null;
+        }
+
+    }
+
 
 // Main component used for quick donation in Virtual adoption page
 const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonationType = "one-time" }) => {
 
-    // State variables to store donation amount and donor, and card data, states for modal
-    const [ amount, setAmount ] = useState(0);
-    const [ customAmount, setCustomAmount ] = useState("");
-    const [ name, setName ] = useState("");
-    const [ email, setEmail ] = useState("");
-    const [ cardNumber, setCardNumber ] = useState("");
-    const [ cardHolderName, setCardHolderName ] = useState("");
-    const [ expDate, setExpDate ] = useState("");
-    const [ cvv, setCvv ] = useState("");
-    const [ isMonthly, setIsMonthly ] = useState(defaultDonationType === "monthly");
+    //nUsing custom hook to store data, handle input change and errors
+    const { formData, setFormData, errors, setErrors, handleChange, validate, resetForm } =  useFormValidation({
+        amount: 0,
+        customAmount: "",
+        name: "",
+        email: "",
+        cardNumber: "",
+        cardHolderName: "",
+        expDate: "",
+        cvv: ""
+    }, donationValidationSchema );
 
-    const [ errors, setErrors ] = useState({});
+    const [ isMonthly, setIsMonthly ] = useState(defaultDonationType === "monthly");
     const [ isSubmitting, setIsSubmitting ] = useState(false);
     const [ serverError, setServerError ] = useState("");
+
 
     // Stop background scroll when the modal is open, and restore it when it is closed
     useEffect(() => {
@@ -87,22 +212,41 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
     }, [isOpen, defaultDonationType]);
 
 
-
     // Preset donation amounts
     const presetAmounts = [ 25, 50, 100, 150, 200, 400 ];
 
     // Function to set amount from preset blocks
     const handlePresetAmount = (amount) => {
-        setAmount(amount);
-        setCustomAmount("");
-    }
+        setFormData((prev) => ({
+            ...prev,
+            amount: amount,
+            customAmount: ""
+        }));
+
+        if(errors.amount) {
+            setErrors((prev) => ({
+                ...prev,
+                amount: null
+            }));
+        }
+    };
 
     // Function to set custom donation amount
     const handleCustomAmount = (e) => {
         const value = e.target.value;
-        setCustomAmount(value);
-        setAmount(Number(value));
-    }
+        setFormData((prev) => ({
+            ...prev,
+            customAmount: value,
+            amount: Number(value)
+        }));
+
+        if(errors.amount) {
+            setErrors((prev) => ({
+                ...prev,
+                amount: null
+            }));
+        }
+    };
 
     // Function to format card number with space between every four digit groups
     const formatCardNumber = (value) => {
@@ -111,175 +255,30 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
         return formattedCardNumber;
     }
 
-    // Function to validate card number -> Luhn's algorithm
-    const isValidCardNumber = (number) => {
-        const cleanedCardNumber = number.replace(/\D/g, "");
-        const validCardLengths = [13, 14, 15, 16, 19];
-
-        // Only accepts real card number lengths
-        if(!validCardLengths.includes(cleanedCardNumber.length)){
-            return false;
-        };
-
-
-        let sum = 0;
-        let isSecond = false;
-
-        for(let i = cleanedCardNumber.length - 1; i >= 0; i--) {
-
-            let digit = parseInt(cleanedCardNumber[i]);
-            
-            if(isSecond) {
-                digit *= 2;
-
-                if(digit > 9) {
-                    digit -= 9;
-                }
-            }
-
-            sum += digit;
-            isSecond = !isSecond;
-        }
-
-        return sum % 10 === 0;
-
-    }
-
-    // Function to validate inputs
-    const validateForm = () => {
-
-        const formErrors = {};
-
-        // Amount validation
-        // Amount must be a value bigger than 0
-        if(!amount || amount <= 0) {
-            formErrors.amount = "Select or enter donation amount!";
-        }
-
-        // Name validation 
-        // Name must be a valid full name consisting of two words and cannot contain special characters
-        const nameTrimmed = name.trim();
-        const nameParts = nameTrimmed.split(" ").filter((part) => part.length > 0);
-        const hasValidNameChars = /^[\p{L}\s\-']+$/u.test(nameTrimmed);
-
-
-        if(!nameTrimmed) {
-            formErrors.name = "Name is required!";
-        } else if(nameTrimmed.length < 2) {
-            formErrors.name = "Name is too short!";
-        } else if(!hasValidNameChars) {
-            formErrors.name = "Name cannot contain special characters and numbers!";
-        } else if(nameParts.length < 2) {
-            formErrors.name = "Enter first and last name!";
-        }
-
-
-        // Cardholder name validation
-        // Cardholder's name has to be longer than two characters and should not contain special characters and numbers
-        const cardHolderNameTrimmed = cardHolderName.trim();
-        const hasValidCardHolderNameChars =  /^[\p{L}\s\-']+$/u.test(cardHolderNameTrimmed);
-
-        if(!cardHolderNameTrimmed) {
-            formErrors.cardHolderName = "Cardholder name is required!";
-        } else if(cardHolderNameTrimmed.length < 2 ) {
-            formErrors.cardHolderName = "Cardholder name is too short!";
-        } else if(!hasValidCardHolderNameChars) {
-            formErrors.cardHolderName = "Name cannot contain special characters and numbers!"
-        }
-
-
-        // Email validation
-        // Valid email consist of: 
-        // username -> contains letters, numbers, dots, underscores
-        // domain name -> contains letters, dots, hyphens
-        // top level domain -> must be at least two letters
-        const trimmedEmail = email.trim();
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-        if(!email) {
-            formErrors.email = "Email is required!";
-        } else if(!emailRegex.test(trimmedEmail)) {
-            formErrors.email = "Enter valid email!";
-        }
-
-        // Card number validation with helper function
-        if(!cardNumber) {
-            formErrors.cardNumber = "Card number is required!";
-        } else if(!isValidCardNumber(cardNumber)) {
-            formErrors.cardNumber = "Invalid card number!";
-        }
-
-        // Expiry date validation
-        if(!expDate) {
-            formErrors.expDate= "Expiry date required!";
-        } else if(expDate.length !== 5 || !expDate.includes("/")) {
-            formErrors.expDate = "Format must be MM/YY!";
-        } else {
-            const [month, year] = expDate.split("/").map(Number);
-            const currentDate = new Date();
-            const currentYear = currentDate.getFullYear() % 100;
-            const currentMonth = currentDate.getMonth() + 1;
-
-            if(month < 1 || month > 12) {
-                formErrors.expDate = "Invalid month!";
-            } else if(year < currentYear) {
-                formErrors.expDate = "Card expired!";
-            } else if(year === currentYear && month < currentMonth) {
-                formErrors.expDate = "Card expired!";
-            } else if(year > currentYear + 10) {
-                formErrors.expDate = "Expiry date year is invalid!";
-            }
-        }
-
-
-        // CVV validation 
-        if(!cvv) {
-            formErrors.cvv = "CVV is required!";
-        } else if(cvv.length < 3) {
-            formErrors.cvv = "CVV must be at least 3 digits!";
-        } else if(cvv.length > 4) {
-            formErrors.cvv = "CVV must be 3-4 digits!";
-        }
-
-        return formErrors;
-
-    }
-
 
     // Function to handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const formErrors = validateForm();
-
-        if(Object.keys(formErrors).length > 0) {
-            setErrors(formErrors);
+        if(!validate()) {
             return;
-        }
+        } 
 
-        setErrors({});
         setServerError("");
         setIsSubmitting(true);
 
         try {
             await submitDonation({
                 targetName: target ? (target.name || target.title) : "Our shelter",
-                amount: amount,
+                amount: formData.amount,
                 isMonthly: isMonthly,
-                donorName: name,
-                donorEmail: email
+                donorName: formData.name,
+                donorEmail: formData.email
             });
 
             // Form only resets if the API call was a success
-            onSuccess(amount, isMonthly);
-            setAmount(0);
-            setCustomAmount("");
-            setName("");
-            setEmail("");
-            setCardNumber("");
-            setCardHolderName("");
-            setExpDate("");
-            setCvv("");
+            onSuccess(formData.amount, isMonthly);
+            resetForm();
             setIsMonthly(false);
 
         } catch(error) {
@@ -296,7 +295,6 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
     }
 
    
-
     // Returns null when the modal is closed
     if(!isOpen) return null;
 
@@ -368,7 +366,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                                 key={presetAmount}
                                 amount={presetAmount}
                                 onClick={() => handlePresetAmount(presetAmount)}
-                                isSelected={amount === presetAmount && !customAmount}
+                                isSelected={formData.amount === presetAmount && !formData.customAmount}
                             />
                         ))}
                     </div>
@@ -385,7 +383,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                         <input 
                             id="custom-donation-amount"
                             type="number" 
-                            value={customAmount}
+                            value={formData.customAmount}
                             onChange={handleCustomAmount}
                             placeholder="200"
                             min="1"
@@ -467,7 +465,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                         </div>
                     </div>
 
-                    { isMonthly && amount > 0  && (
+                    { isMonthly && formData.amount > 0  && (
                         <div className="p-3 mt-3 mb-3 rounded-lg bg-sky-50 border border-sky-200">
                             <p className="text-sm text-gray-800">
                                 You will be charged <strong>{amount} Lei monthly</strong>.
@@ -508,17 +506,11 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                             name="name"
                             autoComplete="name"
                             type="text" 
-                            value={name}
+                            value={formData.name}
                             onChange={(e) => {
                                 const value = e.target.value;
-                                const validChars = /^[\p{L}\s\-']*$/u;
-
-                                if(validChars.test(value)) {
-                                    setName(value);
-                                }
-
-                                if(errors.name) {
-                                    setErrors({...errors, name: null});
+                                if(PATTERNS.nameInput.test(value)) {
+                                    handleChange("name", value);
                                 }
                             }}
                             placeholder="Bingi Bingusz"
@@ -553,13 +545,9 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                             name="email"
                             autoComplete="email"
                             type="email" 
-                            value={email}
+                            value={formData.email}
                             onChange={(e) => {
-                                setEmail(e.target.value);
-
-                                if(errors.email) {
-                                    setErrors({...errors, email: null});
-                                }
+                                handleChange("email", e.target.value);
                             }}
                             placeholder="example@example.com"
                             required
@@ -607,27 +595,19 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                                 placeholder="XXXX XXXX XXXX XXXX"
                                 maxLength="23"
                                 required
-                                value={formatCardNumber(cardNumber)}
+                                value={formatCardNumber(formData.cardNumber)}
                                 onChange={(e) => {
                                     const cleanedCardNumber = e.target.value.replace(/\D/g, "");
 
                                     if(cleanedCardNumber.length <= 19) {
-                                        setCardNumber(cleanedCardNumber);
+                                        handleChange("cardNumber", cleanedCardNumber);
                                     }
-
-                                    if(errors.cardNumber) {
-                                        setErrors({...errors, cardNumber: null});
-                                    } 
                                 }}
                                 onPaste={(e) => {
                                     e.preventDefault();
                                     const pastedCardNumber = e.clipboardData.getData("text");
                                     const cleanCardNumber = pastedCardNumber.replace(/\D/g, "").slice(0, 19);
-                                    setCardNumber(cleanCardNumber);
-
-                                    if(errors.cardNumber) {
-                                        setErrors({...errors, cardNumber: null});
-                                    } 
+                                    handleChange("cardNumber", cleanCardNumber)
                                 }}
                                 aria-invalid={errors.cardNumber ? "true" : "false"}
                                 aria-describedby={errors.cardNumber ? "card-number-error" : undefined}
@@ -663,17 +643,12 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                                 type="text" 
                                 placeholder="BINGI BINGUSZ"
                                 required
-                                value={cardHolderName}
+                                value={formData.cardHolderName}
                                 onChange={(e) => {
                                     const value = e.target.value;
-                                    const validChars = /^[\p{L}\s\-']*$/u;
 
-                                    if(validChars.test(value)) {
-                                        setCardHolderName(value);
-                                    }
-
-                                    if(errors.cardHolderName) {
-                                        setErrors({...errors, cardHolderName: null});
+                                    if(PATTERNS.nameInput.test(value)) {
+                                        handleChange("cardHolderName", value);
                                     }
                                 }}
                                 aria-invalid={errors.cardHolderName ? "true" : "false"}
@@ -715,7 +690,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                                     placeholder="MM/YY"
                                     maxLength="5"
                                     required
-                                    value={expDate}
+                                    value={formData.expDate}
                                     onChange={(e) => {
                                         let validExpDate = e.target.value.replace(/\D/g, "");
                                         // Formatting for "MM/YY"
@@ -723,11 +698,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                                             validExpDate = validExpDate.slice(0,2) + "/" + validExpDate.slice(2,4);
                                         }
 
-                                        setExpDate(validExpDate);
-
-                                        if(errors.expDate){
-                                            setErrors({...errors, expDate: null})
-                                        }
+                                        handleChange("expDate", validExpDate);
                                     }}
                                     aria-invalid={errors.expDate ? "true" : "false"}
                                     aria-describedby={errors.expDate ? "expiry-date-error" : undefined}
@@ -763,23 +734,15 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                                     placeholder="XXX"
                                     maxLength="4"
                                     required
-                                    value={cvv}
+                                    value={formData.cvv}
                                     onChange={(e) => {
                                         const validCvv = e.target.value.replace(/\D/g, "").slice(0, 4);
-                                        setCvv(validCvv);
-
-                                        if(errors.cvv) {
-                                            setErrors({...errors, cvv: null});
-                                        }
+                                        handleChange("cvv", validCvv);
                                     }}
                                     onPaste={(e) => {
                                         const pastedCvv = e.clipboardData.getData("text");
                                         const cleanCvv = pastedCvv.replace(/\D/g, "").slice(0, 4);
-                                        setCvv(cleanCvv);
-
-                                        if(errors.cvv) {
-                                            setErrors({...errors, cvv: null});
-                                        }
+                                        handleChange("cvv", cleanCvv);
                                     }}
                                     aria-invalid={errors.cvv ? "true" : "false"}
                                     aria-describedby={errors.cvv ? "cvv-number-error" : undefined}
@@ -816,7 +779,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                 <button
                     type="submit"
                     aria-label="Send donation"
-                    disabled={!amount || amount <= 0 || !name || !email || !cardNumber || !cardHolderName || !expDate || !cvv || isSubmitting}
+                    disabled={!formData.amount || formData.amount <= 0 || !formData.name || !formData.email || !formData.cardNumber || !formData.cardHolderName || !formData.expDate || !formData.cvv || isSubmitting}
                     className="
                         w-full py-4 mt-6 rounded-xl shadow-md
                         bg-yellow-400 text-yellow-900 text-lg font-bold
@@ -828,8 +791,8 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
 
                     {isSubmitting 
                         ? "Processing donation..."
-                        : (amount > 0 && name && email && cardNumber && cardHolderName && expDate && cvv) 
-                            ? (isMonthly ? `Sponsor with ${amount} Lei/month` : `Donate ${amount} Lei`)
+                        : (formData.amount > 0 && formData.name && formData.email && formData.cardNumber && formData.cardHolderName && formData.expDate && formData.cvv) 
+                            ? (isMonthly ? `Sponsor with ${formData.amount} Lei/month` : `Donate ${formData.amount} Lei`)
                             : "Enter all data to continue"
                     }
 
@@ -837,10 +800,9 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                 </form>
 
             </div>
-
-            
+    
         </div>
-    )
+    );
 
 }
 

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { submitVolunteerApplication } from "../../services/api";
+import { validateName, validateEmail, validatePhone, PATTERNS } from "../../utils/validationRules";
+import useFormValidation from "../../hooks/useFormValidation";
 import { X, Check, Briefcase, CheckSquare, Clock, FileCheck, Gift, User, CircleEllipsis, CircleAlert, Calendar } from "lucide-react";
 
 
@@ -158,7 +160,7 @@ const ErrorMessage = ({ message }) => {
 
 
 
-const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, formData, setFormData }) => {
+const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, formData, handleChange, errors, setErrors, validate }) => {
 
     // Volunteer availability options for checkboxes
     const availabilityOptions = [
@@ -169,102 +171,28 @@ const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, fo
         { value: 'flexible', label: 'Flexible' }
     ];
 
-    // State to keep track of errors
-    const [ errors, setErrors ] = useState({});
     const [ serverError, setServerError ] = useState("");
     const [ isSubmitting, setIsSubmitting ] = useState(false);
-
-    // Function to update form data and to clear errors
-    const handleChange = (field, value) => {
-        setFormData((prev) => ({
-            ...prev,
-            [field]: value
-        }));
-
-        // Clear the error for the given field when the user is typing
-        if(errors[field]) {
-            setErrors((prev) => ({...prev, [field] : null}));
-        }
-    }
 
 
     // Function to handle availability change
     const handleAvailabilityChange = (option) => {
-        setFormData((prev) => ({
-            ...prev,
-            availability: prev.availability.includes(option)
-            ? prev.availability.filter((item) => item !== option)
-            : [...prev.availability, option]
-        }));
+        const newAvailability = formData.availability.includes(option)
+            ? formData.availability.filter((item) => item !== option)
+            : [...formData.availability, option];
+
+        handleChange("availability", newAvailability);
     }
 
-    // Function to validate inputs
-    const validateForm = () => {
-        const formErrors = {};
-
-        // Name validation
-        const nameTrimmed = formData.name.trim();
-        const nameParts = nameTrimmed.split(" ").filter((part) => part.length > 0);
-        const hasValidNameChars = /^[\p{L}\s\-']+$/u.test(nameTrimmed);
-
-        if(!nameTrimmed) {
-            formErrors.name = "Name is required!";
-        } else if(nameTrimmed.length < 2) {
-            formErrors.name = "Name is too short!";
-        } else if(!hasValidNameChars) {
-            formErrors.name = "Name cannot contain numbers or special characters!";
-        } else if(nameParts.length < 2) {
-            formErrors.name = "Please enter your first and last name!";
-        }
-
-        // Email validation
-        const emailTrimmed = formData.email.trim();
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-        if(!emailTrimmed) {
-            formErrors.email = "Email is required!";
-        } else if(!emailRegex.test(emailTrimmed)) {
-            formErrors.email = "Please enter a valid email address!";
-        }
-
-        // Phone validation
-        const phoneTrimmed = formData.phone.trim();
-        const phoneRegex = /^[\d\s\+\-\(\)]+$/;
-
-        if(!phoneTrimmed) {
-            formErrors.phone = "Phone number is required!";
-        } else if(phoneTrimmed.length < 10) {
-            formErrors.phone = "Phone number is too short!";
-        } else if(!phoneRegex.test(phoneTrimmed)) {
-            formErrors.phone = "Please enter a valid phone number!";
-        }
-
-        // Availability validation only for long term applicants
-        if(!isOneTimeEvent(opportunity) && formData.availability.length === 0) {
-            formErrors.availability = "Select at least one availability option!";
-        }
-       
-
-        return formErrors;
-    };
-
-
+    
     // Function to handle application submission
     const handleSubmit = async(e) => {
         e.preventDefault();
 
-        const formErrors = validateForm();
-
-        if(Object.keys(formErrors).length > 0) {
-            setErrors(formErrors);
-            return;
-        }
-
-        setErrors({});
+        if(!validate()) return;
+       
         setServerError("");
         setIsSubmitting(true);
-
-
 
         try {
 
@@ -328,9 +256,8 @@ const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, fo
                             value={formData.name}
                             onChange={(e) => {
                                 const value = e.target.value;
-                                const validChars = /^[\p{L}\s\-']*$/u;
 
-                                if(validChars.test(value)) {
+                                if(PATTERNS.nameInput.test(value)) {
                                     handleChange("name", value);
                                 }
                             }}
@@ -644,31 +571,40 @@ const ApplicationSuccessView = ({ opportunity, formData, onClose }) => {
 
 const VolunteerApplicationModal = ({ isOpen, onClose, opportunity }) => {
 
+    // State to keep track of current modal view
     const [ currentView, setCurrentView ] = useState("details");
-    const [ formData, setFormData ] = useState({
+
+    // Validation schema
+    // It needs to be inside the component because the availability validator
+    // depends on the opportunity prop to check if it is a one-time event
+    const volunteerValidationSchema = {
+        name: validateName,
+        email: validateEmail,
+        phone: validatePhone,
+        availability: (value) => {
+            if(!isOneTimeEvent(opportunity) && (!value || value.length === 0)) {
+                return "Select at least one availability option!";
+            }
+
+            return null;
+        }
+    };
+
+    // Taking necessary data / functions from custom hook
+    const { formData, setFormData, errors, setErrors, handleChange, validate, resetForm } = useFormValidation({
         name: "",
         email: "",
         phone: "",
-        age: "",
         availability: [],
         motivation: "",
-        experience: "",
-        skills: ""
-    });
+        experience: ""
+    }, volunteerValidationSchema); 
 
+    // Reset form on close
     useEffect(() => {
         if(!isOpen) {
             setCurrentView("details");
-            setFormData({
-                name: "",
-                email: "",
-                phone: "",
-                age: "",
-                availability: [],
-                motivation: "",
-                experience: "",
-                skills: ""
-            });
+            resetForm();
         }
 
     }, [isOpen]);
@@ -686,11 +622,7 @@ const VolunteerApplicationModal = ({ isOpen, onClose, opportunity }) => {
     }, [isOpen]);
 
 
-
-
-
     if(!isOpen) return null;
-
 
     return (
         <div 
@@ -721,7 +653,10 @@ const VolunteerApplicationModal = ({ isOpen, onClose, opportunity }) => {
                             onSubmit={() => setCurrentView("feedback")}
                             onBack={() => setCurrentView("details")}
                             formData={formData}
-                            setFormData={setFormData}
+                            handleChange={handleChange}
+                            errors={errors}
+                            setErrors={setErrors}
+                            validate={validate}
                         />
                     )}
 

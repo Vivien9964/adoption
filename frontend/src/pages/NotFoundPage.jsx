@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Section from "../components/layout/Section";
+import { Dog } from "lucide-react";
 
 
 const NotFoundPage = () => {
@@ -34,7 +35,7 @@ const NotFoundPage = () => {
                 {/* Box with icon */}
                 <div className="p-10 flex-1 bg-yellow-200">
 
-                    <h1>Text</h1>
+                        <h1>Text</h1>                
 
                 </div>
             </div>

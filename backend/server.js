@@ -99,10 +99,12 @@ const validateMeetingData = (data) => {
 
     // Phone validation
     const trimmedPhone = (data.userPhone || "").trim();
-    const phoneRegex = /^07\d{8}$/;
+    const phoneRegex = /^[\d\s\+\-\(\)]+$/;
 
     if (!trimmedPhone) {
         errors.userPhone = "Phone is required!";
+    } else if (trimmedPhone.length < 10) {
+        errors.userPhone = "Phone number is too short!";
     } else if (!phoneRegex.test(trimmedPhone)) {
         errors.userPhone = "Phone number is not valid!";
     }

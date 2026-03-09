@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { PawPrint, Calendar, Clock, UserRound, Mail, Phone, MessageCircle, CircleAlert, Circle } from 'lucide-react';
+import { PawPrint, Calendar, Clock, UserRound, Mail, Phone, MessageCircle, CircleAlert } from 'lucide-react';
 import { useMeeting } from "../../context/MeetingContext";
+import { PATTERNS } from '../../utils/validationRules';
 
 
 
@@ -31,78 +31,14 @@ const ErrorMessage = ({ message, id}) => {
 const StepAddInfo = () => {
 
     // Get necessary data from context
-    const { selectedDog, selectedDate, selectedTime, userInfo, setUserInfo } = useMeeting();
-
-    // State to store validation errors
-    const [ errors, setErrors ] = useState({}); 
-
-    // Function to manage controlled inputs for userInfo
-    const handleInputChange = (field, value) => {
-    
-        setUserInfo( prev => ({
-            ...prev,
-            [field]: value
-        }));
-    }
+    const { selectedDog, selectedDate, selectedTime, userInfo, handleChange, errors } = useMeeting();
 
     const shortenDate = (dateString) => {
         const dateParts = dateString.split(", ");
         return dateParts[1];
     }
 
-    // Function to validate form fields
-    const validateForm = () => {
-        const formErrors = {};
-
-        // Name validation 
-        // Name must be a valid full name consisting of two words and cannot contain special characters
-        const nameTrimmed = userInfo.name.trim();
-        const nameParts = nameTrimmed.split(" ").filter((part) => part.length > 0);
-        const hasValidNameChars = /^[\p{L}\s\-']+$/u.test(nameTrimmed);
-
-        if(!nameTrimmed) {
-            formErrors.name = "Name is required!";
-        } else if(nameTrimmed.length < 2) {
-            formErrors.name = "Name is too short!";
-        } else if(!hasValidNameChars) {
-            formErrors.name = "Name cannot contain special characters and numbers!";
-        } else if(nameParts.length < 2) {
-            formErrors.name = "Enter first and last name!";
-        }
-
-        // Email validation
-        // Valid email consist of: 
-        // username -> contains letters, numbers, dots, underscores
-        // domain name -> contains letters, dots, hyphens
-        // top level domain -> must be at least two letters
-        const trimmedEmail = userInfo.email.trim();
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-        if(!trimmedEmail) {
-            formErrors.email = "Email is required!";
-        } else if(!emailRegex.test(trimmedEmail)) {
-            formErrors.email = "Enter valid email!";
-        }
-
-        // Phone validation
-        // Valid phone must be 10 digits starting with 07
-        const trimmedPhone = userInfo.phone.trim();
-        const phoneRegex = /^07\d{8}$/;
-
-        if(!trimmedPhone) {
-            formErrors.phone = "Phone is required!";
-        } else if(!phoneRegex.test(trimmedPhone)) {
-            formErrors.phone = "Phone must be 10 digits starting with 07!";
-        }
-
-        return formErrors;
-    }
-
-
-
-
-
-
+      
     return (
         // Main container with base styles for content
         <div className="p-6 mt-4 rounded-xl bg-white shadow-lg border-l-4 border-yellow-400">
@@ -193,14 +129,9 @@ const StepAddInfo = () => {
                         value={userInfo.name}
                         onChange={(e) => {
                             const value = e.target.value;
-                            const validChars = /^[\p{L}\s\-']*$/u;
-
-                            if(validChars.test(value)) {
-                                handleInputChange("name", value)
-                            }
-
-                            if(errors.name) {
-                                setErrors({...errors, name: null});
+                            
+                            if(PATTERNS.nameInput.test(value)) {
+                                handleChange("name", value);
                             }
                         }}
                         required
@@ -244,11 +175,7 @@ const StepAddInfo = () => {
                         name="email"
                         value={userInfo.email}
                         onChange={(e) => {
-                            handleInputChange("email", e.target.value);
-
-                            if(errors.email) {
-                                setErrors({...errors, email: null})
-                            }
+                            handleChange("email", e.target.value);
                         }}
                         required
                         aria-invalid={errors.email ? "true" : "false"}
@@ -287,17 +214,12 @@ const StepAddInfo = () => {
                         id="contact-phone"
                         type="tel"
                         autoComplete="tel"
-                        pattern="^07\d{8}$"
                         inputMode="numeric"
                         placeholder="0785674123"
                         name="phone"
                         value={userInfo.phone}
                         onChange={(e) => {
-                            handleInputChange("phone", e.target.value)
-
-                            if(errors.phone) {
-                                setErrors({...errors, phone: null})
-                            }
+                            handleChange("phone", e.target.value);
                         }}
                         required
                         aria-invalid={errors.phone ? "true" : "false"}
@@ -341,7 +263,7 @@ const StepAddInfo = () => {
                         name="notes"
                         value={userInfo.notes}
                         onChange={(e) => {
-                            handleInputChange("notes", e.target.value)
+                            handleChange("notes", e.target.value)
                         }}
                         className="
                             w-full px-4 py-3 border-2 border-sky-300 shadow-md rounded-xl outline-none 

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { createMeeting } from "../services/api";
+import { validateName, validateEmail, validatePhone } from "../utils/validationRules";
 
 const MeetingContext = createContext();
 
@@ -28,6 +29,57 @@ export const MeetingProvider = ({ children }) => {
         notes: ""
     });
     const [ isSubmitted, setIsSubmitted ] = useState(false);
+
+    // State to store errors for user info validation
+    const [ errors, setErrors ] = useState({});
+
+    // Change handler for fields in user info
+    // Follows the same pattern as useFormValidation (handleChange function)
+    const handleChange = (field, value) => {
+        setUserInfo((prev) => ({
+            ...prev,
+            [field]: value
+        }));
+
+        // If user starts correcting their input clear the errors
+        if(errors[field]) {
+            setErrors((prev) => ({
+                ...prev,
+                [field]: null
+            }));
+        }
+    };
+
+
+    // Function to validate inputs using validationRules.js
+    // validateName, validateEmail and validatePhone ensures identical validation through all forms
+    const validateUserInfo = () => {
+        const formErrors = {};
+
+        // Validate name input
+        const nameError = validateName(userInfo.name);
+        if(nameError) {
+            formErrors.name = nameError;
+        }
+
+        // Validate email input
+        const emailError = validateEmail(userInfo.email);
+        if(emailError) {
+            formErrors.email = emailError;
+        }
+
+        // Validate phone input
+        const phoneError = validatePhone(userInfo.phone);
+        if(phoneError) {
+            formErrors.phone = phoneError;
+        }
+
+        setErrors(formErrors);
+
+        return Object.keys(formErrors).length === 0;
+    };
+
+
 
     const nextStep = () => {
         if(currentStep < 4) {
@@ -85,6 +137,7 @@ export const MeetingProvider = ({ children }) => {
             phone: "",
             notes: ""
         });
+        setErrors({});
         setIsSubmitted(false);
     }
 
@@ -104,7 +157,10 @@ export const MeetingProvider = ({ children }) => {
         prevStep,
         submitMeeting,
         resetMeeting,
-        isSubmitted
+        isSubmitted,
+        handleChange,
+        validateUserInfo,
+        errors
     }
 
 

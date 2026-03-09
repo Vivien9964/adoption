@@ -26,7 +26,8 @@ const ScheduleMeetingContent = () => {
             userInfo, 
             submitMeeting,
             isSubmitted,
-            resetMeeting
+            resetMeeting,
+            validateUserInfo
         } = useMeeting();
 
     // State to track if user is currently submitting meeting appointment -> meaning they are at the confirmation stage
@@ -47,6 +48,12 @@ const ScheduleMeetingContent = () => {
     // User only submits the meeting after confrimation which is on the fourth page,
     // otherwise the user just continues to go to the next step in the process
     const handleNextClick = async () => {
+
+        // Validate user info first, then proceed to next step
+        if(currentStep === 3) {
+            if(!validateUserInfo()) return; 
+        }
+
         if( currentStep === 4){
             setIsSubmitting(true);
 

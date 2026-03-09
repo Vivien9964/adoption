@@ -1,5 +1,6 @@
-import { useState } from "react";
 import Section from "../layout/Section";
+import { validateName, validateEmail, PATTERNS } from "../../utils/validationRules";
+import useFormValidation from "../../hooks/useFormValidation";
 import { MapPin, Phone, Mail, Clock, CircleAlert } from "lucide-react";
 
 
@@ -56,22 +57,61 @@ const ErrorMessage = ({ message, id }) => {
             <span>{message}</span>
 
         </p>
-    )
+    );
 }
+
+
+// Validation schema for contact form
+// subject and message validation rules are defined inside the schema, 
+// no need to put them inside validationRules.js, because they are unique to the component
+const contactValidationSchema = {
+    name: validateName,
+    email: validateEmail,
+
+    subject: (value) => {
+        const trimmed = (value || "").trim();
+
+        if(!trimmed) {
+            return "Subject is required!";
+        }
+
+        if(trimmed.length < 5) {
+            return "Subject is too short!";
+        }
+
+        return null;
+    },
+
+    message: (value) => {
+        const trimmed = (value || "").trim();
+
+        if(!trimmed) {
+            return "Message is required!";
+        }
+
+        if(trimmed.length < 10) {
+            return "Message must be at least 10 characters!";
+        }
+
+        if(trimmed.length > 1000) {
+            return "Message is too long (max 1000 characters)!";
+        }
+
+        return null;
+    }
+}
+
+
 
 
 const ContactUsSection = () => {
 
-    // State to hold form data
-    const [formData, setFormData] = useState({
+    const { formData, errors, handleChange, validate, resetForm } = useFormValidation({
         name: "",
         email: "",
         subject: "",
         message: ""
-    });
-
-    // State to store form errors
-    const [errors, setErrors] = useState({});
+    }, contactValidationSchema);
 
     const contactInfoDetails = [
         {
@@ -102,94 +142,15 @@ const ContactUsSection = () => {
     ];
 
 
-    // Function to update form data values
-    const handleInputChange = (field, value) => {
-        setFormData((prev) => ({
-            ...prev,
-            [field]: value
-        }));
-    } 
-
-    const validateForm = () => {
-
-        const formErrors = {};
-
-        // Name validation 
-        // Name must be a valid full name consisting of two words and cannot contain special characters
-        const nameTrimmed = formData.name.trim();
-        const nameParts = nameTrimmed.split(" ").filter((part) => part.length > 0);
-        const hasValidNameChars = /^[\p{L}\s\-']+$/u.test(nameTrimmed);
-
-
-        if(!nameTrimmed) {
-            formErrors.name = "Name is required!";
-        } else if(nameTrimmed.length < 2) {
-            formErrors.name = "Name is too short!";
-        } else if(!hasValidNameChars) {
-            formErrors.name = "Name cannot contain special characters and numbers!";
-        } else if(nameParts.length < 2) {
-            formErrors.name = "Enter first and last name!";
-        }
-
-         // Email validation
-        // Valid email consist of: 
-        // username -> contains letters, numbers, dots, underscores
-        // domain name -> contains letters, dots, hyphens
-        // top level domain -> must be at least two letters
-        const trimmedEmail = formData.email.trim();
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-        if(!trimmedEmail) {
-            formErrors.email = "Email is required!";
-        } else if(!emailRegex.test(trimmedEmail)) {
-            formErrors.email = "Enter valid email!";
-        }
-
-        // Subject validation
-        // Valid subject must be:
-        // -> more than 5 characters long, field cannot be empty
-        const trimmedSubject = formData.subject.trim();
-        if(!trimmedSubject) {
-            formErrors.subject = "Subject is required!";
-        } else if(trimmedSubject.length < 5) {
-            formErrors.subject = "Subject is too short!";
-        }
-
-
-        // Message validation
-        // Valid message should be more than 10 characters long, but it should not contain more than 1000 characters
-        const trimmedMessage = formData.message.trim();
-        
-        if(!trimmedMessage) {
-            formErrors.message = "Message is required!";
-        } else if(trimmedMessage.length < 10) {
-            formErrors.message = "Message must be at least 10 characters!";
-        } else if(trimmedMessage.length > 1000) {
-            formErrors.message = "Message is too long (max 1000 characters)!";
-        }
-
-        return formErrors;
-    }
-
-
     // Funtion to submit contact form with validation first
     const handleSubmit = (e) => {
         e.preventDefault();
+        
+        // If validation fails, return
+        if(!validate()) return;
 
-        const formErrors = validateForm();
-
-        if(Object.keys(formErrors).length > 0) {
-            setErrors(formErrors);
-            return;
-        }
-
-        setErrors({});
-        setFormData({
-            name: "",
-            email: "",
-            subject: "",
-            message: ""
-        });
+        // If validation passes, reset the form
+        resetForm();
     }
 
 
@@ -262,14 +223,9 @@ const ContactUsSection = () => {
                                     value={formData.name}
                                     onChange={(e) => {
                                         const value = e.target.value;
-                                        const validChars = /^[\p{L}\s\-']*$/u;
-
-                                        if(validChars.test(value)) {
-                                            handleInputChange("name", value)
-                                        }
-
-                                        if(errors.name) {
-                                            setErrors({...errors, name: null});
+                                        
+                                        if(PATTERNS.nameInput.test(value)) {
+                                            handleChange("name", value);
                                         }
                                     }}
                                     required
@@ -303,11 +259,7 @@ const ContactUsSection = () => {
                                     placeholder="example@example.com"
                                     value={formData.email}
                                     onChange={(e) => {
-                                        handleInputChange("email", e.target.value)
-
-                                        if(errors.email) {
-                                            setErrors({...errors, email: null});
-                                        }
+                                        handleChange("email", e.target.value);
                                     }}
                                     required
                                     aria-invalid={errors.email ? "true" : "false"}
@@ -345,11 +297,7 @@ const ContactUsSection = () => {
                                     placeholder="Volunteering..."
                                     value={formData.subject}
                                     onChange={(e) => {
-                                        handleInputChange("subject", e.target.value)
-        
-                                        if(errors.subject) {
-                                            setErrors({...errors, subject: null});
-                                        }
+                                        handleChange("subject", e.target.value)
                                     }}
                                     required
                                     aria-invalid={errors.subject ? "true" : "false"}
@@ -380,11 +328,7 @@ const ContactUsSection = () => {
                                     placeholder="Tell us how we can help..."
                                     value={formData.message}
                                     onChange={(e) => {
-                                        handleInputChange("message", e.target.value)
-        
-                                        if(errors.message) {
-                                            setErrors({...errors, message: null});
-                                        }
+                                        handleChange("message", e.target.value)
                                     }}
                                     required
                                     rows={6}

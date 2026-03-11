@@ -270,6 +270,8 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
         try {
             await submitDonation({
                 targetName: target ? (target.name || target.title) : "Our shelter",
+                targetType : target ? target.type : "general",
+                targetId: target ? target.id : null,
                 amount: formData.amount,
                 isMonthly: isMonthly,
                 donorName: formData.name,

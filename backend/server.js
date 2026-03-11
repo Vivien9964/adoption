@@ -580,7 +580,7 @@ app.post("/api/donations", limiterDonation, async (req, res) => {
         if(sanitizedDonationData.targetType === "shelter_project" && sanitizedDonationData.targetId) {
             await db.query(
                 `UPDATE shelter_projects 
-                SET currentAmount = currentAmount + ?
+                SET currentAmount = currentAmount + ?, donorsCount = donorsCount + 1
                 WHERE id = ?`,
                 [sanitizedDonationData.amount, sanitizedDonationData.targetId]
             );

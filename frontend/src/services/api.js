@@ -13,7 +13,7 @@ export const fetchAllPets = async () => {
     }
 
     return response.json();
-}
+};
 
 // Fetch one dog based on ID
 export const fetchPetByID = async (id) => {
@@ -24,7 +24,7 @@ export const fetchPetByID = async (id) => {
     }
 
     return response.json();
-}
+};
 
 
 // Fetch already booked meeting dates and time with a specific dog
@@ -36,7 +36,7 @@ export const fetchMeetingAvailability = async (dogId) => {
     }
 
     return response.json();
-}
+};
 
 
 // Create a new meeting
@@ -59,7 +59,7 @@ export const createMeeting = async (meetingData) => {
     }
 
     return data;
-}
+};
 
 // Submit volunteer application
 export const submitVolunteerApplication = async (volunteerData) => {
@@ -81,7 +81,43 @@ export const submitVolunteerApplication = async (volunteerData) => {
     }
 
     return data;
-}
+};
+
+
+// Fetch all active urgent cases
+export const fetchUrgentCases = async () => {
+    const response = await fetch(`${BASE_URL}/api/urgent-cases`);
+
+    if(!response.ok) {
+        throw new Error("Failed to fetch urgent cases!");
+    }
+
+    return response.json();
+};
+
+
+// Fetch all active shelter projects
+export const fetchShelterProjects = async () => {
+    const response = await fetch(`${BASE_URL}/shelter-projects`);
+
+    if(!response.ok) {
+        throw new Error("Failed to fetch shelter projects!");
+    }
+
+    return response.json();
+};
+
+
+// Fetch donation stats
+export const fetchDonationStats = async () => {
+    const response = await fetch(`${BASE_URL}/donations/stats`);
+
+    if(!response.ok){
+        throw new Error("Failed to fetch donation stats!");
+    }
+
+    return response.json();
+};
 
 
 // Submit donation
@@ -104,4 +140,4 @@ export const submitDonation = async (donationData) => {
     }
 
     return data;
-}
+};

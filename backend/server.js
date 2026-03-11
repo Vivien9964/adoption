@@ -470,6 +470,52 @@ app.post("/api/volunteers", limiterVolunteerApplication, async (req, res) => {
 });
 
 
+// Get all urgent cases -> get involved
+// FIELD() to define the custom sort order
+// isActive -> state that changes over time, false when the dog no longer needs extra donations
+app.get("/api/urgent-cases", async (req, res) => {
+    try {
+        const [rows] = await db.query(
+            "SELECT * FROM urgent_cases WHERE isActive = TRUE ORDER BY FIELD(urgencyLevel, 'Critical', 'High', 'Medium', 'Low')"
+        );
+    
+        const urgentCases = rows.map((urgentCase) => ({
+            ...urgentCase,
+            type: "urgent_case"
+        }));
+
+        res.json(urgentCases);
+
+    } catch(error) {
+        console.error("Error fetching urgent cases:", error);
+        res.status(500).json({ error: "Failed to fetch urgent cases!" });
+    }
+});
+
+
+// Get all shelter projects -> get involved
+app.get("/api/shelter-projects", async (req, res) => {
+    try {
+        const [rows] = await db.query(
+            "SELECT * FROM shelter_projects WHERE isActive = TRUE"
+        );
+
+        // JSON benefits field needs to be parsed 
+        const projects = rows.map((project) => ({
+            ...project,
+            benefits: project.benefits ? JSON.parse(project.benefits) : [],
+            type: "shelter_project"
+        }));
+
+        res.json(projects);
+
+    } catch(error) {
+        console.error("Error fetching shelter projects:", error);
+        res.status(500).json({ error: "Failed to fetch shelter projects!" });
+    }
+});
+
+
 // Send donation data to the database -> quick donation modal
 app.post("/api/donations", limiterDonation, async (req, res) => {
 
@@ -488,6 +534,8 @@ app.post("/api/donations", limiterDonation, async (req, res) => {
 
         const {
             targetName,
+            targetType,
+            targetId,
             amount,
             isMonthly,
             donorName,
@@ -497,6 +545,8 @@ app.post("/api/donations", limiterDonation, async (req, res) => {
         // Sanitized input for donation data
         const sanitizedDonationData = {
             targetName: targetName.trim(),
+            targetType: targetType || "general",
+            targetId: targetId || null,
             amount: Number(amount),
             isMonthly: Boolean(isMonthly),
             donorName: donorName.trim(),
@@ -506,14 +556,36 @@ app.post("/api/donations", limiterDonation, async (req, res) => {
         // Insert donation data to the database
         const [result] = await db.query(
             `INSERT INTO donations
-            (targetName, amount, isMonthly, donorName, donorEmail)
+            (targetName, targetType, targetId, amount, isMonthly, donorName, donorEmail)
             VALUES (?, ?, ?, ?, ?)`,
             [
-                sanitizedDonationData.targetName, sanitizedDonationData.amount,
+                sanitizedDonationData.targetName, sanitizedDonationData.targetType,
+                sanitizedDonationData.targetId, sanitizedDonationData.amount,
                 sanitizedDonationData.isMonthly, sanitizedDonationData.donorName,
                 sanitizedDonationData.donorEmail
             ]
         );
+
+        // Update the received donations amount upon donation for tables
+        // Donation update for urgent cases
+        if(sanitizedDonationData.targetType === "urgent_case" && sanitizedDonationData.targetId) {
+            await db.query(
+                `UPDATE urgent_cases SET donationsReceived = donationsReceived + ?
+                WHERE id = ?`,
+                [sanitizedDonationData.amount, sanitizedDonationData.targetId]
+            );
+        }
+
+        // Donation update for shelter projects
+        if(sanitizedDonationData.targetType === "shelter_project" && sanitizedDonationData.targetId) {
+            await db.query(
+                `UPDATE shelter_projects 
+                SET currentAmount = currentAmount + ?
+                WHERE id = ?`,
+                [sanitizedDonationData.amount, sanitizedDonationData.targetId]
+            );
+        }
+
 
         res.status(201).json({
             message: "Donation registered successfully!",
@@ -523,6 +595,38 @@ app.post("/api/donations", limiterDonation, async (req, res) => {
     } catch(error) {
         console.error("Error registering donation: ", error);
         res.status(500).json({ error: "Failed to register donation!" });
+    }
+});
+
+
+// Get donation statistics
+app.get("/api/donations/stats", async (req, res) => {
+    try {
+
+        // All collected donations
+        const [totalDonations] = await db.query(
+            "SELECT COALESCE(SUM(amount), 0) AS totalCollected FROM donations"
+        );
+
+        // Active donor count
+        // Unique donors are counted -> every donor counted only once
+        const [totalDonors] = await db.query(
+            "SELECT COUNT(DISTINCT donorEmail) AS activeDonors FROM donations"
+        );
+
+        // Urgent cases that received donations
+        const [totalUrgentCases] = await db.query(
+            "SELECT COUNT(DISTINCT targetId) AS dogsHelped FROM donations WHERE targetType = 'urgent_case'"
+        );
+
+        res.json({
+            totalCollected: totalDonations[0].totalCollected,
+            activeDonors: totalDonors[0].activeDonors,
+            dogsHelped: totalUrgentCases[0].dogsHelped
+        });
+    } catch(error) {
+        console.error("Error fetching donation stats:", error);
+        res.status(500).json({ error: "Failed to fetch donation stats!" });
     }
 });
 

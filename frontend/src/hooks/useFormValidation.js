@@ -2,7 +2,7 @@ import { useState } from "react";
 
 // Custom hook that manages form state, validation and error handling
 // It replaces the repeated useState + handleChange + validateForm patterns in
-// QuickDonationModal, VolunteerApplicationModal and StepAddInfo  components
+// QuickDonationModal, VolunteerApplicationModal and ContactUs components
 
 
 // The hook accepts initialValues and validationSchema as parameters

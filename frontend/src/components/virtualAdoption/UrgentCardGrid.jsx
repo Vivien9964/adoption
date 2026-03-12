@@ -1,12 +1,10 @@
-import { useState } from "react";
-import { standardUrgentCareDogs } from "../../data/urgentCareData";
 
-const UrgentCardGrid = ({ onDonateClick }) => {
+const UrgentCardGrid = ({dog, onDonateClick }) => {
 
-    const dog = standardUrgentCareDogs[0];
-    const [ donations, setDonations ] = useState(dog.donationsReceived);
+    const progressPercentage = (dog.donationsReceived / dog.donationsGoal) * 100;
+    const totalDonations = Number(dog.donationsReceived).toFixed(0);
+    const donationGoal = Number(dog.donationsGoal).toFixed(0);
 
-    
     return (
         <div className="
             flex flex-col overflow-hidden rounded-2xl 
@@ -40,14 +38,14 @@ const UrgentCardGrid = ({ onDonateClick }) => {
 
                 {/* Donations */}
                 <div className="flex items-end gap-2 mb-2">
-                    <span className="text-lg font-bold text-gray-900">{donations}Lei</span>
-                    <span className="text-xs text-gray-500 mb-1">/ {dog.donationsGoal} Lei</span>
+                    <span className="text-lg font-bold text-gray-900">{totalDonations} Lei</span>
+                    <span className="text-xs text-gray-500 mb-1">/ {donationGoal} Lei</span>
                 </div>
 
                 <div className="w-full h-2 rounded-full bg-gray-200 mb-3">
                     <div 
                         className="bg-sky-500 h-full rounded-full transition-all duration-500" 
-                        style={{ width: `${(donations / dog.donationsGoal) * 100}%` }}
+                        style={{ width: `${progressPercentage}%` }}
                     />
                 </div>
             </div>

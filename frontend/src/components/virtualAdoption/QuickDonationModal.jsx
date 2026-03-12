@@ -208,8 +208,10 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
     useEffect(() => {
         if(isOpen) {
             setIsMonthly(defaultDonationType === "monthly");
+            resetForm();
+            setServerError("");
         }
-    }, [isOpen, defaultDonationType]);
+    }, [isOpen, defaultDonationType, target]);
 
 
     // Preset donation amounts

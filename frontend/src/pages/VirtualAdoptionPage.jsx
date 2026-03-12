@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useDonations } from "../context/DonationsContext";
+import { useLocation } from "react-router-dom";
 import HeroDonations from "../components/virtualAdoption/HeroDonations";
 import UrgentNeedsSection from "../components/virtualAdoption/UrgentNeedsSection";
 import ShelterProjectsSection from "../components/virtualAdoption/ShelterProjectsSection";
@@ -10,9 +11,10 @@ import VolunteerSection from "../components/virtualAdoption/VolunteerSection";
 
 const VirtualAdoptionPage = () => {
 
+    const { refreshDonationData } = useDonations();
+
     // Dynamic tab navigation  with URL state management
     const location = useLocation();
-    const navigate = useNavigate();
 
     const getInitialTab = () => {
         const params = new URLSearchParams(location.search);
@@ -53,6 +55,8 @@ const VirtualAdoptionPage = () => {
         setIsModalOpen(false);
         setIsSuccessCardOpen(true);
         setIsMonthly(isMonthly);
+
+        refreshDonationData();
     }
 
 
@@ -73,7 +77,7 @@ const VirtualAdoptionPage = () => {
                                     className={`px-6 py-4 rounded-full text-lg font-semibold transition-all duration-300 ${
                                         selectedSection === "urgent"
                                             ? "bg-white text-amber-600 shadow-md"
-                                            : "text-gray-600 hover:text-gray-900"
+                                            : "text-yellow-800 hover:text-yellow-900"
                                     }`}
                                 >
                                     Urgent Care
@@ -86,7 +90,7 @@ const VirtualAdoptionPage = () => {
                                     className={`px-6 py-4 rounded-full text-lg font-semibold transition-all duration-300 ${
                                         selectedSection === "projects"
                                             ? "bg-white text-amber-600 shadow-md"
-                                            : "text-gray-600 hover:text-gray-900"
+                                            : "text-yellow-800 hover:text-yellow-900"
                                     }`}
                                 >
                                  Shelter Projects   
@@ -99,7 +103,7 @@ const VirtualAdoptionPage = () => {
                                     className={`px-6 py-4 rounded-full text-lg font-semibold transition-all duration-300 ${
                                         selectedSection === "volunteer"
                                             ? "bg-white text-amber-600 shadow-md"
-                                            : "text-gray-600 hover:text-gray-900"
+                                            : "text-yellow-800 hover:text-yellow-900"
                                     }`}
                                 >
                                     Volunteer
@@ -111,7 +115,7 @@ const VirtualAdoptionPage = () => {
                                     className={`px-6 py-4 rounded-full text-lg font-semibold transition-all duration-300 ${
                                         selectedSection === "stats"
                                             ? "bg-white text-amber-600 shadow-md"
-                                            : "text-gray-600 hover:text-gray-900"
+                                            : "text-yellow-800 hover:text-yellow-900"
                                     }`}
                                 >
                                     YOUR impact

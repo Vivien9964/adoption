@@ -1,6 +1,7 @@
 
 // Router to manage the routes between multiple pages in the application
 import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { DonationsProvider } from './context/DonationsContext';
 
 // Pages visible in the menu, main pages for the application
 import HomePage from './pages/HomePage';
@@ -23,6 +24,7 @@ function App() {
 
   return (
     <Router>
+      <DonationsProvider>
       <PetsProvider>
         <Navigation />
         <Routes>
@@ -36,6 +38,7 @@ function App() {
         </Routes>
        <Footer />
       </PetsProvider>
+      </DonationsProvider>
     </Router>
   )
 }

@@ -1,14 +1,15 @@
-import { shelterProjects } from "../../data/shelterProjectsData";
 import Section from "../layout/Section";
 import { Hammer, Cross, Bone, ShoppingBasket } from 'lucide-react';
-import { useState } from 'react';
+import { useDonations } from "../../context/DonationsContext";
+
 
 
 // Shelter project card used in shelter projects component
 const ShelterDonationCard = ({ project, onDonateClick }) => {
 
-    const [ donations, setDonations ] = useState(project.currentAmount);
-    const progressPercentage = (donations / project.goalAmount) * 100;
+    const progressPercentage = (project.currentAmount / project.goalAmount) * 100;
+    const donationAmount = Number(project.currentAmount).toFixed(0);
+    const donationGoal = Number(project.goalAmount).toFixed(0);
 
 
     const categoryConfig = {
@@ -52,9 +53,6 @@ const ShelterDonationCard = ({ project, onDonateClick }) => {
 
     const config = categoryConfig[project.category]|| categoryConfig.Infrastructure;
     const Icon = config.icon;
-
-
-
 
 
     return (
@@ -108,8 +106,8 @@ const ShelterDonationCard = ({ project, onDonateClick }) => {
                         <div className="mb-1 flex justify-between text-sm text-gray-600">
                             <p>Progress</p>
                             <div>
-                                <span className="font-black text-lg text-gray-700">{donations}Lei / </span>
-                                <span className="text-gray-600 text-xs">{project.goalAmount}Lei</span>
+                                <span className="font-black text-lg text-gray-700">{donationAmount}Lei / </span>
+                                <span className="text-gray-600 text-xs">{donationGoal}Lei</span>
                             </div>
                         </div>
                         <div className="w-full h-3 rounded-full bg-gray-200">
@@ -121,7 +119,7 @@ const ShelterDonationCard = ({ project, onDonateClick }) => {
 
                         <div className="mt-2 flex justify-between">
                             <p className="text-xs font-bold text-yellow-900">{progressPercentage.toFixed(0)}% funded!</p>
-                            <p className="text-xs font-bold text-gray-600">{project.goalAmount - donations}Lei to go!</p>
+                            <p className="text-xs font-bold text-gray-600">{project.goalAmount - project.currentAmount}Lei to go!</p>
                         </div>
                     </div>
 
@@ -138,14 +136,8 @@ const ShelterDonationCard = ({ project, onDonateClick }) => {
                         </button>
                         </div>
 
-
-                </div>
-
-               
-            </div>
-
-            
-               
+                </div>    
+            </div>   
         </div>
     )
 }
@@ -153,6 +145,12 @@ const ShelterDonationCard = ({ project, onDonateClick }) => {
 
 // Main component used in Virtual adoption page
 const ShelterProjectsSection = ({ onDonateClick }) => {
+
+    const { shelterProjectsData, loading } = useDonations();
+
+    if(loading) return <p>Loading projects...</p>;
+
+
     return (
         <Section padding="small">
             
@@ -168,7 +166,7 @@ const ShelterProjectsSection = ({ onDonateClick }) => {
 
             {/* Shelter projects grid to display shelter project cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-8">
-            { shelterProjects.map((project) => (
+            { shelterProjectsData.map((project) => (
                     <ShelterDonationCard 
                         key={project.id} 
                         project={project} 

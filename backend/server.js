@@ -18,10 +18,10 @@ app.use(cors({
 
 app.use(express.json({ limit: "10kb" }));
 
-// General rate limiter for all routes which allows maximum 50 requests per 15 minutes per IP
+// General rate limiter for all routes which allows maximum 200 requests per 15 minutes per IP
 const limiterAllRoutes = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 50,
+    max: 200,
     message: {error: "Too many requests, please try again later!"}
 });
 
@@ -557,7 +557,7 @@ app.post("/api/donations", limiterDonation, async (req, res) => {
         const [result] = await db.query(
             `INSERT INTO donations
             (targetName, targetType, targetId, amount, isMonthly, donorName, donorEmail)
-            VALUES (?, ?, ?, ?, ?)`,
+            VALUES (?, ?, ?, ?, ?, ?, ?)`,
             [
                 sanitizedDonationData.targetName, sanitizedDonationData.targetType,
                 sanitizedDonationData.targetId, sanitizedDonationData.amount,

@@ -98,7 +98,7 @@ export const fetchUrgentCases = async () => {
 
 // Fetch all active shelter projects
 export const fetchShelterProjects = async () => {
-    const response = await fetch(`${BASE_URL}/shelter-projects`);
+    const response = await fetch(`${BASE_URL}/api/shelter-projects`);
 
     if(!response.ok) {
         throw new Error("Failed to fetch shelter projects!");
@@ -110,7 +110,7 @@ export const fetchShelterProjects = async () => {
 
 // Fetch donation stats
 export const fetchDonationStats = async () => {
-    const response = await fetch(`${BASE_URL}/donations/stats`);
+    const response = await fetch(`${BASE_URL}/api/donations/stats`);
 
     if(!response.ok){
         throw new Error("Failed to fetch donation stats!");

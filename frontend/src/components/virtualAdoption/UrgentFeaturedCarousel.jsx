@@ -1,8 +1,6 @@
-import { urgentCareDogs } from "../../data/urgentCareData";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-
-import { useState } from "react";
+import { useDonations } from "../../context/DonationsContext";
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -12,8 +10,8 @@ import 'swiper/css/pagination';
 // Card component used in carousel
 const UrgentFeaturedCard = ({ dog, onDonateClick }) => {
 
-    const [ donations, setDonations ] = useState(dog.donationsReceived);
-    const progressPercentage = (donations / dog.donationsGoal) * 100;
+    const progressPercentage = (dog.donationsReceived / dog.donationsGoal) * 100;
+    const totalDonations = Number(dog.donationsReceived).toFixed(0);
 
     return (
         // Main card body
@@ -48,14 +46,13 @@ const UrgentFeaturedCard = ({ dog, onDonateClick }) => {
                 {/* Name */}
                 <h1 className="mb-3 font-bold text-xl text-gray-700">{dog.name}</h1>
                 
-
                 {/* Condition */}
                 <div className="
                     px-3 py-2 mb-3 rounded-full
                     text-center text-md text-gray-700 font-black
                     border-l-2 border-r-2 border-amber-500 bg-amber-50
                     ">
-                    <p className="text-md font-semibold text-amber-900">{dog.condition}</p>
+                    <p className="text-md font-semibold text-amber-900">{dog.conditionName}</p>
                 </div>
 
                 {/* Condition description */}
@@ -63,9 +60,9 @@ const UrgentFeaturedCard = ({ dog, onDonateClick }) => {
 
                 {/* Donation progress section */}
                 <div className="mt-auto p-6 rounded-2xl border-2 border-amber-400">
-
+                    
                     <div className="flex justify-between mb-2 text-sm">
-                            <span className="font-black text-lg text-gray-700">{donations}Lei</span>
+                            <span className="font-black text-lg text-gray-700">{totalDonations}Lei <span className="text-gray-500 font-normal text-sm">raised</span></span>
                             <span className="text-gray-500">{progressPercentage.toFixed(0)}%</span>
                     </div>
 
@@ -74,7 +71,7 @@ const UrgentFeaturedCard = ({ dog, onDonateClick }) => {
                         <div className="bg-amber-500 h-full rounded-full transition-all duration-500" style={{ width: `${progressPercentage}%`}}></div>
                     </div>
 
-                    <p className="mt-1 text-xs font-bold text-gray-600">{dog.donationsGoal - donations}Lei to go!</p>
+                    <p className="mt-1 text-xs font-bold text-gray-500">{dog.donationsGoal - dog.donationsReceived}Lei to go!</p>
                 
 
                 </div>
@@ -115,6 +112,12 @@ const UrgentFeaturedCard = ({ dog, onDonateClick }) => {
 // Main component used in Virtual adoption page
 const UrgentFeaturedCarousel = ({ onDonateClick }) => {
 
+    const { urgentCasesData, loading } = useDonations();
+
+    const featuredUrgentCases = urgentCasesData.filter((dog) => dog.urgencyLevel === "Critical" || dog.urgencyLevel === "High");
+
+    if(loading) return <p>Loading urgent cases...</p>;
+
     return (
 
     <>
@@ -147,7 +150,7 @@ const UrgentFeaturedCarousel = ({ onDonateClick }) => {
                 }}
                 className="py-8"
             >
-                {urgentCareDogs.map((dog) => (
+                {featuredUrgentCases.map((dog) => (
                     <SwiperSlide key={dog.id}>
                         <UrgentFeaturedCard 
                             dog={dog}

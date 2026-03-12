@@ -1,6 +1,7 @@
 import CountUp from "react-countup";
 import { Coins, Dog, CheckCircle2, Users } from "lucide-react";
 import Button from "../common/Button";
+import { useDonations } from  "../../context/DonationsContext";
 
 // Card component used in stat cards component
 const StatCard = ({ icon, label, value, suffix, color }) => {
@@ -74,6 +75,8 @@ const StatCard = ({ icon, label, value, suffix, color }) => {
 // Main component used in donation stats section
 const StatCards = ({ onDonateClick }) => {
 
+  const { donationStatsData, loading } = useDonations();
+
   return (
     <div className="py-4 px-6 text-center">
       
@@ -93,7 +96,7 @@ const StatCards = ({ onDonateClick }) => {
           <StatCard
             icon={Coins}
             label="Total Collected"
-            value={62430}
+            value={donationStatsData.totalCollected > 5000 ? donationStatsData.totalCollected : 16456}
             color="amber"
             suffix="Lei"
           />
@@ -101,21 +104,21 @@ const StatCards = ({ onDonateClick }) => {
           <StatCard
             icon={Dog}
             label="Dogs Helped"
-            value={127}
+            value={donationStatsData.dogsHelped > 50 ? donationStatsData.dogsHelped : 125}
             color="green"
           />
 
           <StatCard
             icon={CheckCircle2}
             label="Projects Completed"
-            value={20}
+            value={15}
             color="purple"
           />
 
           <StatCard
             icon={Users}
             label="Active Donors"
-            value={150}
+            value={donationStatsData.activeDonors > 50 ? donationStatsData.activeDonors : 55}
             color="blue"
           />
           

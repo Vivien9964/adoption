@@ -1,10 +1,17 @@
 import UrgentFeaturedCarousel from "./UrgentFeaturedCarousel";
 import Section from "../layout/Section";
 import UrgentCardGrid from "./UrgentCardGrid";
-import { Activity } from 'lucide-react';
+import { useDonations } from "../../context/DonationsContext";
+
 
 
 const UrgentNeedsSection = ({ onDonateClick }) => {
+
+    const { urgentCasesData, loading } = useDonations();
+
+    const standardCareCases = urgentCasesData.filter((dog) => dog.urgencyLevel === "Medium" || dog.urgenclyLevel === "Low");
+
+
     return (
         // Main section container
         <Section padding="small">
@@ -22,13 +29,6 @@ const UrgentNeedsSection = ({ onDonateClick }) => {
                     Dogs that need help right now
                  </p>
         
-                {/* Badge */}
-                <div className="flex items-center gap-3 mb-4">
-                    <div className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-full shadow-lg">
-                        <Activity className="h-5 w-5 animate-pulse" />
-                        <span className="font-bold text-sm uppercase tracking-wide">Critical</span>
-                    </div>
-                </div>
             </div>
 
                 {/* Carousel */}
@@ -51,10 +51,13 @@ const UrgentNeedsSection = ({ onDonateClick }) => {
 
                 {/* Standard donations card grid witg cards*/}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <UrgentCardGrid onDonateClick={onDonateClick} />
-                    <UrgentCardGrid onDonateClick={onDonateClick} />
-                    <UrgentCardGrid onDonateClick={onDonateClick} />
-                    <UrgentCardGrid onDonateClick={onDonateClick} />
+                    {standardCareCases.map((dog) => (
+                        <UrgentCardGrid 
+                            key={dog.id}
+                            dog={dog}
+                            onDonateClick={onDonateClick}
+                        />
+                    ))}
                   
                 </div>
             </div>

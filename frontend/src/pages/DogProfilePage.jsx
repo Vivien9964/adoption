@@ -31,7 +31,7 @@ import {
 const DogProfilePage = () => {
 
     // Taking id as string from url
-    const { id } = useParams();
+    const { uuid } = useParams();
     const navigate = useNavigate();
 
     // Local states
@@ -49,7 +49,7 @@ const DogProfilePage = () => {
     useEffect(() => {
         const getPet = async() => {
            try {
-            const data = await fetchPetByID(id);
+            const data = await fetchPetByID(uuid);
             setDog(data);
            } catch(error) {
             console.error(error);
@@ -60,7 +60,7 @@ const DogProfilePage = () => {
 
         getPet();
 
-    }, [id]);
+    }, [uuid]);
 
     // !! Important to handle loading state first, otherwise dog -> null, error with idealHomeChar 
     if(loading || !dog) {

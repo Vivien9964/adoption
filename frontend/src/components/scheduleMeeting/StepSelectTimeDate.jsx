@@ -108,7 +108,7 @@ const StepSelectTimeDate = ({ dog }) => {
             if(!dog) return;
 
             try {
-                const data = await fetchMeetingAvailability(dog.id);
+                const data = await fetchMeetingAvailability(dog.uuid);
                 console.log("Bookings:", data.bookings);
                 setBookedSlots(data.bookings);
             } catch(err) {

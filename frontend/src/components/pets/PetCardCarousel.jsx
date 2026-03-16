@@ -10,7 +10,7 @@ const PetCardCarousel = ({ pet }) => {
         // Component body is a link, since the user can just click on the card itself and 
         // go to the individual profile - link acts as a wrapper
         <Link 
-            to={`/dogs/${pet.id}`}
+            to={`/dogs/${pet.uuid}`}
             className="block group h-full rounded-xl"    
         >
             {/* Card container */}

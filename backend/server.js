@@ -3,11 +3,18 @@ import cors from "cors";
 import dotenv from "dotenv";
 import db from "./db.js";
 import rateLimit from "express-rate-limit";
+import helmet from "helmet";
+import { v4 as uuidv4 } from "uuid";
+
 
 dotenv.config();
 
 const app = express();
+// Do not show framework header 
+app.disable("x-powered-by");
 const PORT = process.env.PORT || 3000;
+
+app.use(helmet());
 
 // Updated cors settings to only allow API requests from Vite dev server
 app.use(cors({
@@ -56,12 +63,16 @@ const validateMeetingData = (data) => {
     const errors = {};
 
     // Field validation, to make sure required fields are not empty
-    if (!data.dogId) {
-        errors.dogId = "Dog ID is required!";
+    if (!data.dogUuid) {
+        errors.dogUuid = "Dog ID is required!";
     }
 
     if (!data.dogName || !data.dogName.trim()) {
         errors.dogName = "Dog name is required!";
+    }
+
+    if(data.dogName.trim().length > 200) {
+        errors.dogName = "Dog name is too long!";
     }
 
     if (!data.meetingDate || !data.meetingDate.trim()) {
@@ -79,6 +90,8 @@ const validateMeetingData = (data) => {
 
     if (!nameTrimmed) {
         errors.userName = "Name is required!";
+    } else if (nameTrimmed.length > 200) {
+        errors.userName = "Name is too long!";
     } else if (nameTrimmed.length < 2) {
         errors.userName = "Name is too short!";
     } else if (!hasValidNameChars) {
@@ -93,6 +106,8 @@ const validateMeetingData = (data) => {
 
     if (!trimmedEmail) {
         errors.userEmail = "Email is required!";
+    } else if (trimmedEmail.length > 254 ) {
+        errors.userEmail = "Email is too long!";
     } else if (!emailRegex.test(trimmedEmail)) {
         errors.userEmail = "Enter a valid email!";
     }
@@ -105,6 +120,8 @@ const validateMeetingData = (data) => {
         errors.userPhone = "Phone is required!";
     } else if (trimmedPhone.length < 10) {
         errors.userPhone = "Phone number is too short!";
+    } else if (trimmedPhone.length > 20) {
+        errors.userPhone = "Phone number is too long!";
     } else if (!phoneRegex.test(trimmedPhone)) {
         errors.userPhone = "Phone number is not valid!";
     }
@@ -141,6 +158,8 @@ const validateVolunteerData = (data) => {
         errors.name = "Name is required!";
     } else if (nameTrimmed.length < 2) {
         errors.name = "Name is too short!";
+    } else if (nameTrimmed.length > 200) {
+        errors.name = "Name is too long!";
     } else if (!hasValidNameChars) {
         errors.name = "Name cannot contain special characters and numbers!";
     } else if (nameParts.length < 2) {
@@ -153,6 +172,8 @@ const validateVolunteerData = (data) => {
 
     if (!trimmedEmail) {
         errors.email = "Email is required!";
+    } else if (trimmedEmail.length > 254) {
+        errors.email = "Email is too long!";
     } else if (!emailRegex.test(trimmedEmail)) {
         errors.email = "Enter a valid email!";
     }
@@ -165,6 +186,8 @@ const validateVolunteerData = (data) => {
         errors.phone = "Phone number is required!";
     } else if (trimmedPhone.length < 10) {
         errors.phone = "Phone number is too short!";
+    } else if (trimmedPhone.length > 20) {
+        errors.phone = "Phone number is too long!";
     } else if (!phoneRegex.test(trimmedPhone)) {
         errors.phone = "Phone number is not valid!";
     }
@@ -197,6 +220,10 @@ const validateDonationData = (data) => {
         errors.targetName = "Donation target is required!";
     }
 
+    if(data.targetName.trim().length > 500) {
+        errors.targetName = "Donation target name is too long!";
+    }
+
     // Amount validation
     if (!data.amount || data.amount <= 0) {
         errors.amount = "Donation amount must be greater than zero!";
@@ -213,6 +240,8 @@ const validateDonationData = (data) => {
         errors.donorName = "Name is required!";
     } else if (nameTrimmed.length < 2) {
         errors.donorName = "Name is too short!";
+    } else if (nameTrimmed.length > 200) {
+        errors.donorName = "Name is too long!";
     } else if (!hasValidNameChars) {
         errors.donorName = "Name cannot contain special characters and numbers!";
     } else if (nameParts.length < 2) {
@@ -225,6 +254,8 @@ const validateDonationData = (data) => {
 
     if (!trimmedEmail) {
         errors.donorEmail = "Email is required!";
+    } else if (trimmedEmail.length > 254) {
+        errors.donorEmail = "Email is too long!";
     } else if (!emailRegex.test(trimmedEmail)) {
         errors.donorEmail = "Enter a valid email!";
     }
@@ -265,10 +296,17 @@ app.get("/api/dogs", async( req, res ) => {
 
 
 // Get individual dog 
-app.get("/api/dogs/:id", async( req, res ) => {
+app.get("/api/dogs/:uuid", async( req, res ) => {
     try {
+
+        // UUID validation before querying
+        const isValidUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if(!isValidUuid.test(req.params.uuid)) {
+            return res.status(400).json({ error: "Invalid ID!"});
+        }
+
         // Array of dog objects
-        const [rows] = await db.query("SELECT * FROM dogs WHERE id = ?", [req.params.id]);
+        const [rows] = await db.query("SELECT * FROM dogs WHERE uuid = ?", [req.params.uuid]);
 
         if(rows.length === 0) {
             return res.status(404).json({ error: "Dog not found!" })
@@ -293,9 +331,17 @@ app.get("/api/dogs/:id", async( req, res ) => {
 
 
 // Get available meeting dates for a dog
-app.get("/api/meetings/availability/:dogId", async( req, res) => {
+app.get("/api/meetings/availability/:dogUuid", async( req, res) => {
     try {
-        const { dogId } = req.params;
+        const { dogUuid } = req.params;
+
+        // Get the dogId based on dog's UUID
+        const [dogRows] = await db.query("SELECT id FROM dogs WHERE uuid = ?", [dogUuid]);
+        if (dogRows.length === 0) {
+            return res.status(404).json({ error: "Dog not found!" });
+        }
+
+        const dogId = dogRows[0].id;
         const [meetings] = await db.query(`SELECT meetingDate, meetingTime FROM meetings WHERE dogId = ?`, [dogId]);
         res.status(200).json({ bookings: meetings });
     } catch(error) {
@@ -322,7 +368,7 @@ app.post("/api/meetings", limiterMeeting, async( req, res) => {
 
 
         const {
-        dogId,
+        dogUuid,
         dogName,
         dogBreed,
         dogImage,
@@ -334,6 +380,12 @@ app.post("/api/meetings", limiterMeeting, async( req, res) => {
         userPhone,
         notes
         } = req.body
+
+        const [dogRows] = await db.query("SELECT id FROM dogs WHERE uuid = ?", [dogUuid]);
+        if (dogRows.length === 0) {
+            return res.status(404).json({ error: "Dog not found!" });
+        }
+        const dogId = dogRows[0].id;
 
         // Sanitized input data to make sure the database stores inputs 
         // without whitespace for all fields and uppercase in email
@@ -535,7 +587,7 @@ app.post("/api/donations", limiterDonation, async (req, res) => {
         const {
             targetName,
             targetType,
-            targetId,
+            targetUuid,
             amount,
             isMonthly,
             donorName,
@@ -546,7 +598,7 @@ app.post("/api/donations", limiterDonation, async (req, res) => {
         const sanitizedDonationData = {
             targetName: targetName.trim(),
             targetType: targetType || "general",
-            targetId: targetId || null,
+            targetUuid: targetUuid || null,
             amount: Number(amount),
             isMonthly: Boolean(isMonthly),
             donorName: donorName.trim(),
@@ -556,11 +608,11 @@ app.post("/api/donations", limiterDonation, async (req, res) => {
         // Insert donation data to the database
         const [result] = await db.query(
             `INSERT INTO donations
-            (targetName, targetType, targetId, amount, isMonthly, donorName, donorEmail)
+            (targetName, targetType, targetUuid, amount, isMonthly, donorName, donorEmail)
             VALUES (?, ?, ?, ?, ?, ?, ?)`,
             [
                 sanitizedDonationData.targetName, sanitizedDonationData.targetType,
-                sanitizedDonationData.targetId, sanitizedDonationData.amount,
+                sanitizedDonationData.targetUuid, sanitizedDonationData.amount,
                 sanitizedDonationData.isMonthly, sanitizedDonationData.donorName,
                 sanitizedDonationData.donorEmail
             ]
@@ -568,21 +620,21 @@ app.post("/api/donations", limiterDonation, async (req, res) => {
 
         // Update the received donations amount upon donation for tables
         // Donation update for urgent cases
-        if(sanitizedDonationData.targetType === "urgent_case" && sanitizedDonationData.targetId) {
+        if(sanitizedDonationData.targetType === "urgent_case" && sanitizedDonationData.targetUuid) {
             await db.query(
                 `UPDATE urgent_cases SET donationsReceived = donationsReceived + ?
-                WHERE id = ?`,
-                [sanitizedDonationData.amount, sanitizedDonationData.targetId]
+                WHERE uuid = ?`,
+                [sanitizedDonationData.amount, sanitizedDonationData.targetUuid]
             );
         }
 
         // Donation update for shelter projects
-        if(sanitizedDonationData.targetType === "shelter_project" && sanitizedDonationData.targetId) {
+        if(sanitizedDonationData.targetType === "shelter_project" && sanitizedDonationData.targetUuid) {
             await db.query(
                 `UPDATE shelter_projects 
                 SET currentAmount = currentAmount + ?, donorsCount = donorsCount + 1
-                WHERE id = ?`,
-                [sanitizedDonationData.amount, sanitizedDonationData.targetId]
+                WHERE uuid = ?`,
+                [sanitizedDonationData.amount, sanitizedDonationData.targetUuid]
             );
         }
 
@@ -616,7 +668,7 @@ app.get("/api/donations/stats", async (req, res) => {
 
         // Urgent cases that received donations
         const [totalUrgentCases] = await db.query(
-            "SELECT COUNT(DISTINCT targetId) AS dogsHelped FROM donations WHERE targetType = 'urgent_case'"
+            "SELECT COUNT(DISTINCT targetUuid) AS dogsHelped FROM donations WHERE targetType = 'urgent_case'"
         );
 
         res.json({
@@ -630,7 +682,10 @@ app.get("/api/donations/stats", async (req, res) => {
     }
 });
 
-
+// 404 handler for undefined routes
+app.use((req, res) => {
+    res.status(404).json({ error: "Route not found!" });
+});
 
 
 app.listen(PORT, () => {

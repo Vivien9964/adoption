@@ -31,7 +31,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/dogs" element={<DogsPage />} />
-          <Route path="/dogs/:id" element={<DogProfilePage />} />
+          <Route path="/dogs/:uuid" element={<DogProfilePage />} />
           <Route path="/schedule-meeting" element={<ScheduleMeetingPage />} />
           <Route path="/virtual-adoption" element={<VirtualAdoptionPage />} />
           <Route path="*" element={<NotFoundPage />} />

@@ -172,7 +172,7 @@ const isValidCardNumber = (number) => {
 // Main component used for quick donation in Virtual adoption page
 const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonationType = "one-time" }) => {
 
-    //nUsing custom hook to store data, handle input change and errors
+    //Using custom hook to store data, handle input change and errors
     const { formData, setFormData, errors, setErrors, handleChange, validate, resetForm } =  useFormValidation({
         amount: 0,
         customAmount: "",
@@ -273,7 +273,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
             await submitDonation({
                 targetName: target ? (target.name || target.title) : "Our shelter",
                 targetType : target ? target.type : "general",
-                targetId: target ? target.id : null,
+                targetId: target ? target.uuid : null,
                 amount: formData.amount,
                 isMonthly: isMonthly,
                 donorName: formData.name,

@@ -15,9 +15,9 @@ export const fetchAllPets = async () => {
     return response.json();
 };
 
-// Fetch one dog based on ID
-export const fetchPetByID = async (id) => {
-    const response = await fetch(`${BASE_URL}/api/dogs/${id}`);
+// Fetch one dog based on UUID
+export const fetchPetByID = async (uuid) => {
+    const response = await fetch(`${BASE_URL}/api/dogs/${uuid}`);
 
     if(!response.ok) {
         throw new Error("Failed to fetch dog!");
@@ -28,8 +28,8 @@ export const fetchPetByID = async (id) => {
 
 
 // Fetch already booked meeting dates and time with a specific dog
-export const fetchMeetingAvailability = async (dogId) => {
-    const response = await fetch(`${BASE_URL}/api/meetings/availability/${dogId}`);
+export const fetchMeetingAvailability = async (dogUuid) => {
+    const response = await fetch(`${BASE_URL}/api/meetings/availability/${dogUuid}`);
 
     if(!response.ok) {
         throw new Error("Failed to fetch available date and time!");

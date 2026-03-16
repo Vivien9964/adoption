@@ -124,7 +124,7 @@ const StepAddInfo = () => {
                         id="contact-name"
                         type="text" 
                         autoComplete="name"
-                        placeholder="Johhny Doe"
+                        placeholder="Johnny Doe"
                         name="name"
                         value={userInfo.name}
                         onChange={(e) => {

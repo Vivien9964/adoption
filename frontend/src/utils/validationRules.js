@@ -59,7 +59,7 @@ export const validateEmail = (value) => {
         return "Email is required!";
     }
 
-    // Check if emailfollows the standard email format
+    // Check if email follows the standard email format
     if(!PATTERNS.email.test(trimmed)) {
         return "Enter a valid email!";
     }

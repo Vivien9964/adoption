@@ -2,13 +2,13 @@ import { useNavigate } from 'react-router-dom'
 import { MapPin } from 'lucide-react';
 
 
-const PetCardDogsPage = ({dog}) => {
+const PetCardDogsPage = ({ dog }) => {
 
     const navigate = useNavigate();
 
     // helper function to navigate to individual dog profile page
     const handleClick = () => {
-        navigate(`/dogs/${dog.id}`);
+        navigate(`/dogs/${dog.uuid}`);
     }
 
     const dogAge = dog.ageInMonths < 12 ? `${dog.ageInMonths} ${dog.ageInMonths === 1 ? "month" : "months"}`

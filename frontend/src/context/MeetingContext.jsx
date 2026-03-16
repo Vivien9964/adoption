@@ -99,7 +99,7 @@ export const MeetingProvider = ({ children }) => {
 
             // Creating an object which contains all relevant meeting data 
             const meetingData = {
-                dogId: selectedDog.id,
+                dogUuid: selectedDog.uuid,
                 dogName: selectedDog.name,
                 dogBreed: selectedDog.breed,
                 dogImage: selectedDog.mainImage,

@@ -1766,8 +1766,8 @@ const shelterProjectsData = [
 async function populateDatabase() {
   try {
     
-    /*
-    Add dogs to database
+  
+    // Add dogs to database
 
     for (const dog of dogsData) {
 
@@ -1793,7 +1793,7 @@ async function populateDatabase() {
       );
       
     }
-    */
+    
 
     // Add urgent cases to database
     for (const urgentCase of urgentCasesData) {

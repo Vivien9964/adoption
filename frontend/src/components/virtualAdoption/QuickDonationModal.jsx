@@ -3,6 +3,7 @@ import { submitDonation } from "../../services/api";
 import { validateName, validateEmail, PATTERNS } from "../../utils/validationRules";
 import useFormValidation from "../../hooks/useFormValidation";
 import { X, CreditCard, User, HeartHandshake, Coins, CircleAlert } from "lucide-react";
+import defaultShelterImage from "../../assets/general/default-donation.jpg";
 
 
 // Card component to display donation amount in donation modal
@@ -336,7 +337,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                 {/* Target image */}
                 {target && (
                     <img 
-                        src={target.image || target.mainImage}
+                        src={target?.image || target?.mainImage || defaultShelterImage}
                         alt={target ? `${target.name || target.title}`: "Donation target" } 
                         className="h-full w-full object-cover rounded-lg"
                     />
@@ -736,7 +737,7 @@ const QuickDonationModal = ({ isOpen, onClose, target, onSuccess, defaultDonatio
                                     autoComplete="cc-csc"
                                     type="text" 
                                     placeholder="XXX"
-                                    maxLength="4"
+                                    maxLength="3"
                                     required
                                     value={formData.cvv}
                                     onChange={(e) => {

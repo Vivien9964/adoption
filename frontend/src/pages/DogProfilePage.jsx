@@ -46,6 +46,7 @@ const DogProfilePage = () => {
 
 
     // Fetching individual dog profile 
+    
     useEffect(() => {
         const getPet = async() => {
            try {

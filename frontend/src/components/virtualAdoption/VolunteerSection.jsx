@@ -175,20 +175,55 @@ const UpcomingEventCard = ({ event, icon, openModal }) => {
 
 
 
-
-
-
-
-
 const VolunteerSection = () => {
 
     const [ isModalOpen, setIsModalOpen ] = useState(false);
     const [ selectedOpportunity, setSelectedOpportunity ] = useState(null);
+    
+    // Save applicants to local storage for now to persist applicant count in upcoming events
+    const [ events, setEvents ] = useState(() => {
+        // Get saved counts
+        const savedCounts = localStorage.getItem("eventVolunteerCounts");
+        
+        // If saved counts existing
+        if (savedCounts) {
+            // Prase counts
+            const counts = JSON.parse(savedCounts);
+            // Return a new array with the updated stats
+            return upcomingEvents.map(event => ({
+                ...event,
+                volunteersSignedUp: counts[event.id] || event.volunteersSignedUp
+            }));
+        }
+        
+        return upcomingEvents;
+    });
 
     // Function to toggle modal based on opportunity
     const handleOpenModal = (opportunity) => {
         setIsModalOpen(true);
         setSelectedOpportunity(opportunity);
+    }
+
+    // Function to handle applicant count for upcoming event cards 
+    // For now count saved in local storage
+    const handleApplicationSuccess = (opportunityId) => {
+        setEvents((prevEvents) => {
+            const updatedEvents = prevEvents.map(event => 
+                event.id === opportunityId
+                    ? {...event, volunteersSignedUp: event.volunteersSignedUp + 1}
+                    : event
+            );
+            // Save the counts
+            const counts = updatedEvents.reduce((acc, event) => {
+                acc[event.id] = event.volunteersSignedUp;
+                return acc;
+            }, {});
+            
+            localStorage.setItem("eventVolunteerCounts", JSON.stringify(counts));
+            
+            return updatedEvents;
+        });
     }
 
 
@@ -227,6 +262,7 @@ const VolunteerSection = () => {
                         isOpen={isModalOpen}
                         onClose={() => setIsModalOpen(false)}
                         opportunity={selectedOpportunity}
+                        onApplicationSuccess={handleApplicationSuccess}
                     />
 
                 </div>
@@ -247,7 +283,7 @@ const VolunteerSection = () => {
                 {/* Upcoming events grid for upcoming event cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {
-                        upcomingEvents.map((event) => (
+                        events.map((event) => (
                             <UpcomingEventCard 
                                 key={event.id}
                                 event={event}

@@ -160,7 +160,7 @@ const ErrorMessage = ({ message }) => {
 
 
 
-const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, formData, handleChange, errors, setErrors, validate }) => {
+const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, formData, handleChange, errors, setErrors, validate, onApplicationSuccess }) => {
 
     // Volunteer availability options for checkboxes
     const availabilityOptions = [
@@ -209,6 +209,10 @@ const OpportunityApplicationView = ({ opportunity, onClose, onSubmit, onBack, fo
             });
 
             onSubmit();
+
+            if (isOneTimeEvent(opportunity) && onApplicationSuccess) {
+                onApplicationSuccess(opportunity.id);
+            }
 
         } catch(error) {
 
@@ -569,7 +573,7 @@ const ApplicationSuccessView = ({ opportunity, formData, onClose }) => {
 
 
 
-const VolunteerApplicationModal = ({ isOpen, onClose, opportunity }) => {
+const VolunteerApplicationModal = ({ isOpen, onClose, opportunity, onApplicationSuccess }) => {
 
     // State to keep track of current modal view
     const [ currentView, setCurrentView ] = useState("details");
@@ -657,6 +661,7 @@ const VolunteerApplicationModal = ({ isOpen, onClose, opportunity }) => {
                             errors={errors}
                             setErrors={setErrors}
                             validate={validate}
+                            onApplicationSuccess={onApplicationSuccess}
                         />
                     )}
 

@@ -416,11 +416,14 @@ app.post("/api/meetings", limiterMeeting, async( req, res) => {
             })
         }
 
+        const meetingUuid = uuidv4();
+
         const [result] = await db.query(
             `INSERT INTO meetings 
-            (dogId, dogName, dogBreed, dogImage, dogLocation, meetingDate, meetingTime, userName, userEmail, userPhone, notes)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            (uuid, dogId, dogName, dogBreed, dogImage, dogLocation, meetingDate, meetingTime, userName, userEmail, userPhone, notes)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
+                meetingUuid,
                 sanitizedMeetingData.dogId, sanitizedMeetingData.dogName, 
                 sanitizedMeetingData.dogBreed, sanitizedMeetingData.dogImage,
                 sanitizedMeetingData.dogLocation, sanitizedMeetingData.meetingDate, 
@@ -496,12 +499,15 @@ app.post("/api/volunteers", limiterVolunteerApplication, async (req, res) => {
             });
         }
 
+        const volunteerUuid = uuidv4();
+
         // If the candidate did not apply so far, then add them to the database
         const [result] = await db.query(
             `INSERT INTO volunteers 
-            (opportunityId, opportunityTitle, isOneTimeEvent, name, email, phone, availability, motivation, experience)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            (uuid, opportunityId, opportunityTitle, isOneTimeEvent, name, email, phone, availability, motivation, experience)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
+                volunteerUuid,
                 sanitizedVolunteerData.opportunityId, sanitizedVolunteerData.opportunityTitle,
                 sanitizedVolunteerData.isOneTimeEvent, sanitizedVolunteerData.name,
                 sanitizedVolunteerData.email, sanitizedVolunteerData.phone,
@@ -605,12 +611,15 @@ app.post("/api/donations", limiterDonation, async (req, res) => {
             donorEmail: donorEmail.trim().toLowerCase()
         };
 
+        const donationUuid = uuidv4();
+
         // Insert donation data to the database
         const [result] = await db.query(
             `INSERT INTO donations
-            (targetName, targetType, targetUuid, amount, isMonthly, donorName, donorEmail)
-            VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            (uuid, targetName, targetType, targetUuid, amount, isMonthly, donorName, donorEmail)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
             [
+                donationUuid,
                 sanitizedDonationData.targetName, sanitizedDonationData.targetType,
                 sanitizedDonationData.targetUuid, sanitizedDonationData.amount,
                 sanitizedDonationData.isMonthly, sanitizedDonationData.donorName,

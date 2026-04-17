@@ -257,8 +257,7 @@ const SuccessModalContent = () => {
 
 const SuccessModal = () => {
     return (
-            <SuccessModalContent />
-        
+            <SuccessModalContent />   
     )
 }
 

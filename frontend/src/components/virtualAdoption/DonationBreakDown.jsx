@@ -46,7 +46,7 @@ export const DonationBreakDownCard = ({ donationData, showAmount = true }) => {
           
           {/* Value in percentage for donation breakdown and simple value for about page stats */}
           <span className={`text-5xl ${config.valueColor} font-black`}>
-            {showAmount ?  `${donationData.value} %` : `${donationData.value}`}
+            {showAmount ?  `${donationData.value}%` : `${donationData.value}`}
           </span>
           
           {/* Title */}

@@ -6,7 +6,7 @@ const PetCardDogsPage = ({ dog }) => {
 
     const navigate = useNavigate();
 
-    // helper function to navigate to individual dog profile page
+    // Helper function to navigate to individual dog profile page
     const handleClick = () => {
         navigate(`/dogs/${dog.uuid}`);
     }

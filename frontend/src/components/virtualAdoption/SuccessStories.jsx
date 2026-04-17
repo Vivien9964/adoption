@@ -1,4 +1,12 @@
 import { Coins,  Users, Calendar } from "lucide-react"
+import goldieBefore from "../../assets/successStories/goldie-before.jpg";
+import goldieAfter from "../../assets/successStories/goldie-after.jpg";
+import insulationBefore from "../../assets/successStories/insulation-before.jpg"
+import insulationAfter from "../../assets/successStories/insulation-after.jpg"
+import supplyBefore from "../../assets/successStories/supply-before.jpg"
+import supplyAfter from "../../assets/successStories/supply-after.jpg"
+import yorkieBefore from "../../assets/successStories/yorkie-before.jpg"
+import yorkieAfter from "../../assets/successStories/yorkie-after.jpg"
 
 
 // Card used in succes stories component
@@ -103,8 +111,8 @@ const SuccessStories = () => {
     const successData = [
         {
             id: 1,
-            beforeImage: "https://picsum.photos/400/300?grayscale",
-            afterImage: "https://picsum.photos/400/300",
+            beforeImage: yorkieBefore,
+            afterImage: yorkieAfter,
             title: "Luna's emergency surgery",
             update: "Surgery successful. Luna is recovering!",
             donationsReceived: 3200,
@@ -113,8 +121,8 @@ const SuccessStories = () => {
         },
         {
             id: 2,
-            beforeImage: "https://picsum.photos/400/300?grayscale",
-            afterImage: "https://picsum.photos/400/300",
+            beforeImage: insulationBefore,
+            afterImage: insulationAfter,
             title: "Shelter insulation",
             update: "Our shelter is well insulated. 50 dogs are safe from the cold.",
             donationsReceived: 8000,
@@ -123,8 +131,8 @@ const SuccessStories = () => {
         },
         {
             id: 3,
-            beforeImage: "https://picsum.photos/400/300?grayscale",
-            afterImage: "https://picsum.photos/400/300",
+            beforeImage: goldieBefore,
+            afterImage: goldieAfter,
             title: "PinPin's special treatment",
             update: "PinPin is now in safe hands with Dr.Bingusz! He shows imporvement.",
             donationsReceived: 1500,
@@ -133,8 +141,8 @@ const SuccessStories = () => {
         },
         {
             id: 4,
-            beforeImage: "https://picsum.photos/400/300?grayscale",
-            afterImage: "https://picsum.photos/400/300",
+            beforeImage: supplyBefore,
+            afterImage: supplyAfter,
             title: "Winter Supply",
             update: "Our dogs have enough food to get through the winter months!",
             donationsReceived: 6000,

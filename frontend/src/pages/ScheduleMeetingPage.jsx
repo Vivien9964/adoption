@@ -15,6 +15,7 @@ const ScheduleMeetingContent = () => {
     const location = useLocation();
 
     // Take step variables and functions from meeting context
+    
     const { currentStep,
             setCurrentStep, 
             nextStep, 

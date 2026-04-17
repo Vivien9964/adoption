@@ -1,7 +1,7 @@
 import Section from "../layout/Section";
 import { Hammer, Cross, Bone, ShoppingBasket } from 'lucide-react';
 import { useDonations } from "../../context/DonationsContext";
-
+import transportVehicle from "../../assets/successStories/transport-vehicle.jpg";
 
 
 // Shelter project card used in shelter projects component
@@ -53,6 +53,11 @@ const ShelterDonationCard = ({ project, onDonateClick }) => {
 
     const config = categoryConfig[project.category]|| categoryConfig.Infrastructure;
     const Icon = config.icon;
+
+    if(project.category === "Equipment") {
+        project.image = transportVehicle;
+    }
+
 
 
     return (

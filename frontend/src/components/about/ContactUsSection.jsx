@@ -203,10 +203,6 @@ const ContactUsSection = () => {
 
                     {/* User data group */}
                     <fieldset className="m-0 p-0 border-0">
-                            
-                            <legend className="font-2xl font-black text-yellow-800 mb-4">
-                                Personal Information
-                            </legend>
 
                         <div className="flex flex-col md:flex-row justify-between gap-4">
 

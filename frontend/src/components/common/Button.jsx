@@ -1,5 +1,5 @@
 
-const Button = ({ children, variant = "primary", size = "medium", fullWidth = false, onClick, href, className = "", ...props}) => {
+const Button = ({ children, variant = "primary", size = "medium", rounded = "2xl", fullWidth = false, onClick, href, className = "", ...props}) => {
 
     // Tailwind classes below are always applied
     const baseClasses = `
@@ -9,7 +9,13 @@ const Button = ({ children, variant = "primary", size = "medium", fullWidth = fa
         focus:outline-none focus:ring-2 focus:ring-offset-2
         disabled:opacity-50 disabled:cursor-not-allowed
         ${fullWidth ? "w-full" : ""}
-    `
+    `;
+
+    const roundedClasses = {
+        "xl": "rounded-xl",
+        "2xl": "rounded-2xl",
+        "full": "rounded-full"
+    };
 
     // Variant classes are focusing on button style, color schemes
     const variants = {
@@ -35,6 +41,15 @@ const Button = ({ children, variant = "primary", size = "medium", fullWidth = fa
               bg-transparent border-2 border-yellow-300
               text-yellow-900 hover:bg-yellow-100
               focus:ring-yellow-300
+            `,
+            yellow: `
+              bg-yellow-400 hover:bg-yellow-500
+              text-yellow-800
+              shadow-md hover:shadow-xl
+              hover:text-yellow-900
+              border-2 border-yellow-500
+              font-black
+              focus:ring-yellow-500
             `
     }
 
@@ -46,7 +61,7 @@ const Button = ({ children, variant = "primary", size = "medium", fullWidth = fa
     }
 
     // Classes combined
-    const buttonClasses = `${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`
+    const buttonClasses = `${baseClasses} ${roundedClasses[rounded]} ${variants[variant]} ${sizes[size]} ${className} cursor-pointer`
 
     if(href) {
         return (

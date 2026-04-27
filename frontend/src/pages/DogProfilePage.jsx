@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
+import Button from "../components/common/Button";
 import Section from "../components/layout/Section";
 import QuickDonationModal from "../components/virtualAdoption/QuickDonationModal";
 import DonationSuccessCard from "../components/virtualAdoption/DonationSuccessCard";
@@ -130,7 +131,7 @@ const DogProfilePage = () => {
         if(window.innerWidth < 768) {
             window.location.href = `tel:${phoneNumber}`;
         } else {
-            navigate('/contact');
+            navigate('/about');
         }
     }
 
@@ -417,13 +418,16 @@ const DogProfilePage = () => {
                 </div>
 
                   {/* Image container - gallery */}
-                    <div className='grid grid-cols-1 md:grid-cols-2 grid-cols-3 gap-4 mt-4'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 grid-cols-3 gap-6 mt-4'>
                         {dog.images.map((image, index) => (
                             <img 
                                 key={index}
                                 src={image} 
                                 alt={`${dog.name}-${dog.breed}`} 
-                                className='w-full h-80 object-cover rounded-xl'
+                                className='
+                                    w-full h-80 md:h-100 object-cover rounded-xl cursor-pointer
+                                    hover:scale-103 transition:hover duration-300
+                                '
                             />
                          ))}
                 
@@ -469,16 +473,15 @@ const DogProfilePage = () => {
                                 </p>
 
                             {/* CTA button - schedule visit, same as in PetCardDogsPage -> needs to be updated in layout components */}
-                            <button 
+                            <Button 
                                 onClick={() => handleClick("visit")}
-                                className='
-                                    w-full sm:w-[280px] py-3.5 px-6 rounded-2xl mt-4
-                                    bg-yellow-500 hover:bg-yellow-600 text-yellow-900 font-black text-base
-                                    transition-all duration-300 shadow-md hover:shadow-xl 
-                                    border-2 border-yellow-500 hover:rotate-3'
+                                variant="yellow" 
+                                size="medium" 
+                                rounded="2xl"
+                                className="w-full sm:w-[280px] mt-4"
                             >
                                 Schedule Visit
-                            </button>
+                            </Button>
                         
                         </div>      
 
@@ -511,15 +514,15 @@ const DogProfilePage = () => {
                             </p>
 
                             {/* CTA button - sponsor pet */}
-                            <button 
+                            <Button 
                                 onClick={() => handleClick("sponsor")}
-                                className='
-                                    w-full sm:w-[280px] py-3.5 px-6 rounded-2xl mt-4
-                                    bg-yellow-500 hover:bg-yellow-600 text-yellow-900 font-black text-base
-                                    transition-all duration-300 shadow-md hover:shadow-xl border-2 border-yellow-500 hover:rotate-3'
+                                variant="yellow" 
+                                size="medium" 
+                                rounded="2xl"
+                                className="w-full sm:w-[280px] mt-4"
                             >
                                 {`Sponsor ${dog.name}`}
-                            </button>
+                            </Button>
                         </div>
 
                     </div>   
@@ -534,27 +537,29 @@ const DogProfilePage = () => {
                         <p className='text-center text-gray-500 text-md'>Have questions first? Get in touch!</p>
                         
                         {/* CTA buttons container */}
-                        <div className='flex gap-3 flex-row'>
+                        <div className='mt-2 flex gap-3 flex-row'>
 
                             {/* Call button */}
-                            <button 
+                            <Button 
                                 onClick={handleCallUs}
-                                className='px-6 py-2 mt-3 bg-white border-2 border-sky-300 rounded-xl cursor-pointer hover:shadow-lg hover:bg-sky-50'>
-                                <span className='flex items-center justify-between gap-2 text-gray-700'>
-                                    <Phone className='w-5 h-5' />
-                                    Call Us
-                                </span>
-                            </button>
+                                variant="outline"
+                                size="small"
+                                rounded="xl"
+                            >
+                                <Phone className='w-5 h-5 mr-2' />
+                                Call Us
+                            </Button>
 
                             {/* Email button */}
-                            <button 
+                            <Button 
                                 onClick={handleEmailUs}
-                                className='px-6 py-2 mt-3 bg-white border-2 border-sky-300 rounded-xl cursor-pointer hover:shadow-lg hover:bg-sky-50'>
-                                <span className='flex items-center justify-between gap-2 text-gray-700'>
-                                    <Mail className='w-5 h-5' />
-                                    Send an Email
-                                </span>
-                            </button>
+                                variant="outline"
+                                size="small"
+                                rounded="xl"
+                            >
+                                <Mail className='w-5 h-5 mr-2' />
+                                Email Us
+                            </Button>
                            
                         </div>
 

@@ -1,5 +1,6 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import { MapPin } from 'lucide-react';
+import Button from "../common/Button";
 
 
 const PetCardDogsPage = ({ dog }) => {
@@ -91,13 +92,14 @@ const PetCardDogsPage = ({ dog }) => {
                 </p>                        
 
                 {/* CTA button */}
-                <button className='
-                    w-[70%] py-3.5 px-6 rounded-2xl mb-4
-                    bg-yellow-500 hover:bg-yellow-600 text-yellow-900 font-black text-base
-                    transition-all duration-300 shadow-md hover:shadow-xl border-2 border-yellow-500 hover:rotate-3'
+                <Button 
+                    variant="yellow" 
+                    size="medium" 
+                    rounded="2xl"
+                    className="w-[70%] mb-4"
                 >
                     {`Meet ${dog.name}`}
-                </button>
+                </Button>
     
             </div>
         </div>

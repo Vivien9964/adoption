@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { CalendarDays, MapPin, PawPrint } from 'lucide-react';
+import Button from "../common/Button";
 
 const EventCard = ({ event }) => {
 
@@ -108,17 +109,15 @@ const EventCard = ({ event }) => {
                 )}
 
                 {/* CTA button */}
-                <button
+                <Button
                     onClick={handleVolunteerClick}
-                    className="
-                        w-full px-6 py-3 rounded-full
-                        bg-yellow-300 hover:bg-yellow-400
-                        text-yellow-900 font-bold
-                        hover:scale-105 hover:shadow-lg
-                        transition-all duration-300"
+                    variant="primary"
+                    size="medium"
+                    rounded="full"
+                    className="w-full"
                 >
-                    I volunteer
-                </button>
+                    I Volunteer
+                </Button>
         </div>
 
     </div>

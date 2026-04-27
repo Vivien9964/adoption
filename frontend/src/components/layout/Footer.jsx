@@ -99,15 +99,9 @@ const Footer = () => {
                         </li>
                         <li>
                             <Link to="/about" className={styles.link}>
-                                About Us
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/contact" className={styles.link}>
                                 Contact
                             </Link>
-                       </li>
-
+                        </li>
                     </ul>
                 </div>
 
@@ -127,7 +121,7 @@ const Footer = () => {
                         </li>
                         <li>
                             <Link to="/virtual-adoption" className={styles.link}>
-                                Virtual adoption
+                                Get Involved
                             </Link>
                         </li>
                     

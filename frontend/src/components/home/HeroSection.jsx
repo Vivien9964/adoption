@@ -25,13 +25,12 @@ const HeroSection = ({ onDonateClick }) => {
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
                     {/* Hero - main title */}
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 drop-shadow-lg">
-                        Every dog deserves a{' '} <span className="text-yellow-300">loving HOME</span>
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-20 mb-6 drop-shadow-lg">
+                        Every dog deserves a {' '} <span className="text-yellow-300"> loving HOME</span>
                     </h1>
 
                     {/* Hero - paragraph */}
                     <p className="max-w-2xl mx-auto mb-8 md:mb-12 text-lg md:text-xl lg:text-2xl text-gray-100 drop-shadow-md">
-                        Visit our shelter or dog profiles.
                         Find your furrever friend today!
                     </p>
 
@@ -40,16 +39,9 @@ const HeroSection = ({ onDonateClick }) => {
                         
                         {/* Adopt button */}
                         <Link to='/dogs'>
-                            <button className="
-                                    group px-8 py-4 flex items-center gap-3
-                                    rounded-2xl shadow-xl
-                                    bg-yellow-400 hover:bg-yellow-500
-                                    text-yellow-900 text-lg font-bold
-                                    hover:shadow-2xl hover:scale-105
-                                    transition-all duration-300"
-                        >
+                           <Button variant="yellow" size="large" rounded="2xl">
                                 Adopt a Dog
-                            </button>
+                           </Button>
                         </Link>
 
                         {/* Donate button */}

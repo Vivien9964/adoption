@@ -185,7 +185,8 @@ const StepSelectTimeDate = ({ dog }) => {
                 { !isCalendarOpen && customDateSelected && (
                     <div className='flex justify-center'>
                         <div className="p-4 text-center bg-sky-500/30 border-3 border-sky-400/50 rounded-xl">
-                            <h2 className="text-gray-500 font-bold text-sm mb-2">Success! Selected date:</h2>
+                            <Calendar className="w-8 h-8 text-gray-700 mx-auto mb-2" />
+                            <h2 className="text-gray-500 text-sm mb-2">Success! Selected date:</h2>
                             <p className="text-gray-700 font-semibold text-2xl">{selectedDate}</p>
                         </div>
                     </div>
@@ -195,13 +196,21 @@ const StepSelectTimeDate = ({ dog }) => {
                 { isCalendarOpen && (
                     <div className="mt-4 p-4 border-3 border-yellow-300/50 rounded-xl bg-sky-50">
                        
+                        <p className="text-gray-600 text-sm mb-4 text-center">
+                            Select a date for your visit
+                        </p>
+                        <div className="flex justify-center">
                             <DatePicker
                                 selected={datePickerDate}
                                 onChange={handleSelectCustomDate}
                                 minDate={new Date()}
                                 inline
                                 calendarClassName="custom-calendar"
+                                showMonthDropdown
+                                showYearDropdown
+                                dropdownMode="select"
                             />
+                        </div>
                     </div>
                 )}
 

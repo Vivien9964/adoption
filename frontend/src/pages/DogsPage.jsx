@@ -32,8 +32,8 @@ const DogsPage = () => {
                     ))}
 
                     {filteredDogs.length === 0 && (
-                        <div>
-                            <p>No dogs matching!</p>
+                        <div className="mt-4 text-center">
+                            <p className="text-2xl md:text-4xl font-bold text-yellow-800">No dogs matching!</p>
                         </div>
                     )}
 
